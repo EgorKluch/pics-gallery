@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Аукцион картин</title>
+
+   <script src="{{ script }}"></script>
+   <link rel="stylesheet" href="{{ style }}">
+</head>
+
+<body>
+
+<div id="wrapper">
+
+   {% include 'header.twig' %}
+
+   <div id="main">
+      <div id="leftBar">
+         {% include 'user/leftBlock.twig' %}
+         {% block leftBar %}{% endblock %}
+      </div>
+      <div id="content">
+         <h2>{% block title %}{% endblock %}</h2>
+         {% block content %}{% endblock %}
+      </div>
+   </div>
+
+   {% include 'footer.twig' %}
+
+</div>
+
+</body>
+</html>

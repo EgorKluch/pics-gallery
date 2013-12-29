@@ -11,6 +11,7 @@ var config = require('../config/config');
 
 var Mysql = function (callback) {
   if (Mysql.instance) {
+    if (callback) callback(Mysql.instance);
     return Mysql.instance;
   }
   Mysql.instance = this;
