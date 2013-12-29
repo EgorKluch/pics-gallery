@@ -16,6 +16,7 @@
     "twig": "~0.6.0",
     "jquery-browserify": "~1.8.1",
     "underscore": "~1.5.2",
-    "express": "~3.4.7"
+    "express": "~3.4.7",
+    "mysql": "~2.0.0-rc1"
   }
 }
