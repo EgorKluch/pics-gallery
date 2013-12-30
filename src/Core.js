@@ -5,15 +5,14 @@
 
 var Mysql = require('./Mysql');
 
-var config = require('./config/config');
-
-var Core = function (callback) {
+var Core = function (app, callback) {
   if (Core.instance) {
     if (callback) callback(Core.instance);
     return Core.instance;
   }
   Core.instance = this;
 
+  this.app = app;
   new Mysql(function (response) {
     this.mysql = response;
     if (callback) callback(this);

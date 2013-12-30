@@ -18,11 +18,10 @@ var render = function (app, template, script, style, data, callback) {
   });
 };
 
-module.exports = function (app) {
+module.exports = function (core) {
+  var app = core.app;
   app.get('/', function (req, res) {
-    render(app, 'index.twig', 'index.js', 'main.css', function (html) {
-      res.send(html);
-    });
+    return core.getController('main/index');
   });
 
   app.use(function(req, res){

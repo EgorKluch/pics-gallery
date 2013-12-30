@@ -5,37 +5,27 @@
 
 'use strict';
 
+var fs = require('fs');
+var path = require("path");
+
 module.exports = function (grunt) {
-  grunt.initConfig({
+  var config = {
     pkg: grunt.file.readJSON('package.json'),
 
-    browserify: {
-      index: {
-        src: ['scripts/pages/index.js'],
-        dest: 'js/index.js',
-        options: {
-          transform: ['brfs'],
-          debug: true
-        }
-      }
-    },
-
     copy: {
-      pages: {
+      controllers: {
         files: [
           {
             expand: true,
-            cwd: 'scripts/pages/',
-            src: '**',
-            dest: 'js/'
+            cwd: 'controllers',
+            src: '*/css/*.css',
+            dest: 'build/'
           }
         ]
       }
     },
 
-    clean: {
-      vod: ['js/**/*']
-    },
+    clean: ['build/**'],
 
     watch: {
       files: ['js/**/*'],
@@ -78,7 +68,36 @@ module.exports = function (grunt) {
         'scripts/**/*.js'
       ]
     }
+  };
+
+  config.browserify = {
+    index: {
+      src: 'controllers/*/js/main.js',
+        dest: 'build/test.js',
+        options: {
+        transform: ['brfs'],
+          debug: true
+      }
+    }
+  };
+
+  config.browserify = {};
+  var controllerPath = './controllers';
+  fs.readdir(controllerPath, function (err, dirs) {
+    if (err) throw err;
+
+    dirs
+      .map(function (dir) { return path.join(p, dir); })
+      .filter(function (dir) { return fs.statSync(dir).isDirectory(); })
+      .forEach(function (dir) {
+        var controllerName =_.last(dir.dirname.split('/'));
+        fs.readdir(dir + '/js/', function (err, scripts){
+
+        })
+      });
   });
+
+  grunt.initConfig(config);
 
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -87,6 +106,4 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-
-  grunt.registerTask('build', ['clean', 'copy', 'browserify']);
 };

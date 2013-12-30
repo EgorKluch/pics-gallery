@@ -9,6 +9,8 @@ var express = require('express');
 
 var config = require('./config/config');
 
+var Core = require('./src/Core');
+
 var app = express();
 app.configure(function(){
   // Config twig
@@ -21,7 +23,8 @@ app.configure(function(){
   app.use('/css', express.static('css'));
 });
 
-require('./config/routes')(app);
+new Core(app, function (core) {
+});
 
 app.listen(config.port);
 console.log('Express started on port ' + config.port);
