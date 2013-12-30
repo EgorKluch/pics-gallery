@@ -6,21 +6,25 @@
 'use strict';
 
 var _ = require('underscore');
+var Core = require('../core/Core');
 
+var core = new Core();
+var app = core.app;
 
-module.exports = function (core) {
-  var controller;
-  var app = core.app;
-
-  app.get('/', function (req, res) {
-    controller = new (require('../controller/main/mainController'))();
-    core.getPage(controller.index(), res.send.bind(res));
-  });
-
-  app.use(function(req, res){
-    controller = new (require('../controller/main/mainController'))();
-    core.getPage(controller.notFound(), function (html) {
-      res.send(404, html);
-    });
-  });
+var createController = function (path) {
+  var Controller = require('../controller/' + path);
+  return new Controller();
 };
+
+
+app.get('/', function (req, res) {
+  var controller = this.createController('main/mainController');
+  core.getPage(controller.index(), res.send.bind(res));
+});
+
+app.use(function(req, res){
+  var controller = this.createController('main/mainController');
+  core.getPage(controller.notFound(), function (html) {
+    res.send(404, html);
+  });
+});

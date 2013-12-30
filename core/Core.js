@@ -6,21 +6,28 @@
 'use strict';
 
 var Mysql = require('./Mysql');
+var mysql = new Mysql();
 
-
-var Core = function (app, callback) {
-  if (Core.instance) {
-    if (callback) callback(Core.instance);
-    return Core.instance;
-  }
-  Core.instance = this;
+var Core = function (app) {
+  if (Core.instance) return Core.instance;
 
   this.app = app;
-  new Mysql(function (response) {
-    this.mysql = response;
-    if (callback) callback(this);
-  }.bind(this));
-  return this;
+
+  return Core.instance = this;
+};
+
+Core.prototype.initialize = function (app, request, response, callback) {
+  if (this._isInit) {
+    if (callback) callback();
+    return;
+  }
+  this._isInit = true;
+  this.request = request;
+  this.response = response;
+  this.session = request.session;
+  this.post = request.body;
+
+  mysql.initialize(callback);
 };
 
 Core.prototype.getPage = function (controller, callback) {

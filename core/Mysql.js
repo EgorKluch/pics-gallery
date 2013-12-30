@@ -13,20 +13,23 @@ var _ = require('underscore');
 var config = require('../config/config');
 
 
-var Mysql = function (callback) {
-  if (Mysql.instance) {
-    if (callback) callback(Mysql.instance);
-    return Mysql.instance;
+var Mysql = function () {
+  if (Mysql.instance) return Mysql.instance;
+  return Mysql.instance = this;
+};
+
+Mysql.prototype.initialize = function (callback) {
+  if (this._isInit) {
+    if (callback) callback();
+    return;
   }
-  Mysql.instance = this;
+  this._isInit = true;
 
   this.connection = mysql.createConnection(config.mysql);
   this.connection.connect(function(err) {
     if (err) throw err;
-    if (callback) callback(this);
+    if (callback) callback();
   }.bind(this));
-
-  return this;
 };
 
 /**
@@ -66,6 +69,10 @@ Mysql.prototype.select = function (table, columns, where, callback) {
  */
 Mysql.prototype.one = function (table, columns, where, callback) {
   this.select(table, columns, where, function (rows) {
+    if (rows.length === 0) {
+      callback(null);
+      return;
+    }
     callback(rows[0]);
   });
 };
@@ -85,7 +92,9 @@ Mysql.prototype.insert = function (table, fields, callback) {
   query += ' values(' + Object.values(fields).forEach(function (value) {
     return mysql.escape(value);
   });
-  this.query(query, callback);
+  this.query(query, function (response) {
+    callback(response.insertId);
+  });
 };
 
 /**
