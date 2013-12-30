@@ -3,29 +3,23 @@
  * @date: 29.12.13
  */
 
+'use strict';
+
 var _ = require('underscore');
 
-var render = function (app, template, script, style, data, callback) {
-  if (_.isFunction(data)) {
-    callback = data;
-    data = {};
-  }
-  data.script = '/js/' + template;
-  data.style = '/css/' + style;
-  app.render(template, data, function (err, html) {
-    if (err) throw err;
-    callback(html);
-  });
-};
 
 module.exports = function (core) {
+  var controller;
   var app = core.app;
+
   app.get('/', function (req, res) {
-    return core.getController('main/index');
+    controller = new (require('../controller/main/mainController'))();
+    core.getPage(controller.index(), res.send.bind(res));
   });
 
   app.use(function(req, res){
-    render(app, 'notFound.twig', 'index.js', 'main.css', function (html) {
+    controller = new (require('../controller/main/mainController'))();
+    core.getPage(controller.notFound(), function (html) {
       res.send(404, html);
     });
   });

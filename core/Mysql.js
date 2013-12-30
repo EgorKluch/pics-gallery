@@ -6,8 +6,12 @@
  * @date: 29.12.13
  */
 
+'use strict';
+
 var mysql = require('mysql');
+var _ = require('underscore');
 var config = require('../config/config');
+
 
 var Mysql = function (callback) {
   if (Mysql.instance) {
@@ -41,7 +45,7 @@ Mysql.prototype.select = function (table, columns, where, callback) {
   }
 
   if (columns === null) {
-    columns = '*'
+    columns = '*';
   } else {
     columns = columns.forEach(function (column) {
       return mysql.escapeId(column);
@@ -91,11 +95,11 @@ Mysql.prototype.insert = function (table, fields, callback) {
  * @param where
  * @param values
  */
-Mysql.prototype.update = function (table, where, values) {
+Mysql.prototype.update = function (table, where, values, callback) {
   var query = 'update ' + mysql.escapeId(table);
   query += ' set ' + this._getWhereString(values, ',');
   query += ' where ' + this._getWhereString(where);
-  this.query(query, callback)
+  this.query(query, callback);
 };
 
 /**
@@ -104,7 +108,7 @@ Mysql.prototype.update = function (table, where, values) {
  * @param table
  * @param where
  */
-Mysql.prototype.delete = function (table, where) {
+Mysql.prototype.delete = function (table, where, callback) {
   var query = 'delete from ' + mysql.escapeId(table);
   query += ' where ' + this._getWhereString(where);
   this.query(query, callback);
@@ -160,4 +164,4 @@ Mysql.prototype._getWhereString = function (where, operator) {
   }.bind(this)).join(' ' + operator + ' ');
 };
 
-exports = Mysql;
+module.exports = Mysql;

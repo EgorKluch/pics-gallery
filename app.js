@@ -6,10 +6,10 @@
 'use strict';
 
 var express = require('express');
-
 var config = require('./config/config');
+var routes = require('./config/routes');
+var Core = require('./core/Core');
 
-var Core = require('./src/Core');
 
 var app = express();
 app.configure(function(){
@@ -24,6 +24,7 @@ app.configure(function(){
 });
 
 new Core(app, function (core) {
+  routes(core);
 });
 
 app.listen(config.port);
