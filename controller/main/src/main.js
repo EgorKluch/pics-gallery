@@ -5,8 +5,8 @@
 
 'use strict';
 
-var Core = require('../../../scripts/common/Core');
-
-$(document).ready(function () {
-  var core = new Core();
+$(document).ready(function() {
+  $('#leftBar').css('height', $('#content').height());
 });
+
+require('../../user/js/main.js');

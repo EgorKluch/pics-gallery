@@ -29,7 +29,9 @@ app.configure(function(){
   app.use(express.bodyParser());
 
   // Init core
-  app.use(core.initialize);
+  app.use(function (req, res, next) {
+    core.initialize(app, req, res, next);
+  });
 
   // Handle request
   require('./config/routes');

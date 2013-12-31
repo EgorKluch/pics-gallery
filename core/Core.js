@@ -30,12 +30,12 @@ Core.prototype.initialize = function (app, request, response, callback) {
   mysql.initialize(callback);
 };
 
-Core.prototype.getPage = function (controller, callback) {
+Core.prototype.getPage = function (script, style, template, callback) {
   var data = {
-    script: '/js/' + controller.script.split(':').join('/'),
-    style: '/css/' + controller.style.split(':').join('/')
+    script: '/js/' + script,
+    style: '/css/' + style
   };
-  var template = 'controller/' + controller.template.split(':').join('/');
+  template = 'controller/' + template;
   this.app.render(template, data, function(err, html){
     if (err) throw err;
     callback(html);

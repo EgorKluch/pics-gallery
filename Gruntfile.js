@@ -93,7 +93,7 @@ module.exports = function (grunt) {
       });
     };
 
-    var scanControllers = function (controllers, callback) {
+    var scanStyles = function (controllers, callback) {
       if (controllers.length === 0) {
         callback();
         return;
@@ -117,7 +117,7 @@ module.exports = function (grunt) {
       var controllers = dirs
         .map(function (dir) {return path.join(controllerPath, dir); })
         .filter(function (dir) { return fs.statSync(dir).isDirectory(); });
-      scanControllers(controllers, function () {
+      scanStyles(controllers, function () {
 
         grunt.config.set('clean', ['build/js', 'build/css']);
         grunt.task.run('clean');

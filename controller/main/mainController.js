@@ -7,26 +7,22 @@
 
 var util = require('util');
 
-var Controller = require('../../core/Controller');
+var Core = require('../../core/Core');
 
-var MainController = function () {
-  Controller.call(this);
-};
+var core = new Core();
 
-util.inherits(MainController, Controller);
+
+var MainController = function () {};
 
 MainController.prototype.index = function () {
-  this.script = 'main:main.js';
-  this.style = 'main:main.css';
-  this.template = 'main:index.twig';
-  return this;
+  var sendMethod = core.response.send.bind(core.response);
+  core.getPage('main/main.js', 'main/main.css', 'main/index.twig', sendMethod);
 };
 
 MainController.prototype.notFound = function () {
-  this.script = 'main:main.js';
-  this.style = 'main:main.css';
-  this.template = 'main:notFound.twig';
-  return this;
+  core.getPage('main/main.js', 'main/main.css', 'main/notFound.twig', function (html) {
+    core.response.send(404, html);
+  });
 };
 
 module.exports = MainController;
