@@ -16,26 +16,27 @@ var userManager = new UserManager();
 
 var UserController = function () {};
 
-UserController.prototype.signUpPage = function () {
-  var sendMethod = core.response.send.bind(core.response);
-  core.getPage('user/signUp.js', 'main/main.css', 'user/signUp.twig', sendMethod);
+UserController.prototype.signUpPage = function (req, res) {
+  core.getPage('user/signUp.js', 'main/main.css', 'user/signUp.twig', function (html) {
+    res.send(html);
+  });
 };
 
-UserController.prototype.signUp = function () {
+UserController.prototype.signUp = function (req, res) {
   userManager.signUp(function () {
-    core.response.json({result: 1});
+    res.json({result: 1});
   });
 };
 
-UserController.prototype.signIn = function () {
+UserController.prototype.signIn = function (req, res) {
   userManager.signIn(function () {
-    core.response.json({result: 1});
+    res.json({result: 1});
   });
 };
 
-UserController.prototype.signOut = function () {
+UserController.prototype.signOut = function (req, res) {
   userManager.signOut();
-  core.response.json({result: 1});
+  res.json({result: 1});
 };
 
 module.exports = UserController;

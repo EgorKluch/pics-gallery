@@ -14,14 +14,15 @@ var core = new Core();
 
 var MainController = function () {};
 
-MainController.prototype.index = function () {
-  var sendMethod = core.response.send.bind(core.response);
-  core.getPage('main/main.js', 'main/main.css', 'main/index.twig', sendMethod);
+MainController.prototype.index = function (req, res) {
+  core.getPage('main/main.js', 'main/main.css', 'main/index.twig', function (html) {
+    res.send(html);
+  });
 };
 
-MainController.prototype.notFound = function () {
+MainController.prototype.notFound = function (req, res) {
   core.getPage('main/main.js', 'main/main.css', 'main/notFound.twig', function (html) {
-    core.response.send(404, html);
+    res.send(404, html);
   });
 };
 

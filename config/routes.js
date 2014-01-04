@@ -11,38 +11,25 @@ var Core = require('../core/Core');
 var core = new Core();
 var app = core.app;
 
-var createController = function (path) {
-  var Controller = require('../controller/' + path);
-  return new Controller();
+var subscribe = function (method, url, path) {
+  if (method === null || ['get', 'post', 'delete', 'use'].indexOf(method) === -1) {
+    throw 'Undefined route method';
+  }
+
+  path = path.split(':');
+  var Controller = require('../controller/' + path[0]);
+  var controller = new Controller();
+
+  var controllerMethod = path[1];
+  controllerMethod = controller[controllerMethod].bind(controller);
+  app[method](url, core.initData.bind(core), controllerMethod);
 };
 
+subscribe('get', '/', 'main/mainController:index');
 
-app.get('/', function () {
-  var mainController = createController('main/mainController');
-  mainController.index();
-});
+subscribe('get', '/signIn', 'user/userController:signIn');
+subscribe('get', '/signOut', 'user/userController:signOut');
+subscribe('get', '/signUp', 'user/userController:signUpPage');
+subscribe('post', '/signUp', 'user/userController:signUp');
 
-app.get('/signIn', function () {
-  var userController = createController('user/userController');
-  userController.signIn();
-});
-
-app.get('/signOut', function () {
-  var userController = createController('user/userController');
-  userController.signOut();
-});
-
-app.get('/signUp', function () {
-  var userController = createController('user/userController');
-  userController.signUpPage();
-});
-
-app.post('/signUp', function () {
-  var userController = createController('user/userController');
-  userController.signUp();
-});
-
-app.use(function(){
-  var mainController = createController('main/mainController');
-  mainController.notFound();
-});
+subscribe('use', '/signUp', 'main/mainController:notFound');

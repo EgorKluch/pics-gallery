@@ -5,6 +5,8 @@
 
 'use strict';
 
+var $ = require('jquery-browserify');
+
 $(document).ready(function() {
   $('#leftBar').css('height', $('#content').height());
 });

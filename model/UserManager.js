@@ -62,7 +62,7 @@ UserManager.prototype.getUserByEmail = function (email, callback) {
 };
 
 UserManager.prototype.isAuthorized = function () {
-  return this.currentUser | true;
+  return this.currentUser;
 };
 
 UserManager.prototype.signIn = function (callback) {

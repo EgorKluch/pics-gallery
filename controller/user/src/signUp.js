@@ -7,8 +7,12 @@
 
 require('../../main/src/main.js');
 
+var $ = require('jquery-browserify');
+
 var Core = require('../../core/js/Core.js');
+
 var core = new Core();
+
 
 $(document).ready(function () {
   var $signUpForm = $('#signUpForm');

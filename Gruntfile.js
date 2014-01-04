@@ -73,6 +73,10 @@ module.exports = function (grunt) {
 
     var scanScripts = function (controller, callback) {
       var controllerName = path.basename(controller);
+      if (!path.existsSync(controller + '/src/')) {
+        callback();
+        return;
+      }
       fs.readdir(controller + '/src/', function (err, scripts){
         if (err) throw err;
         scripts
@@ -93,7 +97,7 @@ module.exports = function (grunt) {
       });
     };
 
-    var scanStyles = function (controllers, callback) {
+    var scanControllers = function (controllers, callback) {
       if (controllers.length === 0) {
         callback();
         return;
@@ -117,7 +121,7 @@ module.exports = function (grunt) {
       var controllers = dirs
         .map(function (dir) {return path.join(controllerPath, dir); })
         .filter(function (dir) { return fs.statSync(dir).isDirectory(); });
-      scanStyles(controllers, function () {
+      scanControllers(controllers, function () {
 
         grunt.config.set('clean', ['build/js', 'build/css']);
         grunt.task.run('clean');
