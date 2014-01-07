@@ -35,6 +35,9 @@ app.use(express.urlencoded());
 
 require('./config/routes');
 
-// core.initialize(function () {});
-app.listen(config.port);
-console.log('Express started on port ' + config.port);
+core.initialize(function () {
+  // core.initialize(function () {});
+  app.listen(config.port);
+  console.log('Express started on port ' + config.port);
+});
+

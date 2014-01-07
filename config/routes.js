@@ -27,7 +27,7 @@ var subscribe = function (method, url, path) {
 
 subscribe('get', '/', 'main/mainController:index');
 
-subscribe('get', '/signIn', 'user/userController:signIn');
+subscribe('post', '/signIn', 'user/userController:signIn');
 subscribe('get', '/signOut', 'user/userController:signOut');
 subscribe('get', '/signUp', 'user/userController:signUpPage');
 subscribe('post', '/signUp', 'user/userController:signUp');
