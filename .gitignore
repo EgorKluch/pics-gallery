@@ -1,5 +1,7 @@
 .idea
 node_modules
 config/config.js
-./js
-./css
+js
+css
+!controller/*/js
+!controller/*/css
