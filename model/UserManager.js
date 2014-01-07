@@ -9,6 +9,7 @@ var crypto = require('crypto');
 var User = require('./User');
 var Core = require('../core/Core');
 var Mysql = require('../core/Mysql');
+var AppError = require('../core/AppError');
 
 var core = new Core();
 var mysql = new Mysql();
@@ -67,7 +68,7 @@ UserManager.prototype.isAuthorized = function () {
 
 UserManager.prototype.signIn = function (callback) {
   if (this.isAuthorized()) {
-    throw { errorCode: 1, message: 'User already login' };
+    throw new AppError(1, 'User already login');
   }
 
   var password = this._getHashedPassword(core.post.password);
@@ -77,7 +78,7 @@ UserManager.prototype.signIn = function (callback) {
   };
   mysql.one('user', null, data, function (userData) {
     if (!userData) {
-      throw { errorCode: 2, message: 'Wrong login or password' };
+      throw new AppError(2, 'Wrong login or password');
     }
     var id = userData.id;
     this._createToken(function (token) {
@@ -89,19 +90,19 @@ UserManager.prototype.signIn = function (callback) {
 
 UserManager.prototype.signUp = function (callback) {
   if (this.isAuthorized()) {
-    throw { errorCode: 1, message: 'User already login' };
+    throw new AppError(1, 'User already login');
   }
 
   var login = core.post.login;
   var email = core.post.email;
   this.getUserByLogin(login, function (userData) {
     if (userData) {
-      throw { errorCode: 2, message: 'User with this login already exists' };
+      throw new AppError(2, 'User with this login already exists');
     }
 
     this.getUserByEmail(email, function (userData) {
       if (userData) {
-        throw { errorCode: 3, message: 'User with this email already exists' };
+        throw new AppError(3, 'User with this email already exists');
       }
 
       this._createToken(function (token) {

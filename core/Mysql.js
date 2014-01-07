@@ -44,7 +44,7 @@ Mysql.prototype.initialize = function (callback) {
 Mysql.prototype.select = function (table, columns, where, callback) {
   table = mysql.escapeId(table);
   if (where) {
-    where = ' where ' + this._getWhereString(where);
+    where = ' where ' + this._getWhereString(where, 'and');
   }
 
   if (columns === null) {
@@ -108,7 +108,7 @@ Mysql.prototype.insert = function (table, fields, callback) {
 Mysql.prototype.update = function (table, where, values, callback) {
   var query = 'update ' + mysql.escapeId(table);
   query += ' set ' + this._getWhereString(values, ',');
-  query += ' where ' + this._getWhereString(where);
+  query += ' where ' + this._getWhereString(where, 'and');
   this.query(query, callback);
 };
 
@@ -119,9 +119,9 @@ Mysql.prototype.update = function (table, where, values, callback) {
  * @param where
  * @param callback
  */
-Mysql.prototype.delete = function (table, where, callback) {
+Mysql.prototype.remove = function (table, where, callback) {
   var query = 'delete from ' + mysql.escapeId(table);
-  query += ' where ' + this._getWhereString(where);
+  query += ' where ' + this._getWhereString(where, 'and');
   this.query(query, callback);
 };
 
@@ -145,10 +145,10 @@ Mysql.prototype.query = function (query, data, callback) {
     callback = data;
     data = [];
   }
-  this.connection.query(query, data, function (err, rows) {
-    if (err) throw err;
-    callback(rows);
-  });
+    this.connection.query(query, data, function (err, rows) {
+      if (err) throw err;
+      callback(rows);
+    });
 };
 
 /**
@@ -164,8 +164,6 @@ Mysql.prototype.query = function (query, data, callback) {
 Mysql.prototype._getWhereString = function (where, operator) {
   if (where === null) return '';
   if (_.isString(where)) return where;
-
-  if (!operator) operator = 'and';
 
   return _.map(where, function (value, field) {
     if (field === 'and' || field === 'or') {

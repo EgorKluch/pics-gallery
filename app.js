@@ -6,11 +6,14 @@
 'use strict';
 
 var express = require('express');
-var config = require('./config/config');
-var Core = require('./core/Core');
-
 var app = express();
+
+var Core = require('./core/Core');
 var core = new Core(app);
+var config = require('./config/config');
+
+var ErrorsHandler = require('./core/ErrorsHandler');
+var errorsHandler = new ErrorsHandler();
 
 
 app.configure(function(){
@@ -32,12 +35,14 @@ app.use(express.cookieSession({
 }));
 app.use(express.json());
 app.use(express.urlencoded());
+app.use(app.router);
+
+// Create singleton instance for init;
+errorsHandler.initialize(app);
 
 require('./config/routes');
 
 core.initialize(function () {
-  // core.initialize(function () {});
   app.listen(config.port);
   console.log('Express started on port ' + config.port);
 });
-
