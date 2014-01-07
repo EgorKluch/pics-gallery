@@ -103,6 +103,7 @@ Mysql.prototype.insert = function (table, fields, callback) {
  * @param table
  * @param where
  * @param values
+ * @param callback
  */
 Mysql.prototype.update = function (table, where, values, callback) {
   var query = 'update ' + mysql.escapeId(table);
@@ -116,6 +117,7 @@ Mysql.prototype.update = function (table, where, values, callback) {
  *
  * @param table
  * @param where
+ * @param callback
  */
 Mysql.prototype.delete = function (table, where, callback) {
   var query = 'delete from ' + mysql.escapeId(table);
@@ -165,7 +167,7 @@ Mysql.prototype._getWhereString = function (where, operator) {
 
   if (!operator) operator = 'and';
 
-  return _.forEach(where, function (field, value) {
+  return _.map(where, function (value, field) {
     if (field === 'and' || field === 'or') {
       return ' (' + this._getWhereString(value, field)  + ')';
     }
