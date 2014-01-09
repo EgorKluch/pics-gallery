@@ -19,6 +19,7 @@ ErrorsHandler.prototype.initialize = function (app) {
     console.log('\n\n');
     console.error(err.stack);
     console.log('\n\n');
+
     if (err instanceof AppError) {
       res.status(500);
       res.json(err.getData());

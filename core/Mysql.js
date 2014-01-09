@@ -18,18 +18,12 @@ var Mysql = function () {
   return Mysql.instance = this;
 };
 
-Mysql.prototype.initialize = function (callback) {
-  if (this._isInit) {
-    if (callback) callback();
-    return;
-  }
+Mysql.prototype.initialize = function (next) {
+  if (this._isInit) return next()
   this._isInit = true;
 
   this.connection = mysql.createConnection(config.mysql);
-  this.connection.connect(function(err) {
-    if (err) throw err;
-    if (callback) callback();
-  }.bind(this));
+  this.connection.connect(next);
 };
 
 /**
@@ -39,9 +33,9 @@ Mysql.prototype.initialize = function (callback) {
  * @param table
  * @param columns
  * @param where
- * @param callback
+ * @param next
  */
-Mysql.prototype.select = function (table, columns, where, callback) {
+Mysql.prototype.select = function (table, columns, where, next) {
   table = mysql.escapeId(table);
   if (where) {
     where = ' where ' + this._getWhereString(where, 'and');
@@ -56,7 +50,7 @@ Mysql.prototype.select = function (table, columns, where, callback) {
   }
 
   var query = 'select ' + columns + ' from ' + table + where;
-  this.query(query, callback);
+  this.query(query, next);
 };
 
 /**
@@ -65,15 +59,15 @@ Mysql.prototype.select = function (table, columns, where, callback) {
  * @param table
  * @param columns
  * @param where
- * @param callback
+ * @param next
  */
-Mysql.prototype.one = function (table, columns, where, callback) {
-  this.select(table, columns, where, function (rows) {
+Mysql.prototype.one = function (table, columns, where, next) {
+  this.select(table, columns, where, function (err, rows) {
     if (rows.length === 0) {
-      callback(null);
+      next(err, null);
       return;
     }
-    callback(rows[0]);
+    next(err, rows[0]);
   });
 };
 
@@ -82,9 +76,9 @@ Mysql.prototype.one = function (table, columns, where, callback) {
  *
  * @param table
  * @param fields
- * @param callback
+ * @param next
  */
-Mysql.prototype.insert = function (table, fields, callback) {
+Mysql.prototype.insert = function (table, fields, next) {
   var query = 'insert into' + mysql.escapeId(table);
   query += '(' + Object.keys(fields).forEach(function (field) {
     return mysql.escapeId(field);
@@ -92,8 +86,9 @@ Mysql.prototype.insert = function (table, fields, callback) {
   query += ' values(' + Object.values(fields).forEach(function (value) {
     return mysql.escape(value);
   });
-  this.query(query, function (response) {
-    callback(response.insertId);
+  this.query(query, function (err, response) {
+    if (err) return next(err);
+    next(null, response.insertId);
   });
 };
 
@@ -103,13 +98,13 @@ Mysql.prototype.insert = function (table, fields, callback) {
  * @param table
  * @param where
  * @param values
- * @param callback
+ * @param next
  */
-Mysql.prototype.update = function (table, where, values, callback) {
+Mysql.prototype.update = function (table, where, values, next) {
   var query = 'update ' + mysql.escapeId(table);
   query += ' set ' + this._getWhereString(values, ',');
   query += ' where ' + this._getWhereString(where, 'and');
-  this.query(query, callback);
+  this.query(query, next);
 };
 
 /**
@@ -117,12 +112,12 @@ Mysql.prototype.update = function (table, where, values, callback) {
  *
  * @param table
  * @param where
- * @param callback
+ * @param next
  */
-Mysql.prototype.remove = function (table, where, callback) {
+Mysql.prototype.remove = function (table, where, next) {
   var query = 'delete from ' + mysql.escapeId(table);
   query += ' where ' + this._getWhereString(where, 'and');
-  this.query(query, callback);
+  this.query(query, next);
 };
 
 /**
@@ -131,24 +126,24 @@ Mysql.prototype.remove = function (table, where, callback) {
  *    https://github.com/felixge/node-mysql#escaping-query-values
  *
  * Two different call:
- *  - this.query(query, data, callback)
- *  - this.query(query, callback)
+ *  - this.query(query, data, next)
+ *  - this.query(query, next)
  *
- * Return result rows in {callback}
+ * Return result rows in {next}
  *
  * @param query
  * @param data
- * @param callback
+ * @param next
  */
-Mysql.prototype.query = function (query, data, callback) {
+Mysql.prototype.query = function (query, data, next) {
   if (arguments.length === 2) {
-    callback = data;
-    data = [];
+    next = data;
+    data = null;
   }
-    this.connection.query(query, data, function (err, rows) {
-      if (err) throw err;
-      callback(rows);
-    });
+  this.connection.query(query, data, function (err, rows) {
+    if (err) return next(err);
+    next(null, rows);
+  });
 };
 
 /**

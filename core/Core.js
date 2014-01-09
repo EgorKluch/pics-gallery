@@ -35,15 +35,15 @@ Core.prototype.initData = function (req, res, next) {
   next();
 };
 
-Core.prototype.getPage = function (script, style, template, callback) {
+Core.prototype.getPage = function (script, style, template, next) {
   var data = {
     script: '/js/' + script,
     style: '/css/' + style
   };
   template = 'controller/' + template;
   this.app.render(template, data, function(err, html){
-    if (err) throw err;
-    callback(html);
+    if (err) return next(err);
+    next(err, html);
   });
 };
 
