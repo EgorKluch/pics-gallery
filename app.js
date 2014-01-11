@@ -15,7 +15,7 @@ var config = require('./config/config');
 
 app.configure(function(){
   // Config twig
-  app.set('views', __dirname + '/templates');
+  app.set('views', __dirname);
   app.set('view engine', 'twig');
   app.set('twig options', {
     strict_variables: true

@@ -17,4 +17,4 @@ core.addRoute('get', '/signOut', 'user/userController:signOut');
 core.addRoute('get', '/signUp', 'user/userController:signUpPage');
 core.addRoute('post', '/signUp', 'user/userController:signUp');
 
-core.addRoute('use', '/signUp', 'main/mainController:notFound');
+core.addNotFoundRoute('main/mainController:notFound');

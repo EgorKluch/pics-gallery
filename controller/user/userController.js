@@ -15,7 +15,7 @@ var userManager = new UserManager();
 var UserController = function () {};
 
 UserController.prototype.signUpPage = function () {
-  core.responseHtmlFromTemplate('user/signUp.js', 'main/main.css', 'user/signUp.twig');
+  core.responseHtmlFromTemplate('user/signUp', 'main/main', 'user:signUp');
 };
 
 UserController.prototype.signUp = function (next) {

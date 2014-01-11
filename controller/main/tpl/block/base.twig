@@ -14,11 +14,11 @@
 
 <div id="wrapper">
 
-   {% include 'header.twig' %}
+   {% include './header.twig' %}
 
    <div id="main">
       <div id="leftBar">
-         {% include 'user/leftBlock.twig' %}
+         {% include '../../../user/tpl/block/leftBlock.twig' %}
          {% block leftBar %}{% endblock %}
       </div>
       <div id="content">
@@ -27,7 +27,7 @@
       </div>
    </div>
 
-   {% include 'footer.twig' %}
+   {% include './footer.twig' %}
 
 </div>
 

@@ -13,11 +13,11 @@ var core = new Core();
 var MainController = function () {};
 
 MainController.prototype.index = function () {
-  core.responseHtmlFromTemplate('main/main.js', 'main/main.css', 'main/index.twig');
+  core.responseHtmlFromTemplate('main/main', 'main/main', 'main:index');
 };
 
 MainController.prototype.notFound = function () {
-  core.responseHtmlFromTemplate('main/main.js', 'main/main.css', 'main/notFound.twig', 404);
+  core.responseHtmlFromTemplate('main/main', 'main/main', 'main:notFound', 404);
 };
 
 module.exports = MainController;

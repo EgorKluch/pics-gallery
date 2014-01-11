@@ -5,7 +5,7 @@
 
 'use strict';
 
-var Core = require('../../core/js/Core.js');
+var Core = require('../../../core/js/Core.js');
 
 var core = new Core();
 

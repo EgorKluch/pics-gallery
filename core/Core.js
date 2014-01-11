@@ -59,19 +59,22 @@ Core.prototype.addRoute = function (method, url, path) {
     return this.error(new Error('Undefined route method'));
   }
 
-  var pathParts = path.split(':');
-
-  var Controller = require('../controller/' + pathParts[0]);
-  var controller = new Controller();
-
-  var controllerMethod = pathParts[1];
-  controllerMethod = controller[controllerMethod].bind(controller);
-
+  var controllerMethod = this._getControllerByPath(path);
   this.app[method](url, this.initData.bind(this), function () {
     controllerMethod(this.error.bind(this));
   }.bind(this));
 
   return this;
+};
+
+Core.prototype.addNotFoundRoute = function (path) {
+  this.app.use(function(req, res){
+    this.initData(req, res, function (err) {
+      if (err) this.error(err);
+      var controllerMethod = this._getControllerByPath(path);
+      controllerMethod(this.error.bind(this));
+    }.bind(this));
+  }.bind(this));
 };
 
 /**
@@ -132,14 +135,25 @@ Core.prototype.responseHtmlFromTemplate = function (script, style, template, cod
  */
 Core.prototype.getPage = function (script, style, template, next) {
   var data = {
-    script: '/js/' + script,
-    style: '/css/' + style
+    script: '/js/' + script + '.js',
+    style: '/css/' + style + '.css'
   };
-  template = 'controller/' + template;
+  var tmp = template.split(':');
+  template = 'controller/' + tmp[0] + '/tpl/' + tmp[1] + '.twig';
   this.app.render(template, data, function(err, html){
     if (err) return next(err);
     next(err, html);
   });
 };
+
+Core.prototype._getControllerByPath = function (path) {
+  var pathParts = path.split(':');
+
+  var Controller = require('../controller/' + pathParts[0]);
+  var controller = new Controller();
+
+  var controllerMethod = pathParts[1];
+  return controller[controllerMethod].bind(controller);
+}
 
 module.exports = Core;
