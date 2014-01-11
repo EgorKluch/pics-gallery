@@ -12,9 +12,6 @@ var Core = require('./core/Core');
 var core = new Core(app);
 var config = require('./config/config');
 
-var ErrorsHandler = require('./core/ErrorsHandler');
-var errorsHandler = new ErrorsHandler();
-
 
 app.configure(function(){
   // Config twig
@@ -26,8 +23,8 @@ app.configure(function(){
 });
 
 // Set statics dirs (not handlers)
-app.use('/js', express.static('js'));
-app.use('/css', express.static('css'));
+app.use('/js', express.static('build/js'));
+app.use('/css', express.static('build/css'));
 
 app.use(express.cookieParser());
 app.use(express.cookieSession({
@@ -36,9 +33,6 @@ app.use(express.cookieSession({
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(app.router);
-
-// Create singleton instance for init;
-errorsHandler.initialize(app);
 
 require('./config/routes');
 

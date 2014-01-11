@@ -31,7 +31,7 @@ $(document).ready(function() {
       }
 
       core.doRequest('/signIn', data, function(response) {
-        if (response.error) throw response.error;
+        if (!response.result) return console.error(response.errorMessage);
         location.reload();
       });
     }

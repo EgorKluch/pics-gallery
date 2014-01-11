@@ -5,8 +5,6 @@
 
 'use strict';
 
-var util = require('util');
-
 var Core = require('../../core/Core');
 
 var core = new Core();
@@ -14,16 +12,12 @@ var core = new Core();
 
 var MainController = function () {};
 
-MainController.prototype.index = function (req, res) {
-  core.getPage('main/main.js', 'main/main.css', 'main/index.twig', function (html) {
-    res.send(html);
-  });
+MainController.prototype.index = function () {
+  core.responseHtmlFromTemplate('main/main.js', 'main/main.css', 'main/index.twig');
 };
 
-MainController.prototype.notFound = function (req, res) {
-  core.getPage('main/main.js', 'main/main.css', 'main/notFound.twig', function (html) {
-    res.send(404, html);
-  });
+MainController.prototype.notFound = function () {
+  core.responseHtmlFromTemplate('main/main.js', 'main/main.css', 'main/notFound.twig', 404);
 };
 
 module.exports = MainController;

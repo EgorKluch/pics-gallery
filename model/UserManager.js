@@ -71,7 +71,7 @@ UserManager.prototype.isAuthorized = function () {
 
 UserManager.prototype.signIn = function (next) {
   if (this.isAuthorized()) {
-    return next(new AppError(1, 'User already login'));
+    return next(new AppError('User already login', 1));
   }
 
   var password = this._getHashedPassword(core.post.password);
@@ -82,7 +82,7 @@ UserManager.prototype.signIn = function (next) {
   mysql.one('user', null, data, function (err, userData) {
     if (err) return next(err);
 
-    if (!userData) return next(new AppError(2, 'Wrong login or password'));
+    if (!userData) return next(new AppError('Wrong login or password', 2));
 
     var id = userData.id;
     this._createToken(function (err, token) {
@@ -94,7 +94,7 @@ UserManager.prototype.signIn = function (next) {
 };
 
 UserManager.prototype.signUp = function (next) {
-  if (this.isAuthorized()) return next(new AppError(1, 'User already login'));
+  if (this.isAuthorized()) return next(new AppError('User already login', 1));
 
   var login = core.post.login;
   var email = core.post.email;
@@ -131,11 +131,11 @@ UserManager.prototype.signOut = function (next) {
 UserManager.prototype._checkUserOnExists = function (login, email, next) {
   this.getUserByLogin(login, function (err, userData) {
     if (err) return next(err);
-    if (userData) next(new AppError(2, 'User with this login already exists'));
+    if (userData) next(new AppError('User with this login already exists', 2));
 
     this.getUserByEmail(email, function (err, userData) {
       if (err) return next(err);
-      if (userData) return next(new AppError(3, 'User with this email already exists'));
+      if (userData) return next(new AppError('User with this email already exists', 3));
       next();
     });
   }.bind(this));

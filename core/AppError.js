@@ -5,12 +5,31 @@
 
 var util = require("util");
 
-var AppError = function (errorCode, message) {
-  Error.call(this, message);
-  Error.captureStackTrace(this, AppError);
+/**
+ * @param {String|Error} err
+ * @param {Number} [errorCode=0]
+ * @param {Number} [status=500]
+ * @constructor
+ */
+var AppError = function (err, errorCode, status) {
+  this.stack = null;
 
-  this.errorCode = errorCode;
-  this.message = message;
+  if (err instanceof AppError) return err;
+
+  if (err instanceof Error) {
+    this.message = err.message;
+    this.code = err.code;
+  } else {
+    Error.call(this, err);
+    this.message = err;
+  }
+
+  if (!this.stack) {
+    Error.captureStackTrace(this, AppError);
+  }
+
+  this.errorCode = errorCode ? errorCode : 0;
+  this.status = status ? status : 500;
 };
 
 util.inherits(AppError, Error);
@@ -19,7 +38,7 @@ AppError.prototype.getData = function () {
   return {
     result: 0,
     errorCode: this.errorCode,
-    message: this.message
+    errorMessage: this.message
   };
 };
 

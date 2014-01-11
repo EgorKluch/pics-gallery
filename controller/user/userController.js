@@ -5,8 +5,6 @@
 
 'use strict';
 
-var util = require('util');
-
 var Core = require('../../core/Core');
 var UserManager = require('../../model/UserManager');
 
@@ -16,31 +14,28 @@ var userManager = new UserManager();
 
 var UserController = function () {};
 
-UserController.prototype.signUpPage = function (req, res, next) {
-  core.getPage('user/signUp.js', 'main/main.css', 'user/signUp.twig', function (err, html) {
-    if (err) return next(err);
-    res.send(html);
-  });
+UserController.prototype.signUpPage = function () {
+  core.responseHtmlFromTemplate('user/signUp.js', 'main/main.css', 'user/signUp.twig');
 };
 
-UserController.prototype.signUp = function (req, res, next) {
+UserController.prototype.signUp = function (next) {
   userManager.signUp(function (err) {
     if (err) return next(err);
-    res.json({result: 1});
+    core.responseJson();
   });
 };
 
-UserController.prototype.signIn = function (req, res, next) {
+UserController.prototype.signIn = function (next) {
   userManager.signIn(function (err) {
     if (err) return next(err);
-    res.json({result: 1});
+    core.responseJson();
   });
 };
 
-UserController.prototype.signOut = function (req, res, next) {
+UserController.prototype.signOut = function (next) {
   userManager.signOut(function (err) {
     if (err) return next(err);
-    res.json({result: 1});
+    core.responseJson();
   });
 };
 

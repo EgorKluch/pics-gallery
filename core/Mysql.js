@@ -12,14 +12,21 @@ var mysql = require('mysql');
 var _ = require('underscore');
 var config = require('../config/config');
 
+var AppError = require('./AppError');
 
+/**
+ * @constructor
+ */
 var Mysql = function () {
   if (Mysql.instance) return Mysql.instance;
   return Mysql.instance = this;
 };
 
+/**
+ * @param {Function} next
+ */
 Mysql.prototype.initialize = function (next) {
-  if (this._isInit) return next()
+  if (this._isInit) return next();
   this._isInit = true;
 
   this.connection = mysql.createConnection(config.mysql);
@@ -30,15 +37,15 @@ Mysql.prototype.initialize = function (next) {
  * Select rows from {table} who match {where}
  * In result row inludes only {columns} fields
  *
- * @param table
- * @param columns
- * @param where
- * @param next
+ * @param {String} table
+ * @param {Array|String} columns
+ * @param {String|Array|Object} where
+ * @param {Function} next
  */
 Mysql.prototype.select = function (table, columns, where, next) {
   table = mysql.escapeId(table);
   if (where) {
-    where = ' where ' + this._getWhereString(where, 'and');
+    where = ' where ' + this._getWhereString(where);
   }
 
   if (columns === null) {
@@ -56,27 +63,25 @@ Mysql.prototype.select = function (table, columns, where, next) {
 /**
  * Return first result of this.select method result
  *
- * @param table
- * @param columns
- * @param where
- * @param next
+ * @param {String} table
+ * @param {Array} columns
+ * @param {String|Array|Object} where
+ * @param {Function} next
  */
 Mysql.prototype.one = function (table, columns, where, next) {
   this.select(table, columns, where, function (err, rows) {
-    if (rows.length === 0) {
-      next(err, null);
-      return;
-    }
-    next(err, rows[0]);
+    if (err) return next(new AppError(err));
+    if (rows.length === 0) return next(null, null);
+    next(null, rows[0]);
   });
 };
 
 /**
  * Insert row into {table}
  *
- * @param table
- * @param fields
- * @param next
+ * @param {String} table
+ * @param {Array} fields
+ * @param {Function} next
  */
 Mysql.prototype.insert = function (table, fields, next) {
   var query = 'insert into' + mysql.escapeId(table);
@@ -95,28 +100,28 @@ Mysql.prototype.insert = function (table, fields, next) {
 /**
  * Update {table} from {values} source for rows, who match {where}
  *
- * @param table
- * @param where
- * @param values
- * @param next
+ * @param {String} table
+ * @param {String|Array|Object} where
+ * @param {Array} values
+ * @param {Function} next
  */
 Mysql.prototype.update = function (table, where, values, next) {
   var query = 'update ' + mysql.escapeId(table);
   query += ' set ' + this._getWhereString(values, ',');
-  query += ' where ' + this._getWhereString(where, 'and');
+  query += ' where ' + this._getWhereString(where);
   this.query(query, next);
 };
 
 /**
  * Delete rows from {table} who match {where}
  *
- * @param table
- * @param where
- * @param next
+ * @param {String} table
+ * @param {String|Array|Object} where
+ * @param {Function} next
  */
 Mysql.prototype.remove = function (table, where, next) {
   var query = 'delete from ' + mysql.escapeId(table);
-  query += ' where ' + this._getWhereString(where, 'and');
+  query += ' where ' + this._getWhereString(where);
   this.query(query, next);
 };
 
@@ -131,9 +136,9 @@ Mysql.prototype.remove = function (table, where, next) {
  *
  * Return result rows in {next}
  *
- * @param query
- * @param data
- * @param next
+ * @param {String} query
+ * @param {Object|Function} data
+ * @param {Function} [next]
  */
 Mysql.prototype.query = function (query, data, next) {
   if (arguments.length === 2) {
@@ -141,7 +146,7 @@ Mysql.prototype.query = function (query, data, next) {
     data = null;
   }
   this.connection.query(query, data, function (err, rows) {
-    if (err) return next(err);
+    if (err) return next(new AppError(err));
     next(null, rows);
   });
 };
@@ -151,14 +156,16 @@ Mysql.prototype.query = function (query, data, next) {
  * Example: { a:1, b:2, or: { c: 3, and: { d:4, e:5 } } } transform to
  *    a=1 and b=2 and (c=3 or (d=4 and e=5))
  *
- * @param where
- * @param operator
- * @returns {*}
+ * @param {String|Array|Object} where
+ * @param {String} [operator='and']
+ * @returns {String}
  * @private
  */
 Mysql.prototype._getWhereString = function (where, operator) {
-  if (where === null) return '';
+  if (!where) return '';
   if (_.isString(where)) return where;
+
+ if (!operator) operator = 'and';
 
   return _.map(where, function (value, field) {
     if (field === 'and' || field === 'or') {

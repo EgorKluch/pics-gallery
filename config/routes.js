@@ -5,31 +5,16 @@
 
 'use strict';
 
-var _ = require('underscore');
 var Core = require('../core/Core');
 
 var core = new Core();
-var app = core.app;
 
-var subscribe = function (method, url, path) {
-  if (method === null || ['get', 'post', 'delete', 'use'].indexOf(method) === -1) {
-    throw 'Undefined route method';
-  }
 
-  path = path.split(':');
-  var Controller = require('../controller/' + path[0]);
-  var controller = new Controller();
+core.addRoute('get', '/', 'main/mainController:index');
 
-  var controllerMethod = path[1];
-  controllerMethod = controller[controllerMethod].bind(controller);
-  app[method](url, core.initData.bind(core), controllerMethod);
-};
+core.addRoute('post', '/signIn', 'user/userController:signIn');
+core.addRoute('get', '/signOut', 'user/userController:signOut');
+core.addRoute('get', '/signUp', 'user/userController:signUpPage');
+core.addRoute('post', '/signUp', 'user/userController:signUp');
 
-subscribe('get', '/', 'main/mainController:index');
-
-subscribe('post', '/signIn', 'user/userController:signIn');
-subscribe('get', '/signOut', 'user/userController:signOut');
-subscribe('get', '/signUp', 'user/userController:signUpPage');
-subscribe('post', '/signUp', 'user/userController:signUp');
-
-subscribe('use', '/signUp', 'main/mainController:notFound');
+core.addRoute('use', '/signUp', 'main/mainController:notFound');

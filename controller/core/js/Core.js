@@ -25,7 +25,7 @@ Core.prototype.doRequest = function(url, data, callback) {
     success: callback,
     error: function (response) {
       var error = JSON.parse(response.responseText);
-      console.error(error.message);
+      console.error(error.errorMessage);
     }
   });
 };
