@@ -8,8 +8,8 @@
 var express = require('express');
 var app = express();
 
-var Core = require('./core/Core');
-var core = new Core(app);
+var AppError = require('./core/AppError');
+
 var config = require('./config/config');
 
 
@@ -32,11 +32,26 @@ app.use(express.cookieSession({
 }));
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(app.router);
 
-require('./config/routes');
 
-core.initialize(function () {
-  app.listen(config.port);
-  console.log('Express started on port ' + config.port);
+var routesConfig = require('./config/routes');
+routesConfig(app);
+
+
+// Handle errors!
+app.use(function (err, req, res, next) {
+  if (!err) return;
+
+  if (!(err instanceof AppError)) {
+    err = new AppError(err);
+  }
+
+  console.log('\n\n');
+  console.error(err.stack);
+
+  res.json(err.status, err.getData());
 });
+
+
+app.listen(config.port);
+console.log('Express started on port ' + config.port);

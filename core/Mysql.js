@@ -14,6 +14,7 @@ var config = require('../config/config');
 
 var AppError = require('./AppError');
 
+
 /**
  * @constructor
  */
@@ -26,9 +27,6 @@ var Mysql = function () {
  * @param {Function} next
  */
 Mysql.prototype.initialize = function (next) {
-  if (this._isInit) return next();
-  this._isInit = true;
-
   this.connection = mysql.createConnection(config.mysql);
   this.connection.connect(next);
 };
@@ -80,19 +78,19 @@ Mysql.prototype.one = function (table, columns, where, next) {
  * Insert row into {table}
  *
  * @param {String} table
- * @param {Array} fields
+ * @param {Object} fields
  * @param {Function} next
  */
 Mysql.prototype.insert = function (table, fields, next) {
   var query = 'insert into' + mysql.escapeId(table);
-  query += '(' + Object.keys(fields).forEach(function (field) {
+  query += '(' + _.map(fields, function (value, field) {
     return mysql.escapeId(field);
   }).join(', ') + ')';
-  query += ' values(' + Object.values(fields).forEach(function (value) {
+  query += ' values(' + _.map(fields, function (value) {
     return mysql.escape(value);
-  });
+  }).join(', ') + ')';
   this.query(query, function (err, response) {
-    if (err) return next(err);
+    if (err) return next(new AppError(err));
     next(null, response.insertId);
   });
 };
@@ -102,7 +100,7 @@ Mysql.prototype.insert = function (table, fields, next) {
  *
  * @param {String} table
  * @param {String|Array|Object} where
- * @param {Array} values
+ * @param {Object} values
  * @param {Function} next
  */
 Mysql.prototype.update = function (table, where, values, next) {

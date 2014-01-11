@@ -6,62 +6,58 @@
 'use strict';
 
 var crypto = require('crypto');
+var util = require('util');
+
+var BaseClass = require('../core/BaseClass');
 var User = require('./User');
-var Core = require('../core/Core');
-var Mysql = require('../core/Mysql');
 var AppError = require('../core/AppError');
 
-var core = new Core();
-var mysql = new Mysql();
 
-
-var UserManager = function () {
-  if (UserManager.instance) return UserManager.instance;
-  return UserManager.instance = this;
+var UserManager = function (core) {
+  BaseClass.call(this, core);
 };
 
+util.inherits(UserManager, BaseClass);
+
 UserManager.prototype.initialize = function (next) {
-  if (this._isInit) next();
-  this._isInit = true;
+  var token = this.session.token;
+  if (!token) return next();
 
-  var token = core.session.token;
-  if (token) {
-    mysql.one('user', null, { token: token }, function (err, userData) {
-      if (err) return next(err);
+  this.mysql.one('user', null, { token: token }, function (err, userData) {
+    if (err) return next(new AppError(err));
 
-      if (!data) {
-        core.session.token = null;
-        this.currentUser = null;
-        return next();
-      }
+    if (!userData) {
+      this.session.token = null;
+      this.currentUser = null;
+      return next(null);
+    }
 
-      this.currentUser = new User(userData);
-      next();
-    }.bind(this));
-  }
+    this.currentUser = new User(userData);
+    next(null);
+  }.bind(this));
 };
 
 UserManager.prototype.getUserById = function (id, next) {
-  mysql.one('user', null, { id: id }, function (err, userData) {
-    if (err) return next(err);
+  this.mysql.one('user', null, { id: id }, function (err, userData) {
+    if (err) return next(new AppError(err));
     if (!userData) return next(null, null);
     next(null, new User(userData));
   });
 };
 
 UserManager.prototype.getUserByLogin = function (login, next) {
-  mysql.one('user', null, { login: login }, function (err, userData) {
-    if (err) return next(err);
+  this.mysql.one('user', null, { login: login }, function (err, userData) {
+    if (err) return next(new AppError(err));
     if (!userData) return next(null, null);
     return next(null, new User(userData));
   });
 };
 
 UserManager.prototype.getUserByEmail = function (email, next) {
-  mysql.one('user', null, { email: email }, function (err, userData) {
-    if (err) return next(err);
-    if (!userData) next(null);
-    next(new User(userData));
+  this.mysql.one('user', null, { email: email }, function (err, userData) {
+    if (err) return next(new AppError(err));
+    if (!userData) return next(null);
+    next(null, new User(userData));
   });
 };
 
@@ -74,67 +70,68 @@ UserManager.prototype.signIn = function (next) {
     return next(new AppError('User already login', 1));
   }
 
-  var password = this._getHashedPassword(core.post.password);
+  var password = this._getHashedPassword(this.post.password);
   var data = {
-    login: core.post.login,
+    login: this.post.login,
     password: password
   };
-  mysql.one('user', null, data, function (err, userData) {
-    if (err) return next(err);
+  this.mysql.one('user', null, data, function (err, userData) {
+    if (err) return next(new AppError(err));
 
     if (!userData) return next(new AppError('Wrong login or password', 2));
 
     var id = userData.id;
     this._createToken(function (err, token) {
-      if (err) return next(err);
-      core.session.token = token;
-      mysql.update('user', {id: id}, {token: token}, next);
-    });
+      if (err) return next(new AppError(err));
+      this.session.token = token;
+      this.mysql.update('user', {id: id}, {token: token}, next);
+    }.bind(this));
   }.bind(this));
 };
 
 UserManager.prototype.signUp = function (next) {
   if (this.isAuthorized()) return next(new AppError('User already login', 1));
 
-  var login = core.post.login;
-  var email = core.post.email;
+  var login = this.post.login;
+  var email = this.post.eMail;
+
   this._checkUserOnExists(login, email, function (err) {
-    if (err) return next(err);
+    if (err) return next(new AppError(err));
 
     this._createToken(function (err, token) {
-      if (err) return next(err);
+      if (err) return next(new AppError(err));
 
       var data = {
         login: login,
         email: email,
         token: token,
-        name: core.post.name,
-        password: this._getHashedPassword(core.post.password)
+        name: this.post.name,
+        password: this._getHashedPassword(this.post.password)
       };
 
-      mysql.insert('user', data, function (err, id) {
-        if (err) return next(err);
+      this.mysql.insert('user', data, function (err, id) {
+        if (err) return next(new AppError(err));
 
         data.id = id;
-        next();
-      });
-    });
+        this.signIn(next);
+
+      }.bind(this));
+    }.bind(this));
   }.bind(this));
 };
 
 UserManager.prototype.signOut = function (next) {
-  core.session.token = null;
+  this.session.token = null;
   next();
 };
 
-
 UserManager.prototype._checkUserOnExists = function (login, email, next) {
   this.getUserByLogin(login, function (err, userData) {
-    if (err) return next(err);
+    if (err) return next(new AppError(err));
     if (userData) next(new AppError('User with this login already exists', 2));
 
     this.getUserByEmail(email, function (err, userData) {
-      if (err) return next(err);
+      if (err) return next(new AppError(err));
       if (userData) return next(new AppError('User with this email already exists', 3));
       next();
     });
@@ -142,8 +139,8 @@ UserManager.prototype._checkUserOnExists = function (login, email, next) {
 };
 
 UserManager.prototype._createToken = function (next) {
-  crypto.randomBytes(32, function(err, token) {
-    if (err) return next(err);
+  crypto.randomBytes(16, function(err, token) {
+    if (err) return next(new AppError(err));
 
     token = token.toString('hex');
     next(null, token);

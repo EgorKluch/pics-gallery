@@ -5,36 +5,32 @@
 
 'use strict';
 
-var Core = require('../../core/Core');
-var UserManager = require('../../model/UserManager');
-
-var core = new Core();
-var userManager = new UserManager();
+var AppError = require('../../core/AppError');
 
 
 var UserController = function () {};
 
-UserController.prototype.signUpPage = function () {
-  core.responseHtmlFromTemplate('user/signUp', 'main/main', 'user:signUp');
+UserController.prototype.signUpPage = function (core, next) {
+  core.responseHtmlFromTemplate('user/signUp', 'main/main', 'user:signUp', next);
 };
 
-UserController.prototype.signUp = function (next) {
-  userManager.signUp(function (err) {
-    if (err) return next(err);
+UserController.prototype.signUp = function (core, next) {
+  core.userManager.signUp(function (err) {
+    if (err) return next(new AppError(err));
     core.responseJson();
   });
 };
 
-UserController.prototype.signIn = function (next) {
-  userManager.signIn(function (err) {
-    if (err) return next(err);
+UserController.prototype.signIn = function (core, next) {
+  core.userManager.signIn(function (err) {
+    if (err) return next(new AppError(err));
     core.responseJson();
   });
 };
 
-UserController.prototype.signOut = function (next) {
-  userManager.signOut(function (err) {
-    if (err) return next(err);
+UserController.prototype.signOut = function (core, next) {
+  core.userManager.signOut(function (err) {
+    if (err) return next(new AppError(err));
     core.responseJson();
   });
 };

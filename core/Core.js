@@ -6,92 +6,38 @@
 'use strict';
 
 var Mysql = require('./Mysql');
+var UserManager = require('../model/UserManager');
 var AppError = require('./AppError');
-
-var mysql = new Mysql();
-
 
 /**
  * @param app
- * @constructor
- */
-var Core = function (app) {
-  if (Core.instance) return Core.instance;
-
-  this.app = app;
-
-  return Core.instance = this;
-};
-
-/**
- * @param {Function} [callback]
- */
-Core.prototype.initialize = function (callback) {
-  if (this._isInit) {
-    if (callback) callback();
-    return;
-  }
-  this._isInit = true;
-  mysql.initialize(callback);
-};
-
-/**
  * @param req
  * @param res
- * @param {function} next
+ * @constructor
  */
-Core.prototype.initData = function (req, res, next) {
-  this.request = req;
-  this.response = res;
-  this.session = this.request.session;
-  this.post = this.request.body;
-  next();
+var Core = function (app, req, res) {
+  this.app = app;
+  this.req = req;
+  this.res = res;
+
+  this.mysql = new Mysql(this);
+  this.userManager = new UserManager(this);
 };
 
 /**
- * @param {String} method
- * @param {String} url
- * @param {String} path
- * @returns {Core}
+ * @param {Function} [next]
  */
-Core.prototype.addRoute = function (method, url, path) {
-  if (method === null || ['get', 'post', 'delete', 'use'].indexOf(method) === -1) {
-    return this.error(new Error('Undefined route method'));
-  }
+Core.prototype.initialize = function (next) {
 
-  var controllerMethod = this._getControllerByPath(path);
-  this.app[method](url, this.initData.bind(this), function () {
-    controllerMethod(this.error.bind(this));
+  this.mysql.initialize(function (err) {
+    if (err) return next(new AppError(err));
+
+    this.userManager.initialize(function (err) {
+      if (err) return next(new AppError(err));
+      next();
+    });
+
   }.bind(this));
-
-  return this;
-};
-
-Core.prototype.addNotFoundRoute = function (path) {
-  this.app.use(function(req, res){
-    this.initData(req, res, function (err) {
-      if (err) this.error(err);
-      var controllerMethod = this._getControllerByPath(path);
-      controllerMethod(this.error.bind(this));
-    }.bind(this));
-  }.bind(this));
-};
-
-/**
- * @param {Error||AppError} [err]
- */
-Core.prototype.error = function (err) {
-  if (!err) return;
-
-  if (!(err instanceof AppError)) {
-    err = new AppError(err);
-  }
-
-  console.log('\n\n');
-  console.error(err.stack);
-  console.log('\n\n');
-
-  this.response.json(err.status, err.getData());
 };
 
 /**
@@ -102,7 +48,7 @@ Core.prototype.responseJson = function (data, code) {
   code = code ? code : 200;
   data = data ? data : {};
   data.result = 1;
-  this.response.json(code, data);
+  this.res.json(code, data);
 };
 
 /**
@@ -111,18 +57,19 @@ Core.prototype.responseJson = function (data, code) {
  */
 Core.prototype.responseHtml = function (html, code) {
   code = code ? code : 200;
-  this.response.send(code, html);
+  this.res.send(code, html);
 };
 
 /**
  * @param {String} script
  * @param {String} style
  * @param {String} template
+ * @param {Function} next
  * @param {Number} [code]
  */
-Core.prototype.responseHtmlFromTemplate = function (script, style, template, code) {
+Core.prototype.responseHtmlFromTemplate = function (script, style, template, next, code) {
   this.getPage(script, style, template, function (err, html) {
-    if (err) return this.error(err);
+    if (err) return next(new AppError(err));
     this.responseHtml(html, code);
   }.bind(this));
 };
@@ -136,24 +83,16 @@ Core.prototype.responseHtmlFromTemplate = function (script, style, template, cod
 Core.prototype.getPage = function (script, style, template, next) {
   var data = {
     script: '/js/' + script + '.js',
-    style: '/css/' + style + '.css'
+    style: '/css/' + style + '.css',
+    user: this.userManager.currentUser
   };
+
   var tmp = template.split(':');
   template = 'controller/' + tmp[0] + '/tpl/' + tmp[1] + '.twig';
   this.app.render(template, data, function(err, html){
-    if (err) return next(err);
-    next(err, html);
-  });
+    if (err) return next(new AppError(err));
+    next(null, html);
+  }.bind(this));
 };
-
-Core.prototype._getControllerByPath = function (path) {
-  var pathParts = path.split(':');
-
-  var Controller = require('../controller/' + pathParts[0]);
-  var controller = new Controller();
-
-  var controllerMethod = pathParts[1];
-  return controller[controllerMethod].bind(controller);
-}
 
 module.exports = Core;

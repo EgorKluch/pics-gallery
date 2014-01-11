@@ -5,16 +5,31 @@
 
 'use strict';
 
+var MainController = require('../controller/main/mainController');
+var UserController = require('../controller/user/userController');
 var Core = require('../core/Core');
 
-var core = new Core();
+
+var mainController = new MainController();
+var userController = new UserController();
 
 
-core.addRoute('get', '/', 'main/mainController:index');
+module.exports = function (app) {
 
-core.addRoute('post', '/signIn', 'user/userController:signIn');
-core.addRoute('get', '/signOut', 'user/userController:signOut');
-core.addRoute('get', '/signUp', 'user/userController:signUpPage');
-core.addRoute('post', '/signUp', 'user/userController:signUp');
+  var getRouteHandler = function (context, method) {
+    return function (req, res, next) {
+      var core = new Core(app, req, res);
+      core.initialize(function () {
+        method.call(context, core, next);
+      });
+    }
+  };
 
-core.addNotFoundRoute('main/mainController:notFound');
+  app.get('/', getRouteHandler(mainController, mainController.index));
+  app.post('/signIn', getRouteHandler(userController, userController.signIn));
+  app.all('/signOut', getRouteHandler(userController, userController.signOut));
+  app.get('/signUp', getRouteHandler(userController, userController.signUpPage));
+  app.post('/signUp', getRouteHandler(userController, userController.signUp));
+
+  app.use(getRouteHandler(mainController, mainController.notFound));
+};

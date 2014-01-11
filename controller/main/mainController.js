@@ -5,19 +5,15 @@
 
 'use strict';
 
-var Core = require('../../core/Core');
-
-var core = new Core();
-
 
 var MainController = function () {};
 
-MainController.prototype.index = function () {
-  core.responseHtmlFromTemplate('main/main', 'main/main', 'main:index');
+MainController.prototype.index = function (core, next) {
+  core.responseHtmlFromTemplate('main/main', 'main/main', 'main:index', next);
 };
 
-MainController.prototype.notFound = function () {
-  core.responseHtmlFromTemplate('main/main', 'main/main', 'main:notFound', 404);
+MainController.prototype.notFound = function (core, next) {
+  core.responseHtmlFromTemplate('main/main', 'main/main', 'main:notFound', next, 404);
 };
 
 module.exports = MainController;
