@@ -1,6 +1,9 @@
 .idea
 node_modules
+etc/inspect
+
 config/config.js
+
 js
 css
 !controller/*/js

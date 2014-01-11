@@ -86,7 +86,7 @@ module.exports = function (grunt) {
             var scriptName = path.basename(script);
             browserify[controllerName] = {
               src: script,
-              dest: 'js/' + controllerName + '/' + scriptName,
+              dest: 'build/js/' + controllerName + '/' + scriptName,
               options: {
                 transform: ['brfs'],
                 debug: true
@@ -109,7 +109,7 @@ module.exports = function (grunt) {
           expand: true,
           cwd: 'controller/' + controllerName + '/css/',
           src: '**.css',
-          dest: 'css/' + controllerName + '/'
+          dest: 'build/css/' + controllerName + '/'
         };
         scanControllers(controllers, callback);
       });
