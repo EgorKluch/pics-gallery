@@ -3,7 +3,10 @@
  * @date: 07.01.14
  */
 
-var util = require("util");
+'use strict';
+
+
+var util = require('util');
 
 /**
  * @param {String|Error} err

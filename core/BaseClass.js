@@ -3,6 +3,9 @@
  * @date: 11.01.14
  */
 
+'use strict';
+
+
 var BaseClass = function (core) {
   this.core = core;
   this.mysql = core.mysql;

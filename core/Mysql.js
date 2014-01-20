@@ -163,7 +163,7 @@ Mysql.prototype._getWhereString = function (where, operator) {
   if (!where) return '';
   if (_.isString(where)) return where;
 
- if (!operator) operator = 'and';
+  if (!operator) operator = 'and';
 
   return _.map(where, function (value, field) {
     if (field === 'and' || field === 'or') {

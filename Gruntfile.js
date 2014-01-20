@@ -31,6 +31,7 @@ module.exports = function (grunt) {
           'EPG': true,
           oipfObjectFactory: true
         },
+        devel:true,
         node: true,
         browser: true,
         strict: true,
