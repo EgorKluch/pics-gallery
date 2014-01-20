@@ -117,7 +117,7 @@ Mysql.prototype.update = function (table, where, values, next) {
  * @param {String|Array|Object} where
  * @param {Function} next
  */
-Mysql.prototype.remove = function (table, where, next) {
+Mysql.prototype.del = function (table, where, next) {
   var query = 'delete from ' + mysql.escapeId(table);
   query += ' where ' + this._getWhereString(where);
   this.query(query, next);
