@@ -5,8 +5,14 @@
 
 'use strict';
 
+var util = require('util');
 
-var Picture = function (data) {
+var BaseEntity = require('../core/BaseEntity');
+
+
+var Picture = function (manager, data) {
+  BaseEntity.call(this, manager);
+
   this.id = data.id;
   this.userId = data.id;
   this.addedBy = data.addedBy;
@@ -14,6 +20,9 @@ var Picture = function (data) {
   this.title = data.title;
   this.description = data.description;
 };
+
+util.inherits(Picture, BaseEntity);
+
 
 Picture.prototype.getMysqlData = function () {
   return {

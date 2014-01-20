@@ -7,7 +7,7 @@ create table if not exists user(
   role varchar(128) default 'user',
   token varchar(32) default null,
   name varchar(64) default null,
-  second_name varchar(64) default null
+  second_name varchar(64) default null,
 );
 
 create table if not exists picture(

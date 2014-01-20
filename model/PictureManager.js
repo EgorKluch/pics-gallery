@@ -7,27 +7,27 @@
 
 var util = require('util');
 
-var BaseClass = require('../core/BaseClass');
-var AppError = require('../core/AppError');
+var BaseManager = require('../core/BaseManager');
 var Picture = require('./Picture');
 
 
 var PictureManager = function (core) {
-  BaseClass.call(this, core);
+  BaseManager.call(this, core, 'picture', Picture);
 };
+
+util.inherits(PictureManager, BaseManager);
+
 
 PictureManager.prototype.add = function (data, next) {
   var currentUser = this.core.userManager.currentUser;
 
   var picture = new Picture(data);
   picture.addedBy = currentUser.id;
+
   // TODO: загружаем и сохраняем изображение картины
 
-  this.mysql.insert('picture', picture.getMysqlData(), function (err) {
-    if (err) return next(new AppError(err));
-  });
+  this.mysql.insert('picture', picture.getMysqlData(), next);
 };
 
-util.inherits(PictureManager, BaseClass);
 
 module.exports = PictureManager;

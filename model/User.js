@@ -5,8 +5,14 @@
 
 'use strict';
 
+var util = require('util');
 
-var User = function (data) {
+var BaseEntity = require('../core/BaseEntity');
+
+
+var User = function (manager, data) {
+  BaseEntity.call(this, manager);
+
   this.id = data.id ? data.id : null;
   this.token = data.token ? data.token : null;
 
@@ -17,6 +23,9 @@ var User = function (data) {
   this.name = data.name;
   this.secondName = data.second_name;
 };
+
+util.inherits(User, BaseEntity);
+
 
 User.prototype.getMysqlData = function () {
   return {
@@ -29,6 +38,9 @@ User.prototype.getMysqlData = function () {
     name: this.name,
     second_name: this.secondName
   };
+};
+
+User.prototype.save = function () {
 };
 
 module.exports = User;

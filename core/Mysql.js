@@ -8,12 +8,13 @@
 
 'use strict';
 
+var util = require('util');
 var mysql = require('mysql');
+
 var _ = require('underscore');
 var config = require('../config/config');
 
 var AppError = require('./AppError');
-
 
 /**
  * @constructor
@@ -67,6 +68,11 @@ Mysql.prototype.select = function (table, columns, where, next) {
  * @param {Function} next
  */
 Mysql.prototype.one = function (table, columns, where, next) {
+  if (arguments.length === 3) {
+    next = where;
+    where = columns;
+    columns = null;
+  }
   this.select(table, columns, where, function (err, rows) {
     if (err) return next(new AppError(err));
     if (rows.length === 0) return next(null, null);
@@ -172,5 +178,23 @@ Mysql.prototype._getWhereString = function (where, operator) {
     return mysql.escapeId(field) + '=' + mysql.escape(value);
   }.bind(this)).join(' ' + operator + ' ');
 };
+
+
+var AssignMysql = function (connection, table) {
+  this.connection = connection;
+  this.select = Mysql.prototype.select.bind(this, table);
+  this.one = Mysql.prototype.one.bind(this, table);
+  this.insert = Mysql.prototype.insert.bind(this, table);
+  this.update = Mysql.prototype.update.bind(this, table);
+  this.del = Mysql.prototype.del.bind(this, table);
+};
+
+util.inherits(AssignMysql, Mysql);
+
+
+Mysql.prototype.assign = function (table) {
+  return new AssignMysql(this.connection, table);
+};
+
 
 module.exports = Mysql;
