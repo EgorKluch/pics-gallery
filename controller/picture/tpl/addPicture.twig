@@ -1,0 +1,34 @@
+{% extends '../../main/tpl/block/base.twig' %}
+
+{% block title %}
+  Добавить картину
+{% endblock %}
+
+{% block content %}
+  <p>Обязательные поля отмечены звездочкой.</p>
+  <form id="pictureAddForm" method="POST" enctype="multipart/form-data">
+    <table>
+      <tr>
+        <td class="label">Название<span class="required">*</span>:
+        <td><input name="title">
+      </tr>
+      <tr>
+        <td class="label">Источник<span class="required">*</span>:
+        <td><input name="file" id="fileUpload" type="file">
+      </tr>
+      <tr>
+        <td class="label">Описание:
+        <td><input name="description">
+      </tr>
+      <tr>
+        <td class="label">Цена:
+        <td><input name="cost">
+      </tr>
+      <tr>
+        <td>
+        <td><div style="text-align: right">
+            <a href="/picture/add" class="button pictureAdd" style="font-size: 16px; line-height: 25px">Добавить</a></div>
+      </tr>
+    </table>
+  </form>
+{% endblock %}

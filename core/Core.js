@@ -7,6 +7,7 @@
 
 var Mysql = require('./Mysql');
 var UserManager = require('../model/UserManager');
+var PictureManager = require('../model/PictureManager');
 var AppError = require('./AppError');
 
 /**
@@ -22,6 +23,7 @@ var Core = function (app, req, res) {
 
   this.mysql = new Mysql(this);
   this.userManager = new UserManager(this);
+  this.pictureManager = new PictureManager(this);
 };
 
 /**

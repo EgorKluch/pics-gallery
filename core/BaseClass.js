@@ -10,6 +10,7 @@ var BaseClass = function (core) {
   this.req = core.req;
   this.session = core.req.session;
   this.post = core.req.body;
+  this.query = core.req.query;
 };
 
 module.exports = BaseClass;

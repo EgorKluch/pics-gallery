@@ -15,7 +15,20 @@ var User = function (data) {
   this.email = data.email;
   this.role = data.role;
   this.name = data.name;
-  this.second_name = data.second_name;
+  this.secondName = data.second_name;
+};
+
+User.prototype.getMysqlData = function () {
+  return {
+    id: this.id,
+    token: this.token,
+    login: this.login,
+    password: this.password,
+    email: this.email,
+    role: this.role,
+    name: this.name,
+    second_name: this.secondName
+  };
 };
 
 module.exports = User;

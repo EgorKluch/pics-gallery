@@ -9,8 +9,8 @@ var crypto = require('crypto');
 var util = require('util');
 
 var BaseClass = require('../core/BaseClass');
-var User = require('./User');
 var AppError = require('../core/AppError');
+var User = require('./User');
 
 
 var UserManager = function (core) {
@@ -92,29 +92,20 @@ UserManager.prototype.signIn = function (next) {
 UserManager.prototype.signUp = function (next) {
   if (this.isAuthorized()) return next(new AppError('User already login', 1));
 
-  var login = this.post.login;
-  var email = this.post.eMail;
+  var user = new User(this.post);
+  user.password = this._getHashedPassword(user.password);
 
-  this._checkUserOnExists(login, email, function (err) {
+  this._checkUserOnExists(user.login, user.email, function (err) {
     if (err) return next(new AppError(err));
 
     this._createToken(function (err, token) {
       if (err) return next(new AppError(err));
 
-      var data = {
-        login: login,
-        email: email,
-        token: token,
-        name: this.post.name,
-        password: this._getHashedPassword(this.post.password)
-      };
+      user.token = token;
 
-      this.mysql.insert('user', data, function (err, id) {
+      this.mysql.insert('user', user.getMysqlData(), function (err) {
         if (err) return next(new AppError(err));
-
-        data.id = id;
         this.signIn(next);
-
       }.bind(this));
     }.bind(this));
   }.bind(this));

@@ -86,7 +86,7 @@ module.exports = function (grunt) {
             var scriptName = path.basename(script);
             browserify[controllerName] = {
               src: script,
-              dest: 'build/js/' + controllerName + '/' + scriptName,
+              dest: 'public/js/' + controllerName + '/' + scriptName,
               options: {
                 transform: ['brfs'],
                 debug: true
@@ -109,7 +109,7 @@ module.exports = function (grunt) {
           expand: true,
           cwd: 'controller/' + controllerName + '/css/',
           src: '**.css',
-          dest: 'build/css/' + controllerName + '/'
+          dest: 'public/css/' + controllerName + '/'
         };
         scanControllers(controllers, callback);
       });
@@ -123,7 +123,7 @@ module.exports = function (grunt) {
         .filter(function (dir) { return fs.statSync(dir).isDirectory(); });
       scanControllers(controllers, function () {
 
-        grunt.config.set('clean', ['build/js', 'build/css']);
+        grunt.config.set('clean', ['public/js', 'public/css']);
         grunt.task.run('clean');
 
         grunt.config.set('browserify', browserify);
