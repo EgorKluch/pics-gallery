@@ -14,7 +14,7 @@ var Picture = function (manager, data) {
   BaseEntity.call(this, manager);
 
   this.id = data.id;
-  this.userId = data.id;
+  this.userId = data.userId;
   this.addedBy = data.addedBy;
   this.filename = data.filename;
   this.title = data.title;
@@ -34,3 +34,5 @@ Picture.prototype.getMysqlData = function () {
     description: this.description
   };
 };
+
+module.exports = Picture;

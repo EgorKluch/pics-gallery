@@ -11,9 +11,10 @@ var BaseClass = function (core) {
   this.mysql = core.mysql;
   this.res = core.res;
   this.req = core.req;
-  this.session = core.req.session;
-  this.post = core.req.body;
-  this.query = core.req.query;
+  this.session = core.session;
+  this.post = core.body;
+  this.query = core.query;
+  this.files = core.files;
 };
 
 module.exports = BaseClass;

@@ -1,0 +1,11 @@
+{% extends '../../main/tpl/block/base.twig' %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+  {% for picture in pictures %}
+    {% include "./smallCard.twig" with { 'picture': picture } %}
+  {% endfor %}
+{% endblock %}

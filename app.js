@@ -23,16 +23,17 @@ app.configure(function(){
 });
 
 // Set statics dirs (not handlers)
-app.use('/js', express.static('build/js'));
-app.use('/css', express.static('build/css'));
+app.use('/js', express.static('public/js'));
+app.use('/css', express.static('public/css'));
 
 app.use(express.cookieParser());
 app.use(express.cookieSession({
   secret: 'Siht si terces yek!'
 }));
+
 app.use(express.json());
 app.use(express.urlencoded());
-
+app.use(require('connect-multiparty')());
 
 var routesConfig = require('./config/routes');
 routesConfig(app);

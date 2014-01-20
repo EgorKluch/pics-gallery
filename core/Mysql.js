@@ -42,21 +42,7 @@ Mysql.prototype.initialize = function (next) {
  * @param {Function} next
  */
 Mysql.prototype.select = function (table, columns, where, next) {
-  table = mysql.escapeId(table);
-  if (where) {
-    where = ' where ' + this._getWhereString(where);
-  }
-
-  if (columns === null) {
-    columns = '*';
-  } else {
-    columns = columns.forEach(function (column) {
-      return mysql.escapeId(column);
-    }).join(', ');
-  }
-
-  var query = 'select ' + columns + ' from ' + table + where;
-  this.query(query, next);
+  this._select(table, columns, where, next);
 };
 
 /**
@@ -73,7 +59,7 @@ Mysql.prototype.one = function (table, columns, where, next) {
     where = columns;
     columns = null;
   }
-  this.select(table, columns, where, function (err, rows) {
+  this._select(table, columns, where, function (err, rows) {
     if (err) return next(new AppError(err));
     if (rows.length === 0) return next(null, null);
     next(null, rows[0]);
@@ -88,17 +74,26 @@ Mysql.prototype.one = function (table, columns, where, next) {
  * @param {Function} next
  */
 Mysql.prototype.insert = function (table, fields, next) {
-  var query = 'insert into' + mysql.escapeId(table);
-  query += '(' + _.map(fields, function (value, field) {
-    return mysql.escapeId(field);
-  }).join(', ') + ')';
-  query += ' values(' + _.map(fields, function (value) {
-    return mysql.escape(value);
-  }).join(', ') + ')';
-  this.query(query, function (err, response) {
-    if (err) return next(new AppError(err));
-    next(null, response.insertId);
-  });
+  try {
+    var query = 'insert into' + mysql.escapeId(table);
+
+    query += '(' + _.map(fields, function (value, field) {
+      if (!_.isString(field)) throw new AppError('Field must be a string');
+      return mysql.escapeId(field);
+    }).join(', ') + ')';
+
+    query += ' values(' + _.map(fields, function (value) {
+      return mysql.escape(value);
+    }).join(', ') + ')';
+
+    this.query(query, function (err, response) {
+      if (err) return next(new AppError(err));
+      next(null, response.insertId);
+    });
+
+  } catch (err) {
+    next(new AppError(err));
+  }
 };
 
 /**
@@ -110,10 +105,14 @@ Mysql.prototype.insert = function (table, fields, next) {
  * @param {Function} next
  */
 Mysql.prototype.update = function (table, where, values, next) {
-  var query = 'update ' + mysql.escapeId(table);
-  query += ' set ' + this._getWhereString(values, ',');
-  query += ' where ' + this._getWhereString(where);
-  this.query(query, next);
+  try {
+    var query = 'update ' + mysql.escapeId(table);
+    query += ' set ' + this._getWhereString(values, ',');
+    query += ' where ' + this._getWhereString(where);
+    this.query(query, next);
+  } catch (err) {
+    next(new AppError(err))
+  }
 };
 
 /**
@@ -124,10 +123,39 @@ Mysql.prototype.update = function (table, where, values, next) {
  * @param {Function} next
  */
 Mysql.prototype.del = function (table, where, next) {
-  var query = 'delete from ' + mysql.escapeId(table);
-  query += ' where ' + this._getWhereString(where);
-  this.query(query, next);
+  try {
+    var query = 'delete from ' + mysql.escapeId(table);
+    query += ' where ' + this._getWhereString(where);
+    this.query(query, next);
+
+  } catch (err) {
+    next(new AppError(err));
+  }
 };
+
+Mysql.prototype._select = function (table, columns, where, next) {
+  try {
+    table = mysql.escapeId(table);
+    if (where) {
+      where = ' where ' + this._getWhereString(where);
+    }
+
+    if (columns === null) {
+      columns = '*';
+    } else {
+      columns = columns.forEach(function (column) {
+        return mysql.escapeId(column);
+      }).join(', ');
+    }
+
+    var query = 'select ' + columns + ' from ' + table + where;
+    this.query(query, next);
+
+  } catch (err) {
+    next(new AppError(err));
+  }
+};
+
 
 /**
  * Execute query

@@ -5,8 +5,11 @@
 
 'use strict';
 
+var fs = require('fs');
 var util = require('util');
+var _ = require('underscore');
 
+var AppError = require('../core/AppError');
 var BaseManager = require('../core/BaseManager');
 var Picture = require('./Picture');
 
@@ -21,12 +24,17 @@ util.inherits(PictureManager, BaseManager);
 PictureManager.prototype.add = function (data, next) {
   var currentUser = this.core.userManager.currentUser;
 
-  var picture = new Picture(data);
-  picture.addedBy = currentUser.id;
+  var file = this.files['picture'];
+  var filename = _.last(file.path.split('/'));
+  fs.rename(file.path, __dirname + '/../public/img/pictures' + filename, function (err) {
+    if (err) return next(new AppError(err));
 
-  // TODO: загружаем и сохраняем изображение картины
+    var picture = new this.Entity(data);
+    picture.filename = filename;
+    picture.addedBy = currentUser.id;
 
-  this.mysql.insert('picture', picture.getMysqlData(), next);
+    this.mysql.insert(picture.getMysqlData(), next);
+  }.bind(this));
 };
 
 

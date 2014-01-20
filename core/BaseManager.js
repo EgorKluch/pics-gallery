@@ -12,6 +12,7 @@ var AppError = require('../core/AppError');
 
 
 var BaseManager = function (core, table, Entity) {
+
   BaseClass.call(this, core);
   this.mysql = this.mysql.assign(table);
   this.Entity = Entity.bind(null, this);
@@ -43,4 +44,4 @@ BaseManager.prototype.getByField = function (field, value, next) {
 };
 
 
-module.export = BaseManager;
+module.exports = BaseManager;

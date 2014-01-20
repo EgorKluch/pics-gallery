@@ -15,14 +15,16 @@ UserController.prototype.signUpPage = function (core, next) {
 };
 
 UserController.prototype.signUp = function (core, next) {
-  core.userManager.signUp(function (err) {
+  core.userManager.signUp(core.post, function (err) {
     if (err) return next(new AppError(err));
     core.responseJson();
   });
 };
 
 UserController.prototype.signIn = function (core, next) {
-  core.userManager.signIn(function (err) {
+  var login = core.post.login;
+  var password = core.post.password;
+  core.userManager.signIn(login, password, function (err) {
     if (err) return next(new AppError(err));
     core.responseJson();
   });

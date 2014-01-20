@@ -28,6 +28,7 @@ var AppError = function (err, errorCode, status) {
   }
 
   if (!this.stack) {
+    Error.stackTraceLimit = 30;
     Error.captureStackTrace(this, AppError);
   }
 

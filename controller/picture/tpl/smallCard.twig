@@ -1,0 +1,30 @@
+<div class="picture" data-id="{{ picture.id }}">
+
+  <div class="title">
+    <a href="{{ picture.src }}">{{ picture.title }}</a>
+  </div>
+
+  <a href="{{ picture.url }}"><img src="{{ picture.src }}"></a>
+  <div class="info">
+    <table>
+
+      <tr>
+        <td style="font-weight: bold">Автор:
+        <td>{{ picture.author.name }} {{ picture.author.sname }}
+      </tr>
+
+      <tr>
+        <td>
+        <td style="text-align: right">
+
+          <a href="/picture/{{ picture.id }}/delete"
+             class="redButton deletePicture">Удалить</a>
+
+          <a href="/picture/{{ picture.id }}/edit"
+             class="redButton editPicture">Редактировать</a>
+      </tr>
+
+    </table>
+  </div>
+
+</div>

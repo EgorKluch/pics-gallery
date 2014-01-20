@@ -36,6 +36,9 @@ module.exports = function (app) {
 
   app.get('/picture/add', getRouteHandler(pictureController, pictureController.addPage));
   app.post('/picture/add', getRouteHandler(pictureController, pictureController.add));
+  app.get('/picture/:id/edit', getRouteHandler(pictureController, pictureController.editPage));
+  app.post('/picture/:id/edit', getRouteHandler(pictureController, pictureController.edit));
+  app.post('/picture/:id/delete', getRouteHandler(pictureController, pictureController.del));
 
   app.use(getRouteHandler(mainController, mainController.notFound));
 };

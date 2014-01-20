@@ -8,8 +8,8 @@
 var crypto = require('crypto');
 var util = require('util');
 
-var BaseManager = require('../core/BaseManager');
 var AppError = require('../core/AppError');
+var BaseManager = require('../core/BaseManager');
 var User = require('./User');
 
 
@@ -32,7 +32,7 @@ UserManager.prototype.initialize = function (next) {
       return next(null);
     }
 
-    this.currentUser = new User(userData);
+    this.currentUser = new this.Entity(userData);
     next(null);
   }.bind(this));
 };
@@ -49,14 +49,14 @@ UserManager.prototype.isAuthorized = function () {
   return this.currentUser;
 };
 
-UserManager.prototype.signIn = function (next) {
+UserManager.prototype.signIn = function (login, password, next) {
   if (this.isAuthorized()) {
     return next(new AppError('User already login', 1));
   }
 
-  var password = this._getHashedPassword(this.post.password);
+  password = this._getHashedPassword(password);
   var data = {
-    login: this.post.login,
+    login: login,
     password: password
   };
   this.mysql.one(data, function (err, userData) {
@@ -68,15 +68,15 @@ UserManager.prototype.signIn = function (next) {
     this._createToken(function (err, token) {
       if (err) return next(new AppError(err));
       this.session.token = token;
-      this.mysql.update({id: id}, {token: token}, next);
+      this.mysql.update({ id: id }, { token: token }, next);
     }.bind(this));
   }.bind(this));
 };
 
-UserManager.prototype.signUp = function (next) {
+UserManager.prototype.signUp = function (data, next) {
   if (this.isAuthorized()) return next(new AppError('User already login', 1));
 
-  var user = new User(this.post);
+  var user = new this.Entity(data);
   user.password = this._getHashedPassword(user.password);
 
   this._checkUserOnExists(user.login, user.email, function (err) {

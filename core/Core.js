@@ -20,10 +20,13 @@ var Core = function (app, req, res) {
   this.app = app;
   this.req = req;
   this.res = res;
+  this.session = req.session;
+  this.post = req.body;
+  this.query = req.query;
+  this.args = req.params;
+  this.files = req.files;
 
   this.mysql = new Mysql(this);
-  this.userManager = new UserManager(this);
-  this.pictureManager = new PictureManager(this);
 };
 
 /**
@@ -33,6 +36,9 @@ Core.prototype.initialize = function (next) {
 
   this.mysql.initialize(function (err) {
     if (err) return next(new AppError(err));
+
+    this.userManager = new UserManager(this);
+    this.pictureManager = new PictureManager(this);
 
     this.userManager.initialize(function (err) {
       if (err) return next(new AppError(err));

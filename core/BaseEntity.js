@@ -9,6 +9,7 @@ var _ = require('underscore');
 
 var AppError = require('../core/AppError');
 
+
 var BaseEntity = function (manager) {
   this.manager = manager;
 };

@@ -85,7 +85,7 @@ module.exports = function (grunt) {
           .filter(function (script) { return fs.statSync(script).isFile(); })
           .forEach(function(script) {
             var scriptName = path.basename(script);
-            browserify[controllerName] = {
+            browserify[controllerName + '/' + scriptName] = {
               src: script,
               dest: 'public/js/' + controllerName + '/' + scriptName,
               options: {
