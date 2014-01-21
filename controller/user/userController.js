@@ -11,7 +11,8 @@ var AppError = require('../../core/AppError');
 var UserController = function () {};
 
 UserController.prototype.signUpPage = function (core, next) {
-  core.responseHtmlFromTemplate('user/signUp', 'main/main', 'user:signUp', next);
+  var data = { script: 'user:signUp', style: 'main/main' };
+  core.responseHtmlFromTemplate('user/signUp', data, next);
 };
 
 UserController.prototype.signUp = function (core, next) {

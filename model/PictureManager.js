@@ -21,12 +21,16 @@ var PictureManager = function (core) {
 util.inherits(PictureManager, BaseManager);
 
 
+PictureManager.prototype._getPath = function (filename) {
+  return __dirname + '/../public/img/pictures/' + filename;
+};
+
 PictureManager.prototype.add = function (data, next) {
   var currentUser = this.core.userManager.currentUser;
 
   var file = this.files['picture'];
   var filename = _.last(file.path.split('/'));
-  fs.rename(file.path, __dirname + '/../public/img/pictures/' + filename, function (err) {
+  fs.rename(file.path, this._getPath(filename), function (err) {
     if (err) return next(new AppError(err));
 
     var picture = new this.Entity(data);
@@ -57,8 +61,8 @@ PictureManager.prototype.getAll = function (next) {
 PictureManager.prototype.del = function (picture, next) {
   this.mysql.del({ id: picture.id }, function (err) {
     if (err) return next(new AppError(err));
-    fs.unlink(__dirname + '/../public/img/pictures/' + picture.filename, next);
-  });
+    fs.unlink(this._getPath(picture.filename), next);
+  }.bind(this));
 };
 
 

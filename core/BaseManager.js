@@ -23,12 +23,13 @@ util.inherits(BaseManager, BaseClass);
 
 BaseManager.prototype.getById = function (id, next) {
   this.mysql.one(null, { id: id }, function (err, data) {
-    try {
       if (err) return next(new AppError(err));
       if (!data) return next(null, null);
+
+    try {
       next(null, new this.Entity(data, true));
-    }
-    catch (err) { next(new AppError(err)); }
+    } catch (err) { next(new AppError(err)); }
+
   }.bind(this));
 };
 
@@ -39,8 +40,8 @@ BaseManager.prototype.getByFields = function (fields, next) {
 
     try {
       return next(null, new this.Entity(data));
-    }
-    catch (err) { next(new AppError(err)); }
+    } catch (err) { next(new AppError(err)); }
+
   }.bind(this));
 };
 

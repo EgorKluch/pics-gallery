@@ -19,15 +19,13 @@ var AppError  = require('./AppError');
 /**
  * @constructor
  */
-var Mysql = function () {
-  if (Mysql.instance) return Mysql.instance;
-  return Mysql.instance = this;
-};
+var Mysql = function () {};
 
 /**
  * @param {Function} next
  */
 Mysql.prototype.initialize = function (next) {
+  this.cache = {};
   this.connection = mysql.createConnection(config.mysql);
   this.connection.connect(next);
 };
@@ -109,6 +107,10 @@ Mysql.prototype.insert = function (table, fields, next) {
   }
 };
 
+Mysql.prototype.resetCache = function () {
+  this.cache = {};
+};
+
 /**
  * Update {table} from {values} source for rows, who match {where}
  *
@@ -165,7 +167,17 @@ Mysql.prototype._select = function (table, columns, where, next) {
     }
 
     var query = 'select ' + columns + ' from ' + table + where;
-    this.query(query, next);
+
+    if (this.cache[query]) {
+      return next(null, this.cache[query])
+    }
+    else {
+      this.query(query, function (err, rows) {
+        if (err) return new AppError(err);
+        this.cache[query] = rows;
+        next(null, rows);
+      }.bind(this));
+    }
 
   } catch (err) {
     next(new AppError(err));
@@ -226,8 +238,9 @@ Mysql.prototype._getWhereString = function (where, operator) {
 };
 
 
-var AssignMysql = function (connection, table) {
-  this.connection = connection;
+var AssignMysql = function (mysql, table) {
+  this.connection = mysql.connection;
+  this.cache = mysql.cache;
   this.select = Mysql.prototype.select.bind(this, table);
   this.one = Mysql.prototype.one.bind(this, table);
   this.insert = Mysql.prototype.insert.bind(this, table);
@@ -240,7 +253,7 @@ util.inherits(AssignMysql, Mysql);
 
 
 Mysql.prototype.assign = function (table) {
-  return new AssignMysql(this.connection, table);
+  return new AssignMysql(this, table);
 };
 
 

@@ -9,12 +9,9 @@ var _ = require('underscore');
 
 var AppError = require('../core/AppError');
 var Core = require('../core/Core');
-
 var MainController = require('../controller/main/mainController');
-var UserController = require('../controller/user/userController');
 var PictureController = require('../controller/picture/pictureController');
-
-
+var UserController = require('../controller/user/userController');
 
 var mainController = new MainController();
 var userController = new UserController();
@@ -58,20 +55,19 @@ module.exports = function (app) {
     mainController.notFound(req.core, next);
   });
 
-  app.get('/', getRouteHandler(mainController, mainController.index));
+  app.get('/',                            getRouteHandler(mainController, mainController.index));
 
-  app.post('/signIn', getRouteHandler(userController, userController.signIn));
-  app.all('/signOut', getRouteHandler(userController, userController.signOut));
-  app.get('/signUp', getRouteHandler(userController, userController.signUpPage));
-  app.post('/signUp', getRouteHandler(userController, userController.signUp));
+  app.post('/signIn',                     getRouteHandler(userController, userController.signIn));
+  app.all('/signOut',                     getRouteHandler(userController, userController.signOut));
+  app.get('/signUp',                      getRouteHandler(userController, userController.signUpPage));
+  app.post('/signUp',                     getRouteHandler(userController, userController.signUp));
 
-  app.get('/picture/add', getRouteHandler(pictureController, pictureController.addPage));
-  app.post('/picture/add', getRouteHandler(pictureController, pictureController.add));
-  app.get('/picture/:pictureId/edit', function (req, res, next) {
-    pictureController.editPage(req.core, next);
-  });
-  app.post('/picture/:pictureId/edit', getRouteHandler(pictureController, pictureController.edit));
-  app.post('/picture/:pictureId/delete', getRouteHandler(pictureController, pictureController.del));
+  app.get('/picture/add',                 getRouteHandler(pictureController, pictureController.addPage));
+  app.post('/picture/add',                getRouteHandler(pictureController, pictureController.add));
+  app.get('/picture/:pictureId/edit',     getRouteHandler(pictureController, pictureController.editPage));
+  app.post('/picture/:pictureId/edit',    getRouteHandler(pictureController, pictureController.edit));
+  app.post('/picture/:pictureId/delete',  getRouteHandler(pictureController, pictureController.del));
+
 
   app.use(getRouteHandler(mainController, mainController.notFound));
 };
