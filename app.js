@@ -7,11 +7,12 @@
 
 var express = require('express');
 var app = express();
+var params = require('express-params');
+params.extend(app);
 
 var AppError = require('./core/AppError');
 
 var config = require('./config/config');
-
 
 app.configure(function(){
   // Config twig

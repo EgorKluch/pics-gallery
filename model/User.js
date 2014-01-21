@@ -40,7 +40,4 @@ User.prototype.getMysqlData = function () {
   };
 };
 
-User.prototype.save = function () {
-};
-
 module.exports = User;

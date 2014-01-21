@@ -10,26 +10,28 @@
     <table>
       <tr>
         <td class="label">Название<span class="required">*</span>:
-        <td><input name="title">
-      </tr>
-      <tr>
-        <td class="label">Источник<span class="required">*</span>:
-        <td><input name="file" id="fileUpload" type="file">
+        <td><input name="title" value="{{ title }}">
       </tr>
       <tr>
         <td class="label">Описание:
-        <td><input name="description">
-      </tr>
-      <tr>
-        <td class="label">Цена:
-        <td><input name="cost">
+        <td><input name="description"
+                   value="{{ description }}">
       </tr>
       <tr>
         <td>
-        <td><div style="text-align: right">
-            <a href="/picture/edit" class="button pictureEdit"
+        <td>
+          <div style="text-align: right">
+
+            <a href="/picture/{{ id }}/edit" id="editPictureButton"
+               class="button"
                style="font-size:
-             16px; line-height: 25px">Добавить</a></div>
+             16px; line-height: 25px">Сохранить</a><br>
+
+            <a href="/picture/{{ id }}/delete" id="deletePictureButton"
+               class="button"
+               style="font-size: 16px; line-height: 25px">Удалить</a>
+
+          </div>
       </tr>
     </table>
   </form>

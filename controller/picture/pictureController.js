@@ -15,7 +15,18 @@ PictureController.prototype.addPage = function (core, next) {
 };
 
 PictureController.prototype.editPage = function (core, next) {
-  core.responseHtmlFromTemplate('picture/editPicture', 'main/main', 'picture:editPicture', next);
+  var picture = core.req.picture;
+
+  var data = core.getTemplateData('picture/editPicture', 'main/main');
+  data.id = picture.id;
+  data.title = picture.title;
+  data.description = picture.description;
+
+  var template = core.getTemplate('picture:editPicture');
+  core.app.render(template, data, function (err, html) {
+    if (err) return next(new AppError(err));
+    core.responseHtml(html);
+  });
 };
 
 
@@ -33,14 +44,14 @@ PictureController.prototype.edit = function (core, next) {
   var data = core.post;
   data.userId = core.userManager.currentUser.id;
 
-  core.pictureManager.edit(core.args.id, data, function (err) {
+  core.pictureManager.edit(core.req.picture, data, function (err) {
     if (err) return next(new AppError(err));
     core.responseJson();
   });
 };
 
 PictureController.prototype.del = function (core, next) {
-  core.pictureManager.del(core.args.id, function (err) {
+  core.pictureManager.del(core.req.picture, function (err) {
     if (err) return next(new AppError(err));
     core.responseJson();
   });

@@ -23,7 +23,7 @@ var Core = function (app, req, res) {
   this.session = req.session;
   this.post = req.body;
   this.query = req.query;
-  this.args = req.params;
+  this.params = req.params;
   this.files = req.files;
 
   this.mysql = new Mysql(this);
@@ -82,6 +82,19 @@ Core.prototype.responseHtmlFromTemplate = function (script, style, template, nex
   }.bind(this));
 };
 
+Core.prototype.getTemplateData = function (script, style) {
+  return {
+    script: '/js/' + script + '.js',
+    style: '/css/' + style + '.css',
+    user: this.userManager.currentUser
+  };
+};
+
+Core.prototype.getTemplate = function (template) {
+  var tmp = template.split(':');
+  return 'controller/' + tmp[0] + '/tpl/' + tmp[1] + '.twig';
+};
+
 /**
  * @param {String} script
  * @param {String} style
@@ -89,14 +102,9 @@ Core.prototype.responseHtmlFromTemplate = function (script, style, template, nex
  * @param {Function} next
  */
 Core.prototype.getPage = function (script, style, template, next) {
-  var data = {
-    script: '/js/' + script + '.js',
-    style: '/css/' + style + '.css',
-    user: this.userManager.currentUser
-  };
+  var data = this.getTemplateData(script, style);
+  template = this.getTemplate(template);
 
-  var tmp = template.split(':');
-  template = 'controller/' + tmp[0] + '/tpl/' + tmp[1] + '.twig';
   this.app.render(template, data, function(err, html){
     if (err) return next(new AppError(err));
     next(null, html);

@@ -28,9 +28,18 @@ $(document).ready(function () {
     $pictureAddForm.submit();
 
     $('#iFrame').load(function () {
-      console.log($('#iFrame')[0].contentWindow.document.body.innerHTML);
+      var response = $('#iFrame')[0].contentWindow.document.body.innerHTML;
+      response = $(response).html();
+      response = JSON.parse(response);
+      
+      if (!response.result) {
+        alert('Изините, произошла ошибка');
+        return console.error(response.errorMessage);
+      }
+      JSON.parse(response);
+      alert('Картина успешно создана');
+      location.reload();
     });
-
     return false;
   });
 });

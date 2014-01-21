@@ -11,6 +11,7 @@ var BaseEntity = require('../core/BaseEntity');
 
 
 var Picture = function (manager, data) {
+
   BaseEntity.call(this, manager);
 
   this.id = data.id;

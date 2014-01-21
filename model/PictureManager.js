@@ -26,7 +26,7 @@ PictureManager.prototype.add = function (data, next) {
 
   var file = this.files['picture'];
   var filename = _.last(file.path.split('/'));
-  fs.rename(file.path, __dirname + '/../public/img/pictures' + filename, function (err) {
+  fs.rename(file.path, __dirname + '/../public/img/pictures/' + filename, function (err) {
     if (err) return next(new AppError(err));
 
     var picture = new this.Entity(data);
@@ -35,6 +35,20 @@ PictureManager.prototype.add = function (data, next) {
 
     this.mysql.insert(picture.getMysqlData(), next);
   }.bind(this));
+};
+
+PictureManager.prototype.edit = function (picture, data, next) {
+  _.forEach(data, function (value, key) {
+    picture[key] = value;
+  });
+  picture.save(next);
+};
+
+PictureManager.prototype.del = function (picture, next) {
+  this.mysql.del({ id: picture.id }, function (err) {
+    if (err) return next(new AppError(err));
+    fs.unlink(__dirname + '/../../public/img/pictures/' + picture.filename, next);
+  });
 };
 
 
