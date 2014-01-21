@@ -1,7 +1,7 @@
 <div class="picture" data-id="{{ picture.id }}">
 
   <div class="title">
-    <a href="{{ picture.src }}">{{ picture.title }}</a>
+    <a href="{{ picture.url }}">{{ picture.title }}</a>
   </div>
 
   <a href="{{ picture.url }}"><img src="{{ picture.src }}"></a>
@@ -10,7 +10,7 @@
 
       <tr>
         <td style="font-weight: bold">Автор:
-        <td>{{ picture.author.name }} {{ picture.author.sname }}
+        <td>{{ picture.user.login }}
       </tr>
 
       <tr>
@@ -18,10 +18,11 @@
         <td style="text-align: right">
 
           <a href="/picture/{{ picture.id }}/delete"
-             class="redButton deletePicture">Удалить</a>
+             class="redButton deletePictureButton"
+              >Удалить</a>
 
           <a href="/picture/{{ picture.id }}/edit"
-             class="redButton editPicture">Редактировать</a>
+             class="redButton editPictureButton">Редактировать</a>
       </tr>
 
     </table>

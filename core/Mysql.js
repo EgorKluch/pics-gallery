@@ -8,13 +8,13 @@
 
 'use strict';
 
-var util = require('util');
-var mysql = require('mysql');
+var util   = require('util');
+var mysql  = require('mysql');
+var _      = require('underscore');
 
-var _ = require('underscore');
-var config = require('../config/config');
+var config  = require('../config/config');
 
-var AppError = require('./AppError');
+var AppError  = require('./AppError');
 
 /**
  * @constructor
@@ -42,7 +42,20 @@ Mysql.prototype.initialize = function (next) {
  * @param {Function} next
  */
 Mysql.prototype.select = function (table, columns, where, next) {
+  if (arguments.length === 3) {
+    next = where;
+    where = columns;
+    columns = null;
+  }
   this._select(table, columns, where, next);
+};
+
+Mysql.prototype.selectAll = function (table, columns, next) {
+  if (arguments.length === 2) {
+    next = columns;
+    columns = null;
+  }
+  this._select(table, columns, null, next);
 };
 
 /**
@@ -111,7 +124,7 @@ Mysql.prototype.update = function (table, where, values, next) {
     query += ' where ' + this._getWhereString(where);
     this.query(query, next);
   } catch (err) {
-    next(new AppError(err))
+    next(new AppError(err));
   }
 };
 
@@ -138,7 +151,10 @@ Mysql.prototype._select = function (table, columns, where, next) {
     table = mysql.escapeId(table);
     if (where) {
       where = ' where ' + this._getWhereString(where);
+    } else {
+      where = '';
     }
+
 
     if (columns === null) {
       columns = '*';
@@ -177,6 +193,8 @@ Mysql.prototype.query = function (query, data, next) {
     next = data;
     data = null;
   }
+
+  console.log(query);
   this.connection.query(query, data, function (err, rows) {
     if (err) return next(new AppError(err));
     next(null, rows);
@@ -215,6 +233,7 @@ var AssignMysql = function (connection, table) {
   this.insert = Mysql.prototype.insert.bind(this, table);
   this.update = Mysql.prototype.update.bind(this, table);
   this.del = Mysql.prototype.del.bind(this, table);
+  this.selectAll = Mysql.prototype.selectAll.bind(this, table);
 };
 
 util.inherits(AssignMysql, Mysql);

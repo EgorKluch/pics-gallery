@@ -5,10 +5,12 @@
 
 'use strict';
 
-var Mysql = require('./Mysql');
-var UserManager = require('../model/UserManager');
-var PictureManager = require('../model/PictureManager');
-var AppError = require('./AppError');
+var _ = require('underscore');
+
+var AppError        = require('./AppError');
+var Mysql           = require('./Mysql');
+var PictureManager  = require('../model/PictureManager');
+var UserManager     = require('../model/UserManager');
 
 /**
  * @param app
@@ -108,6 +110,17 @@ Core.prototype.getPage = function (script, style, template, next) {
   this.app.render(template, data, function(err, html){
     if (err) return next(new AppError(err));
     next(null, html);
+  }.bind(this));
+};
+
+Core.prototype.callAsyncMethods = function (objects, method, next) {
+  if (objects.length === 0) return next();
+  var object = objects[0];
+
+  method.call(object, function (err) {
+    if (err) return next(new AppError(err));
+
+    this.callAsyncMethods(_.toArray(objects).slice(1), method, next);
   }.bind(this));
 };
 

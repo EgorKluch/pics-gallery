@@ -50,6 +50,14 @@ module.exports = function (app) {
     });
   });
 
+  app.param('pageNumber', function (req, res, next, pageNumber) {
+    if (parseInt(pageNumber, 10)) {
+      req.pageNumber = pageNumber;
+      return next();
+    }
+    mainController.notFound(req.core, next);
+  });
+
   app.get('/', getRouteHandler(mainController, mainController.index));
 
   app.post('/signIn', getRouteHandler(userController, userController.signIn));

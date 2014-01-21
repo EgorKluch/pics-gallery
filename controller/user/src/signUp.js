@@ -21,7 +21,7 @@ $(document).ready(function () {
       login: $('.login', $signUpForm).val(),
       name: $('.name', $signUpForm).val(),
       password: $('.password', $signUpForm).val(),
-      eMail: $('.eMail', $signUpForm).val()
+      email: $('.email', $signUpForm).val()
     };
 
     if (data.password !== $('.passwordRepeat', $signUpForm).val()) {
@@ -30,22 +30,22 @@ $(document).ready(function () {
     }
 
     if (!data.login) {
-      alert('Для регистрации заполните все поля');
+      alert('Введите логин');
       return false;
     }
 
     if (!data.name) {
-      alert('Для авторизации на сайте введите пароль');
+      alert('Введите имя');
       return false;
     }
 
     if (!data.password) {
-      alert('Для авторизации на сайте введите пароль');
+      alert('Введите пароль');
       return false;
     }
 
-    if (!data.eMail) {
-      alert('Для авторизации на сайте введите пароль');
+    if (!data.email) {
+      alert('Введите почту');
       return false;
     }
 

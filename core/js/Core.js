@@ -5,12 +5,19 @@
 
 'use strict';
 
+var _ = require('underscore');
+
 var Core = function () {
   Core.prototype.token = null;
   Core.prototype.userId = null;
 };
 
 Core.prototype.doRequest = function(url, data, callback) {
+  if (_.isFunction(data)) {
+    callback = data;
+    data = {};
+  }
+
   if (data == null) data = {};
 
   if (this.token != null) {

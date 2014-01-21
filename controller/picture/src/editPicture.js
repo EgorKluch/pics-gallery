@@ -18,7 +18,6 @@ $(document).ready(function () {
   var $pictureEditForm = $('#pictureEditForm');
 
   $('#editPictureButton', $pictureEditForm).click(function () {
-    try {
     var iFrame = $('<iframe name="iFrame" id="iFrame" style="display: none" />');
 
     $('body').append(iFrame);
@@ -43,9 +42,6 @@ $(document).ready(function () {
       alert('Картина успешно изменина');
       location.reload();
     });
-    } catch (e) {
-      console.error(e);
-    }
     return false;
   });
 

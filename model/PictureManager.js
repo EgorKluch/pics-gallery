@@ -44,10 +44,20 @@ PictureManager.prototype.edit = function (picture, data, next) {
   picture.save(next);
 };
 
+PictureManager.prototype.getAll = function (next) {
+  this.mysql.selectAll(function (err, pictures) {
+    if (err) return next(new AppError(err));
+    pictures = pictures.map(function (picture) {
+      return new this.Entity(picture, true);
+    }.bind(this));
+    next(null, pictures);
+  }.bind(this));
+};
+
 PictureManager.prototype.del = function (picture, next) {
   this.mysql.del({ id: picture.id }, function (err) {
     if (err) return next(new AppError(err));
-    fs.unlink(__dirname + '/../../public/img/pictures/' + picture.filename, next);
+    fs.unlink(__dirname + '/../public/img/pictures/' + picture.filename, next);
   });
 };
 

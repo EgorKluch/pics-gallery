@@ -90,7 +90,7 @@ UserManager.prototype.signUp = function (data, next) {
       this.mysql.insert(user.getMysqlData(), function (err) {
         if (err) return next(new AppError(err));
 
-        this.signIn(next);
+        this.signIn(user.login, data.password, next);
       }.bind(this));
     }.bind(this));
   }.bind(this));

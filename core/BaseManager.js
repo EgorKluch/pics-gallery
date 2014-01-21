@@ -8,12 +8,11 @@
 var util = require('util');
 var _ = require('underscore');
 
-var BaseClass = require('../core/BaseClass');
 var AppError = require('../core/AppError');
+var BaseClass = require('../core/BaseClass');
 
 
 var BaseManager = function (core, table, Entity) {
-
   BaseClass.call(this, core);
   this.mysql = this.mysql.assign(table);
   this.Entity = Entity.bind(null, this);
@@ -27,20 +26,7 @@ BaseManager.prototype.getById = function (id, next) {
     try {
       if (err) return next(new AppError(err));
       if (!data) return next(null, null);
-
-      data = _.reduce(data, function (mem, value, key) {
-        key = key
-          .split('_')
-          .map(function (value, index) {
-            if (index === 0) return value;
-            return value.charAt(0).toUpperCase() + value.slice(1);
-          })
-          .join('');
-        mem[key] = value;
-        return mem;
-      }, {});
-
-      next(null, new this.Entity(data));
+      next(null, new this.Entity(data, true));
     }
     catch (err) { next(new AppError(err)); }
   }.bind(this));

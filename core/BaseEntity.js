@@ -12,6 +12,7 @@ var AppError = require('../core/AppError');
 
 var BaseEntity = function (manager) {
   this.manager = manager;
+  this.core = this.manager.core;
 };
 
 BaseEntity.prototype.save = function (next) {
@@ -48,6 +49,20 @@ BaseEntity.prototype.add = function (data, next) {
 
 BaseEntity.prototype.del = function (id, next) {
   this.mysql.del({ id: id }, next);
+};
+
+BaseEntity.prototype.transformDataFromMysql = function (data) {
+  return _.reduce(data, function (mem, value, key) {
+    key = key
+      .split('_')
+      .map(function (value, index) {
+        if (index === 0) return value;
+        return value.charAt(0).toUpperCase() + value.slice(1);
+      })
+      .join('');
+    mem[key] = value;
+    return mem;
+  }, {});
 };
 
 
