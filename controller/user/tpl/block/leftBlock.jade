@@ -1,0 +1,17 @@
+div#loginForm
+  if !user
+    table
+      tr
+        td Логин:
+        td: input.login
+      tr
+        td Пароль:
+        td: input.password(type="password", style="margin-top: 4px;")
+    div.buttons
+      a.button.signIn(href="/signIn", style="margin-right: 10px;") Войти
+      a.button.signUp(href="/signUp") Присоединиться
+  else
+    div.menu
+      a.button(href="/") Главная
+      a.button(href="/picture/add") Добавить картину
+      a.button.signOut(href="/signOut") Выйти

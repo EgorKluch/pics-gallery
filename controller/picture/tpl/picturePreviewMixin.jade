@@ -1,0 +1,17 @@
+mixin picturePreviewMixin
+  div.picture(data-id=picture.id)
+    div.title
+      a(href=picture.url) #{picture.title}
+    a(href=picture.url: img(src=picture.src
+    div.info
+      table
+        tr
+          td(style="font-weight: bold") Автор:
+          td #{picture.user.login}
+        tr
+          td
+          td(style="text-align: right")
+            a.redButton.deletePictureButton(href="/picture/" + picture.id + "/delete")
+              | Удалить
+            a.redButton.editPictureButton(href="/picture/" + picture.id + "/edit")
+              | Редактировать

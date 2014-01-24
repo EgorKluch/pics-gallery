@@ -15,7 +15,6 @@
     "express-params": "0.0.3"
   },
   "dependencies": {
-    "twig": "~0.6.0",
     "jquery-browserify": "~1.8.1",
     "underscore": "~1.5.2",
     "express": "~3.4.7",

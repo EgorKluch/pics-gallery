@@ -1,0 +1,9 @@
+extends ../../main/tpl/block/base
+include picturePreviewMixin
+
+block title
+  | #{title}
+
+block content
+  - for(var picture in pictures)
+    +picturePreview(picture)

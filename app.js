@@ -15,12 +15,8 @@ var AppError = require('./core/AppError');
 var config = require('./config/config');
 
 app.configure(function(){
-  // Config twig
   app.set('views', __dirname);
-  app.set('view engine', 'twig');
-  app.set('twig options', {
-    strict_variables: true
-  });
+  app.set('view engine', 'jade');
 });
 
 // Set statics dirs (not handlers)

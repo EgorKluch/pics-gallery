@@ -1,0 +1,24 @@
+extends ../../main/tpl/block/base
+
+block title
+  | Редактировать картину
+
+block content
+  p Обязательные поля отмечены звездочкой.
+  form#pictureEditForm(method="POST", enctype="multipart/form-data")
+    table
+      tr
+        td.label Название
+          span.required *
+          | :
+        td: input(name="title", value=title)
+      tr
+        td.label Описание:
+        td: input(name="description", value=description)
+      tr
+        td
+        td: div(style="text-align: right")
+          a.button#editPictureButton(href="/picture/" + id + "/edit",
+            style="font-size: 16px; line-height: 25px") Сохранить<br>
+          a.button#deletePictureButton(href="/picture/" + id + "/delete"
+            style="font-size: 16px; line-height: 25px") Удалить

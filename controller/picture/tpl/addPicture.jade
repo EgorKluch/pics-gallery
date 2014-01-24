@@ -1,0 +1,27 @@
+extends ../../main/tpl/block/base
+
+block title
+  | Добавить картину
+
+block content
+  p Обязательные поля отмечены звездочкой.
+  form#pictureAddForm
+    table
+      tr
+        td.label Название
+          span.required *
+          | :
+        td: input(name="title")
+      tr
+        td.label Источник
+          span.required *
+          | :
+        td: input#fileUpload(name="picture", type="file")
+      tr
+        td.label Описание:
+        td: textarea(name="description")
+      tr
+        td
+        td: div(style="text-align: right")
+          a.button#addPictureButton(href="/picture/add",
+            style="font-size: 16px; line-height: 25px") Добавить

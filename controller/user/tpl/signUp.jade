@@ -1,0 +1,28 @@
+extends ../../main/tpl/block/base
+
+block title
+  | Регистрация
+
+block content
+  p Все поля являются обязательными для заполнения.
+  table#signUpForm
+    tr
+      td.label Логин:
+      td: input.login
+    tr
+      td.label Реальное имя:
+      td: input.name
+    tr
+      td.label Пароль:
+      td: input.password(type="password")
+    tr
+      td.label Повторите пароль:
+      td: input.passwordRepeat(type="password")
+    tr
+      td.label Эл. почта:
+      td: input.email
+    tr
+      td
+      td: div(style="text-align: right")
+        a.button.signUp(href="/signUp", style="font-size: 16px; line-height: 25px")
+          | Присоединиться
