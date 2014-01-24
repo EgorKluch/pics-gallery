@@ -92,7 +92,7 @@ Core.prototype.notFound = function (next) {
 
 Core.prototype.render = function (template, data, next) {
   var tmp = template.split(':');
-  template = 'controller/' + tmp[0] + '/tpl/' + tmp[1] + '.twig';
+  template = 'controller/' + tmp[0] + '/tpl/' + tmp[1] + '.jade';
 
   data.script = '/js/' + data.script + '.js';
   data.style = '/css/' + data.style + '.css';

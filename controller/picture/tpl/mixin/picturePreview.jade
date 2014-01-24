@@ -1,8 +1,8 @@
-mixin picturePreviewMixin
+mixin picturePreview(picture)
   div.picture(data-id=picture.id)
     div.title
       a(href=picture.url) #{picture.title}
-    a(href=picture.url: img(src=picture.src
+    a(href=picture.url): img(src=picture.src)
     div.info
       table
         tr

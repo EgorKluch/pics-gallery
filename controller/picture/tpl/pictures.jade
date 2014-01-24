@@ -1,9 +1,9 @@
 extends ../../main/tpl/block/base
-include picturePreviewMixin
+include mixin/picturePreview
 
 block title
   | #{title}
 
 block content
-  - for(var picture in pictures)
+  each picture, index in pictures
     +picturePreview(picture)
