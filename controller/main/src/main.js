@@ -4,11 +4,12 @@
  */
 
 'use strict';
-
+/*
 var $ = require('jquery-browserify');
 
 var Core = require('../../../core/js/Core.js');
 var core = new Core();
+
 
 $(document).ready(function() {
   $('#leftBar').css('height', $('#content').height());
@@ -27,5 +28,5 @@ $(document).ready(function() {
     return false;
   });
 });
-
+*/
 require('../../user/js/main.js');

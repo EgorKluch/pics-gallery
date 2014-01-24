@@ -74,7 +74,15 @@ h2 {
   width: 100px;
   padding: 0;
 }
-
+#loginForm input[name="password"] {
+  margin-top: 4px;
+}
+#loginForm input.invalid {
+  border-color: red;
+}
+#loginForm .signIn {
+  margin-right: 10px;
+}
 .picture {
   display: inline-block;
   width: 250px;
