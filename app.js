@@ -20,6 +20,7 @@ app.configure(function(){
 });
 
 // Set statics dirs (not handlers)
+app.use('/js/lib', express.static('public/lib'));
 app.use('/js', express.static('public/js'));
 app.use('/css', express.static('public/css'));
 app.use('/img', express.static('public/img'));
