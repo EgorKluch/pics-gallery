@@ -5,23 +5,30 @@ block title
 
 block content
   p Обязательные поля отмечены звездочкой.
-  form#pictureAddForm
+  form(ng-controller='AddPictureCtrl', name='addPictureForm', novalidate)
     table
       tr
         td.label Название
           span.required *
           | :
-        td: input(name="title")
+        td
+          div.error(ng-target='title', ng-error='required')
+            | Введите название картины
+          input(type='text', name='title', ng-model='picture.title', requred,
+            ng-class='{validate: doValidate}')
       tr
         td.label Источник
           span.required *
           | :
-        td: input#fileUpload(name="picture", type="file")
+        td
+          div.error(ng-target='picture', ng-error='required')
+            | Выберите файл с изображением картины
+          input#fileUpload(name='picture', type='file', require, ng-class='{validate: doValidate}')
       tr
         td.label Описание:
-        td: textarea(name="description")
+        td: textarea(name='description')
       tr
         td
-        td: div(style="text-align: right")
-          a.button#addPictureButton(href="/picture/add",
-            style="font-size: 16px; line-height: 25px") Добавить
+        td: div(style='text-align: right')
+          a.button#addPictureButton(href='/picture/add',
+            style='font-size: 16px; line-height: 25px') Добавить
