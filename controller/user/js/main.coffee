@@ -3,17 +3,23 @@
 
 'use strict'
 
-$ = require('jquery-browserify');
+app = angular.module 'app', []
 
-app = angular.module('app', []);
+app.controller 'LoginFormCtrl', ['$scope', '$http', ($scope, $http)->
+  $scope.doValidate = off
 
-app.controller('LoginFormCtrl', ['$scope', ($scope)->
   $scope.signIn = ->
+    $scope.doValidate = on
+    return if $scope.loginForm.$invalid
 
-  isInvalid = (field)->
-    input = $scope.loginForm[field]
-    !input.$pristine and input.$invalid
+    $http.post('/signIn', $scope.user)
+      .success (response)->
+        return console.error response.errorMessage if !response.error
+        location.reload()
+      .error (response)->
+        console.error response
 
-  $scope.isInvalidLogin = ->isInvalid 'login'
-  $scope.isInvalidPassword = ->isInvalid 'password'
-]);
+  $scope.signOut = (response)->
+    return console.error response.error if response.error
+    location.reaload()
+]

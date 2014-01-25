@@ -3,3 +3,5 @@ node_modules
 etc/inspect
 config/config.js
 public
+controller/*/js/*.js
+controller/*/css/*.css

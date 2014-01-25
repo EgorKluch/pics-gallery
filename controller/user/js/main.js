@@ -2,26 +2,32 @@
 (function() {
   'use strict';
 
-  var $, app;
-
-  $ = require('jquery-browserify');
+  var app;
 
   app = angular.module('app', []);
 
   app.controller('LoginFormCtrl', [
-    '$scope', function($scope) {
-      var isInvalid;
-      $scope.signIn = function() {};
-      isInvalid = function(field) {
-        var input;
-        input = $scope.loginForm[field];
-        return !input.$pristine && input.$invalid;
+    '$scope', '$http', function($scope, $http) {
+      $scope.doValidate = false;
+      $scope.signIn = function() {
+        $scope.doValidate = true;
+        if ($scope.loginForm.$invalid) {
+          return;
+        }
+        return $http.post('/signIn', $scope.user).success(function(response) {
+          if (!response.error) {
+            return console.error(response.errorMessage);
+          }
+          return location.reload();
+        }).error(function(response) {
+          return console.error(response);
+        });
       };
-      $scope.isInvalidLogin = function() {
-        return isInvalid('login');
-      };
-      return $scope.isInvalidPassword = function() {
-        return isInvalid('password');
+      return $scope.signOut = function(response) {
+        if (response.error) {
+          return console.error(response.error);
+        }
+        return location.reaload();
       };
     }
   ]);

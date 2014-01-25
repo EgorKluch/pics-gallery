@@ -67,7 +67,54 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('build', 'Build controllers', function () {
+  grunt.registerTask('css', 'Build css', function (controllerName) {
+    var controllerPath = 'controller/';
+    var done = this.async();
+    var copy = {};
+    var clean = [];
+
+    var scanControllers = function (controllers, callback) {
+      if (controllers.length === 0) {
+        callback();
+        return;
+      }
+      var controller = controllers.shift();
+      var controllerName = path.basename(controller);
+      copy[controllerName] = {
+        expand: true,
+        cwd: 'controller/' + controllerName + '/css/',
+        src: '**.css',
+        dest: 'public/css/' + controllerName + '/'
+      };
+      clean.push('public/css/' + controllerName);
+      scanControllers(controllers, callback);
+    };
+
+    fs.readdir(controllerPath, function (err, dirs) {
+      if (err) throw err;
+
+      var controllers = dirs
+        .map(function (dir) {return path.join(controllerPath, dir); })
+        .filter(function (dir) { return fs.statSync(dir).isDirectory(); });
+
+      if (controllerName) {
+       controllers = controllers
+         .filter(function (dir) { return path.basename(dir) === controllerName });
+      }
+      
+      scanControllers(controllers, function () {
+        grunt.config.set('clean', clean);
+        grunt.task.run('clean');
+
+        grunt.config.set('copy', copy);
+        grunt.task.run('copy');
+
+        done(0);
+      });
+    });
+  });
+
+  grunt.registerTask('build', 'Build controllers', function (controllerName) {
     var browserify = {};
     var copy = {};
     var controllerPath = 'controller/';
@@ -122,8 +169,13 @@ module.exports = function (grunt) {
       var controllers = dirs
         .map(function (dir) {return path.join(controllerPath, dir); })
         .filter(function (dir) { return fs.statSync(dir).isDirectory(); });
-      scanControllers(controllers, function () {
 
+      if (controllerName) {
+        controllers = controllers
+          .filter(function (dir) { return path.basename(dir) === controllerName });
+      }
+
+      scanControllers(controllers, function () {
         grunt.config.set('clean', ['public/js', 'public/css']);
         grunt.task.run('clean');
 
