@@ -1,9 +1,9 @@
-div#loginForm(ng-controller='LoginFormCtrl')
+div#loginForm(ng-controller='SignInCtrl')
   if !user
     form(name='loginForm', novalidate): table
       tr
         td Логин:
-        td: input(type='text', name='login', ng-model='user.name',
+        td: input(type='text', name='login', ng-model='user.login',
           required, ng-class='{validate: doValidate}')
       tr
         td Пароль:
@@ -11,9 +11,9 @@ div#loginForm(ng-controller='LoginFormCtrl')
           required, ng-class='{validate: doValidate}')
     div.buttons
       a.button.signIn(ng-click='signIn()') Войти
-      a.button.signUp Присоединиться
+      a.button.signUp(href='/signUp') Присоединиться
   else
     div.menu
       a.button(href='/') Главная
       a.button(href='/picture/add') Добавить картину
-      a.button.signOut(href='/signOut') Выйти
+      a.button.signOut(ng-click='signOut()') Выйти

@@ -17,6 +17,11 @@ body {
 a.button {
   color: @blueColor;
   font-weight: bold;
+  cursor: pointer;
+}
+
+input.validate.ng-invalid {
+  border-color: red;
 }
 
 h1 {
@@ -30,6 +35,15 @@ h2 {
   font-weight: bold;
   color: @blueColor;
   margin-top: 5px;
+}
+
+.error {
+  border: 2px solid #6b0400;
+  background-color: #ff8758;
+  color: #c70015;
+  font-size: 12px;
+  width: 230px;
+  margin: 1px 0;
 }
 
 #leftBar {
@@ -87,7 +101,6 @@ h2 {
 
   a {
     font-size: 12px;
-    cursor: pointer;
   }
 
   input {
@@ -97,10 +110,6 @@ h2 {
 
   input[name="password"] {
     margin-top: 4px;
-  }
-
-  input.validate.ng-invalid {
-    border-color: red;
   }
 
   .signIn {
@@ -139,5 +148,18 @@ h2 {
     height: 250px;
     border: 1px solid #b0b0b0;
     padding: 3px;
+  }
+}
+
+#signUpForm {
+  font-size: 13px;
+
+  div.last {
+    text-align: right
+  }
+
+  .button.signUp {
+    font-size: 16px;
+    line-height: 25px;
   }
 }
