@@ -1,0 +1,11 @@
+script(src='/js/lib/angular.js')
+script(src='/js/lib/oi.file.js')
+script(src='/js/picture/testFileUpload.js')
+
+html(ng-app='app')
+
+div(ng-controller='TestFileUploaCtrl')
+  input(type='file', oi-file='options', ng-model='testFile')
+
+  ul(oi-file='options')
+    li: img(ng-src='{{item.thumb}}')

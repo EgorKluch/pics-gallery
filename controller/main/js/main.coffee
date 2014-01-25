@@ -6,4 +6,4 @@
 window.app = angular.module 'app', []
 
 require('./directive/error')
-require('../../user/src/controller/signIn')
+require('../../user/js/controller/signIn')

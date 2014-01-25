@@ -68,6 +68,9 @@ module.exports = function (app) {
   app.post('/picture/:pictureId/edit',    getRouteHandler(pictureController, pictureController.edit));
   app.post('/picture/:pictureId/delete',  getRouteHandler(pictureController, pictureController.del));
 
+  app.get('/fileUploadPage', getRouteHandler(pictureController, pictureController.testFileUploadPage));
+  app.post('/fileUpload', getRouteHandler(pictureController, pictureController.testFileUpload));
+
 
   app.use(getRouteHandler(mainController, mainController.notFound));
 };
