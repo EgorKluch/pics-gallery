@@ -2,11 +2,7 @@
 (function() {
   'use strict';
 
-  var app;
-
-  app = angular.module('app', []);
-
-  app.controller('LoginFormCtrl', [
+  app.controller('SignInCtrl', [
     '$scope', '$http', function($scope, $http) {
       $scope.doValidate = false;
       $scope.signIn = function() {
@@ -15,7 +11,7 @@
           return;
         }
         return $http.post('/signIn', $scope.user).success(function(response) {
-          if (!response.error) {
+          if (response.error) {
             return console.error(response.errorMessage);
           }
           return location.reload();
@@ -24,10 +20,14 @@
         });
       };
       return $scope.signOut = function(response) {
-        if (response.error) {
-          return console.error(response.error);
-        }
-        return location.reaload();
+        return $http.post('/signOut', $scope.user).success(function(response) {
+          if (response.error) {
+            return console.error(response.errorMessage);
+          }
+          return location.reload();
+        }).error(function(response) {
+          return console.error(response);
+        });
       };
     }
   ]);
