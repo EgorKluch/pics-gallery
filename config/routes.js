@@ -62,12 +62,12 @@ module.exports = function (app) {
   app.get('/signUp',                      getRouteHandler(userController, userController.signUpPage));
   app.post('/signUp',                     getRouteHandler(userController, userController.signUp));
 
-  app.get('/picture/add',                 getRouteHandler(pictureController, pictureController.addPage));
+  app.get ('/picture/add',                getRouteHandler(pictureController, pictureController.addPage));
   app.post('/picture/add',                getRouteHandler(pictureController, pictureController.add));
-  app.get('/picture/:pictureId/edit',     getRouteHandler(pictureController, pictureController.editPage));
+  app.post('/picture/upload',             getRouteHandler(pictureController, pictureController.upload));
+  app.get ('/picture/:pictureId/edit',    getRouteHandler(pictureController, pictureController.editPage));
   app.post('/picture/:pictureId/edit',    getRouteHandler(pictureController, pictureController.edit));
   app.post('/picture/:pictureId/delete',  getRouteHandler(pictureController, pictureController.del));
-
 
   app.use(getRouteHandler(mainController, mainController.notFound));
 };

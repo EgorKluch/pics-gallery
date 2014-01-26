@@ -3,5 +3,5 @@
 
 'use strict'
 
-require('../../main/src/main')
+require('../../main/js/main')
 require('./controller/signUp')

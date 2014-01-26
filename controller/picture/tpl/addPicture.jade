@@ -5,30 +5,33 @@ block title
 
 block content
   p Обязательные поля отмечены звездочкой.
-  form(ng-controller='AddPictureCtrl', name='addPictureForm', novalidate)
+  form#addPictureForm(ng-controller='AddPictureCtrl', name='addPictureForm', novalidate)
     table
       tr
         td.label Название
           span.required *
           | :
+
         td
           div.error(ng-target='title', ng-error='required')
             | Введите название картины
-          input(type='text', name='title', ng-model='picture.title', requred,
+          input(type='text', name='title', ng-model='picture.title', required,
             ng-class='{validate: doValidate}')
       tr
         td.label Источник
           span.required *
           | :
         td
-          div.error(ng-target='picture', ng-error='required')
-            | Выберите файл с изображением картины
-          input#fileUpload(name='picture', type='file', require, ng-class='{validate: doValidate}')
+          div.error(ng-target='file', ng-error='required')
+            | Выберите файл изображения картины
+          input(type='file', name='file', oi-file='file', ng-model='picture.file', required )
+          br
+          img(ng-src='{{picture.src}}', ng-show='picture.src')
       tr
         td.label Описание:
-        td: textarea(name='description')
+        td: textarea(name='description', ng-model='picture.description',
+          ng-class='{validate: doValidate}')
       tr
         td
-        td: div(style='text-align: right')
-          a.button#addPictureButton(href='/picture/add',
-            style='font-size: 16px; line-height: 25px') Добавить
+        td
+          div.buttons: a.button(ng-click='addPicture()') Добавить

@@ -1,8 +1,8 @@
 .idea
 node_modules
 etc
-!etc/db.sql
 config/config.js
 public
-controller/*/js/*.js
-*.css
+controller/*/js/**/*.js
+controller/*/css/**/*.css
+tmp

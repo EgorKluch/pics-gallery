@@ -17,9 +17,9 @@ app.controller 'SignUpCtrl', ['$scope', '$http', (s, $http)->
 
   s.signUp = ->
     s.doValidate = on
-    return showErrors() if s.signUpForm.$invalid
+    return if s.signUpForm.$invalid
 
-    $http.post('/signIn', s.user)
+    $http.post('/signUp', s.user)
     .success (response)->
         return console.error response.errorMessage if response.error
         location.reload()

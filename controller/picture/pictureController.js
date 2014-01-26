@@ -9,6 +9,28 @@ var AppError = require('../../core/AppError');
 
 var PictureController = function () {};
 
+PictureController.prototype.testFileUpload = function (core, next) {
+  console.log();
+  console.log();
+  console.log(core.files);
+  console.log();
+  console.log();
+  core.responseJson();
+};
+
+PictureController.prototype.testFileUploadPage = function (core, next) {
+  var data = { script: 'picture/testFileUpload', style: 'main/main' };
+  core.responseHtmlFromTemplate('picture:testFileUpload', data, next);
+};
+
+PictureController.prototype.upload = function (core, next) {
+  var file = core.files.picture;
+  var pictureId = core.post.pictureId;
+  core.pictureManager.upload(file, pictureId, function (err, data) {
+    if (err) next(new AppError(err));
+    core.responseJson(data);
+  });
+};
 
 PictureController.prototype.addPage = function (core, next) {
   var data = { script: 'picture/addPicture', style: 'main/main' };

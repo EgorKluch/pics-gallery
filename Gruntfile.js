@@ -75,14 +75,14 @@ module.exports = function (grunt) {
 
     var scanScripts = function (controller, callback) {
       var controllerName = path.basename(controller);
-      if (!path.existsSync(controller + '/src/')) {
+      if (!path.existsSync(controller + '/js/')) {
         callback();
         return;
       }
-      fs.readdir(controller + '/src/', function (err, scripts){
+      fs.readdir(controller + '/js/', function (err, scripts){
         if (err) throw err;
         scripts
-          .map(function (script) { return path.join(controller + '/src/', script); })
+          .map(function (script) { return path.join(controller + '/js/', script); })
           .filter(function (script) { return fs.statSync(script).isFile(); })
           .filter(function (script) { return path.extname(script) === '.js' })
           .forEach(function(script) {
