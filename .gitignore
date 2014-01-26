@@ -1,7 +1,7 @@
 .idea
 node_modules
-etc/inspect.js
+etc
 config/config.js
 public
-controller/*/src/*.js
-*.css
+controller/*/js/**/*.js
+controller/*/css/**/*.css

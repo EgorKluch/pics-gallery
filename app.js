@@ -24,6 +24,7 @@ app.use('/js/lib', express.static('public/lib'));
 app.use('/js', express.static('public/js'));
 app.use('/css', express.static('public/css'));
 app.use('/img', express.static('public/img'));
+app.use('/tmp/img', express.static('tmp/img'));
 
 app.use(express.cookieParser());
 app.use(express.cookieSession({

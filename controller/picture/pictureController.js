@@ -23,6 +23,14 @@ PictureController.prototype.testFileUploadPage = function (core, next) {
   core.responseHtmlFromTemplate('picture:testFileUpload', data, next);
 };
 
+PictureController.prototype.upload = function (core, next) {
+  var filePath = core.files.picture;
+  var pictureId = core.post.pictureId;
+  core.pictureManager.upload(filePath, pictureId, function (err, data) {
+    if (err) next(new AppError(err));
+    core.responseJSON(data);
+  });
+};
 
 PictureController.prototype.addPage = function (core, next) {
   var data = { script: 'picture/addPicture', style: 'main/main' };

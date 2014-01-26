@@ -20,3 +20,10 @@ create table if not exists picture(
   foreign key (user_id) references user(id),
   foreign key (added_by) references user(id)
 );
+
+create table if not exists tmp_picture(
+  id int unsigned not null auto_increment primary key,
+  filename varchar(128) not null,
+  picture_id int unsigned default null unique,
+  foreign key (picture_id) references picture(id)
+);

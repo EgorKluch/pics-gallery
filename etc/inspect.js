@@ -8,5 +8,10 @@ var obj = {
   repeatePassword: {},
   ngTarget: {},
   ngType: {},
-  ngError: {}
-};cc
+  ngError: {},
+  Files: {},
+  pictureId: {},
+  addPictureForm: {},
+  signUpForm: {},
+  oiFile: {}
+};
