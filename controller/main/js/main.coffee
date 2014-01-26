@@ -3,7 +3,7 @@
 
 'use strict';
 
-window.app = angular.module 'app', []
+window.app = angular.module 'app', ['oi.file']
 
 require('./directive/error')
 require('../../user/js/controller/signIn')

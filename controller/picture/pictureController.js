@@ -24,11 +24,11 @@ PictureController.prototype.testFileUploadPage = function (core, next) {
 };
 
 PictureController.prototype.upload = function (core, next) {
-  var filePath = core.files.picture;
+  var file = core.files.picture;
   var pictureId = core.post.pictureId;
-  core.pictureManager.upload(filePath, pictureId, function (err, data) {
+  core.pictureManager.upload(file, pictureId, function (err, data) {
     if (err) next(new AppError(err));
-    core.responseJSON(data);
+    core.responseJson(data);
   });
 };
 

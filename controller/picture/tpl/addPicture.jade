@@ -24,9 +24,9 @@ block content
         td
           div.error(ng-target='file', ng-error='required')
             | Выберите файл изображения картины
-          input(type='file', name='file', oi-file='file')
+          input(type='file', name='file', oi-file='file', ng-model='picture.file', required )
           br
-          img(ng-src='picture.src', ng-show='picture.src')
+          img(ng-src='{{picture.src}}', ng-show='picture.src')
       tr
         td.label Описание:
         td: textarea(name='description', ng-model='picture.description',

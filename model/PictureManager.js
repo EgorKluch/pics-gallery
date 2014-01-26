@@ -34,22 +34,22 @@ PictureManager.prototype.upload = function (file, pictureId, next) {
   fs.rename(file.path, __dirname + '/../tmp/img/' + filename, function (err) {
     if (err) return next(new AppError(err));
 
-    var data = { filename: filename };
+    var data = { filename: filename, type: 'picture' };
     if (pictureId) {
       data.picture_id = pictureId;
-      this.core.mysql.one('tmp_picture', data, function (err, tmpPicture) {
+      this.core.mysql.one('tmp', data, function (err, tmpPicture) {
         if (err) return next(new AppError(err));
         if (tmpPicture) {
           var where = { picture_id: pictureId };
           data = { filename: filename };
-          this.core.mysql.update('tmp_picture', where, data, next);
+          this.core.mysql.update('tmp', where, data, next);
           data = { hash: tmpPicture.id, src: this.getTmpSrc(filename) };
           next(null, data);
         }
       }.bind(this));
     }
 
-    this.core.mysql.insert('tmp_picture', data, function (err, id) {
+    this.core.mysql.insert('tmp', data, function (err, id) {
       if (err) return next(new AppError(err));
       data = { hash: id, src: this.getTmpSrc(filename) };
       next(null, data);
@@ -65,18 +65,22 @@ PictureManager.prototype.getTmpSrc = function (filename) {
 PictureManager.prototype.add = function (data, next) {
   var currentUser = this.core.userManager.currentUser;
 
-  this.core.mysql.select('tmp_picture', { id: data.hash }, function (err, tmpPicture) {
+  this.core.mysql.one('tmp', { id: data.hash }, function (err, tmpPicture) {
     if (err) return next(new AppError(err));
     if (!tmpPicture) return next(new AppError('File picture wasn\'t loaded!', 1));
     if (tmpPicture.picture_id) return next(new AppError('File picture is used yet', 2));
 
     var filename = tmpPicture.filename;
-    fs.rename(this._getTmpPath(filename), this._getPath(filename), function (err) {
+    var tmpPath = this._getTmpPath(filename);
+    fs.rename(tmpPath, this._getPath(filename), function (err) {
       if (err) return next(new AppError(err));
       var picture = new this.Entity(data);
       picture.filename = filename;
       picture.addedBy = currentUser.id;
-      this.mysql.insert(picture.getMysqlData(), next);
+      this.core.mysql.del('tmp', { id: tmpPicture.id }, function (err) {
+        if (err) return next(new AppError(err));
+        this.mysql.insert(picture.getMysqlData(), next);
+      }.bind(this));
     }.bind(this));
   }.bind(this));
 };
