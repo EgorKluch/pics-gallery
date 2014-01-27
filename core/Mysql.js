@@ -169,7 +169,7 @@ Mysql.prototype._select = function (table, columns, where, next) {
     var query = 'select ' + columns + ' from ' + table + where;
 
     if (this.cache[query]) {
-      return next(null, this.cache[query])
+      return next(null, this.cache[query]);
     }
     else {
       this.query(query, function (err, rows) {

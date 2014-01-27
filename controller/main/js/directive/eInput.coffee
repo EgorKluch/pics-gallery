@@ -1,6 +1,8 @@
 # @author: EgorKluch (EgorKluch@gmail.com)
 # @date: 26.01.14
 
+'use strict'
+
 window.app.directive 'input', ['$parse', ($parse)->
   return {
     restrict: 'E',

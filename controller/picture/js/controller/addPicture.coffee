@@ -3,7 +3,9 @@
 
 'use strict'
 
-app.controller 'AddPictureCtrl', ['$scope', '$http', (s, $http)->
+angular = window.angular
+
+window.app.controller 'AddPictureCtrl', ['$scope', '$http', (s, $http)->
   s.doValidate = off
 
   s.file = {
@@ -11,7 +13,7 @@ app.controller 'AddPictureCtrl', ['$scope', '$http', (s, $http)->
     fieldName: 'picture'
 
     change: (file)->
-      return if !file?
+      return if file is null
       file.$upload(s.file.url, {}).then(
         (response)->
           response = response.data
@@ -27,7 +29,7 @@ app.controller 'AddPictureCtrl', ['$scope', '$http', (s, $http)->
   s.addPicture = ->
     s.doValidate = on
 
-    return if s.addPictureForm.$invalid or s.picture.hash isnt undefined
+    return if s.addPictureForm.$invalid or s.picture.hash is undefined
 
     data = angular.extend {}, s.picture
     delete data.src

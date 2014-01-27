@@ -3,7 +3,7 @@
 
 'use strict'
 
-app.controller 'SignInCtrl', ['$scope', '$http', ($scope, $http)->
+window.app.controller 'SignInCtrl', ['$scope', '$http', ($scope, $http)->
   $scope.doValidate = off
 
   $scope.signIn = ->

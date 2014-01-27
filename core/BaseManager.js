@@ -23,8 +23,8 @@ util.inherits(BaseManager, BaseClass);
 
 BaseManager.prototype.getById = function (id, next) {
   this.mysql.one(null, { id: id }, function (err, data) {
-      if (err) return next(new AppError(err));
-      if (!data) return next(null, null);
+    if (err) return next(new AppError(err));
+    if (!data) return next(null, null);
 
     try {
       next(null, new this.Entity(data, true));

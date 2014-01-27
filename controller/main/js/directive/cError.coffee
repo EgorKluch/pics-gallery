@@ -1,9 +1,11 @@
 # @author: EgorKluch (EgorKluch@gmail.com)
 # @date: 25.01.14
 
+'use strict'
+
 $ = require('jquery-browserify');
 
-app.directive 'error', ->
+window.app.directive 'error', ->
   return {
   restrict: 'C',
   require: '?ngTarget',

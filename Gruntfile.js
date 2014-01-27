@@ -84,7 +84,7 @@ module.exports = function (grunt) {
         scripts
           .map(function (script) { return path.join(controller + '/js/', script); })
           .filter(function (script) { return fs.statSync(script).isFile(); })
-          .filter(function (script) { return path.extname(script) === '.js' })
+          .filter(function (script) { return path.extname(script) === '.js'; })
           .forEach(function(script) {
             var scriptName = path.basename(script);
             browserify[controllerName + '/' + scriptName] = {
@@ -128,7 +128,7 @@ module.exports = function (grunt) {
 
       if (controllerName) {
         controllers = controllers
-          .filter(function (dir) { return path.basename(dir) === controllerName });
+          .filter(function (dir) { return path.basename(dir) === controllerName; });
       }
 
       scanControllers(controllers, function () {

@@ -3,7 +3,9 @@
 
 'use strict'
 
-app.controller 'EditPictureCtrl', ['$scope', '$http', (s, $http)->
+angular = window.angular
+
+window.app.controller 'EditPictureCtrl', ['$scope', '$http', (s, $http)->
   s.doValidate = off
 
   s.editPicture = ->

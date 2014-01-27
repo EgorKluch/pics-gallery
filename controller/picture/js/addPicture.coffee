@@ -3,7 +3,7 @@
 
 'use strict'
 
-window.app = angular.module 'app', ['oi.file']
+window.app = window.angular.module 'app', ['oi.file']
 
 require('../../main/js/directive/cError')
 require('../../main/js/directive/eInput')

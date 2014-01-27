@@ -3,7 +3,7 @@
 
 'use strict'
 
-app.controller 'SignUpCtrl', ['$scope', '$http', (s, $http)->
+window.app.controller 'SignUpCtrl', ['$scope', '$http', (s, $http)->
   s.doValidate = off
 
   s.checkRepeatePassword = ->
