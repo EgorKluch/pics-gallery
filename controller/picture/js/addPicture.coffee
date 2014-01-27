@@ -3,5 +3,11 @@
 
 'use strict'
 
-require('../../main/js/main')
+window.app = angular.module 'app', ['oi.file']
+
+require('../../main/js/directive/cError')
+require('../../main/js/directive/eInput')
+require('../../main/js/directive/eTextarea')
+
+require('../../user/js/controller/signIn')
 require('./controller/addPicture')

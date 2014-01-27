@@ -6,7 +6,8 @@ $ = require('jquery-browserify');
 app.directive 'error', ->
   return {
   restrict: 'C',
-  link: (s, element, attrs)->
+  require: '?ngTarget',
+  link: (scope, element, attrs)->
     element = $(element).hide()
 
     target = attrs.ngTarget
@@ -20,12 +21,14 @@ app.directive 'error', ->
         break
       formElement = formElement.parent()
 
-    event = (err)->
-      console.log(target, error, err)
-      return element.show() if err && (s[form][target].$dirty || s.doValidate)
+    errorField = form + '.' + target + '.$error.' + error
+
+    checkError = (err)->
+      return element.show() if err and (scope[form][target].$dirty or scope.doValidate)
       element.hide()
 
-    errorField = form + '.' + target + '.$error.' + error
-    s.$watch errorField, event
-    s.$watch 'doValidate', event
+    scope.$watch errorField, checkError
+    scope.$watch 'doValidate', ()->
+      err = scope[form][target].$error[error]
+      checkError err
   }

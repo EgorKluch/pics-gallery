@@ -7,6 +7,7 @@ window.app = angular.module 'app', []
 
 require('../../main/js/directive/cError')
 require('../../main/js/directive/eInput')
+require('../../main/js/directive/eTextarea')
 
-require('./controller/signIn')
-require('./controller/signUp')
+require('../../user/js/controller/signIn')
+require('./controller/editPicture')

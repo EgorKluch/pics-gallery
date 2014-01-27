@@ -5,20 +5,26 @@ block title
 
 block content
   p Обязательные поля отмечены звездочкой.
-  form#pictureEditForm(method="POST", enctype="multipart/form-data")
+  form(ng-controller='EditPictureCtrl', name='editPictureForm', novalidate)
+    input(type='hidden', value=id, ng-model='picture.id')
     table
       tr
         td.label Название
           span.required *
           | :
-        td: input(name="title", value=title)
+
+        td
+          div.error(ng-target='title', ng-error='required')
+            | Введите название картины
+          input(type='text', name='title', ng-model='picture.title', required,
+            ng-class='{validate: doValidate}', value=title)
       tr
         td.label Описание:
-        td: input(name="description", value=description)
+        td: textarea(name='description', ng-model='picture.description',
+          ng-class='{validate: doValidate}', value=description)
       tr
         td
-        td: div(style="text-align: right")
-          a.button#editPictureButton(href="/picture/" + id + "/edit",
-            style="font-size: 16px; line-height: 25px") Сохранить<br>
-          a.button#deletePictureButton(href="/picture/" + id + "/delete"
-            style="font-size: 16px; line-height: 25px") Удалить
+        td: div.buttons
+          a.button(ng-click='editPicture()') Сохранить
+          br
+          a.button(ng-click='deletePicture()') Удалить
