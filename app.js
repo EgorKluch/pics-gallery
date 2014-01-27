@@ -15,18 +15,16 @@ var AppError = require('./core/AppError');
 var config = require('./config/config');
 
 app.configure(function(){
-  // Config twig
   app.set('views', __dirname);
-  app.set('view engine', 'twig');
-  app.set('twig options', {
-    strict_variables: true
-  });
+  app.set('view engine', 'jade');
 });
 
 // Set statics dirs (not handlers)
+app.use('/js/lib', express.static('public/lib'));
 app.use('/js', express.static('public/js'));
 app.use('/css', express.static('public/css'));
 app.use('/img', express.static('public/img'));
+app.use('/tmp/img', express.static('tmp/img'));
 
 app.use(express.cookieParser());
 app.use(express.cookieSession({

@@ -46,7 +46,7 @@ UserManager.prototype.getUserByEmail = function (email, next) {
 };
 
 UserManager.prototype.isAuthorized = function () {
-  return this.currentUser;
+  return !!this.currentUser;
 };
 
 UserManager.prototype.signIn = function (login, password, next) {

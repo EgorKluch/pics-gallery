@@ -2,97 +2,177 @@
 @grayColor: #b0b0b0;
 
 body {
-   margin: 0;
-   padding: 0;
-   border: 0;
-   font-family: 'Open Sans';
-   font-size: 15px;
-   font-weight: 400;
-   font-style: normal;
-   font-size-adjust: none;
-   line-height: 21px;
-   vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: 'Open Sans';
+  font-size: 15px;
+  font-weight: 400;
+  font-style: normal;
+  font-size-adjust: none;
+  line-height: 21px;
+  vertical-align: baseline;
 }
 
 a.button {
-   color: @blueColor;
-   font-weight: bold;
+  color: @blueColor;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+input.validate.ng-invalid {
+  border-color: red;
 }
 
 h1 {
-   text-transform: uppercase;
-   color: @blueColor;
+  text-transform: uppercase;
+  color: @blueColor;
 }
 
 h2 {
-   text-transform: uppercase;
-   font-size: 25px;
-   font-weight: bold;
-   color: @blueColor;
-   margin-top: 5px;
+  text-transform: uppercase;
+  font-size: 25px;
+  font-weight: bold;
+  color: @blueColor;
+  margin-top: 5px;
+}
+
+.error {
+  border: 2px solid #6b0400;
+  background-color: #ff8758;
+  color: #c70015;
+  font-size: 12px;
+  width: 230px;
+  margin: 1px 0;
 }
 
 #leftBar {
-   padding-top: 15px;
-   width: 200px;
-   float: left;
-   min-height: 800px;
-   border-right: 2px solid @grayColor;
+  padding-top: 15px;
+  width: 200px;
+  float: left;
+  min-height: 800px;
+  border-right: 2px solid @grayColor;
 
-   .menu {
-      a {
-         display: block;
-      }
-   }
+  .menu {
+    a {
+      display: block;
+    }
+  }
 }
 
 #content {
-   width: 570px;
-   float: right;
-   padding-top: 15px;
+  width: 570px;
+  float: right;
+  padding-top: 15px;
 
-   td.label {
-      text-align: right;
-   }
+  td.label {
+    text-align: right;
+  }
 }
 
 #wrapper {
-   width: 800px;
-   margin: auto;
-   margin-top: 5px;
+  width: 800px;
+  margin: auto;
+  margin-top: 5px;
 }
 
 #header {
-   padding-bottom: 5px;
-   border-bottom: 2px solid @grayColor;
+  padding-bottom: 5px;
+  border-bottom: 2px solid @grayColor;
 
-   a {
-      text-decoration: none;
-      color: @blueColor;
-   }
+  a {
+    text-decoration: none;
+    color: @blueColor;
+  }
 }
 
 #loginForm {
-   display: inline-block;
-   font-size: 13px;
+  display: inline-block;
+  font-size: 13px;
 
-   .title {
-      text-align: center;
-      font-weight: bold;
-   }
+  .title {
+    text-align: center;
+    font-weight: bold;
+  }
 
-   .inputContainer {
+  .inputContainer {
+    display: inline-block;
+  }
+
+  a {
+    font-size: 12px;
+  }
+
+  input {
+    width: 100px;
+    padding: 0;
+  }
+
+  input[name="password"] {
+    margin-top: 4px;
+  }
+
+  .signIn {
+    margin-right: 10px;
+  }
+}
+
+
+.picture {
+  display: inline-block;
+  width: 250px;
+  font-size: 12px;
+  color: #45688e;
+  margin-bottom: 10px;
+  margin-right: 5px;
+  padding: 5px 12px;
+
+  .title {
+    font-weight: bold;
+    font-size: 14px;
+
+    a {
+      color: #45688e;
+      text-decoration: none;
       display: inline-block;
-   }
+      margin-bottom: 5px;
+    }
+  }
 
-   a {
-      font-size: 12px;
-   }
+  table {
+    width: 100%;
+  }
 
-   input {
-      width: 100px;
-      padding: 0;
-   }
+  img {
+    width: 250px;
+    height: 250px;
+    border: 1px solid #b0b0b0;
+    padding: 3px;
+  }
+}
+
+#signUpForm {
+  font-size: 13px;
+
+  div.last {
+    text-align: right
+  }
+
+  .button.signUp {
+    font-size: 16px;
+    line-height: 25px;
+  }
+}
+
+form {
+  .buttons {
+    text-align: right;
+  }
+
+  .button {
+    font-size: 16px;
+    line-height: 25px;
+  }
 }
 
 .picture {

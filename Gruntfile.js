@@ -67,22 +67,24 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('build', 'Build controllers', function () {
+  grunt.registerTask('build', 'Build controllers', function (controllerName) {
     var browserify = {};
     var copy = {};
     var controllerPath = 'controller/';
+    var clean = [];
 
     var scanScripts = function (controller, callback) {
       var controllerName = path.basename(controller);
-      if (!path.existsSync(controller + '/src/')) {
+      if (!path.existsSync(controller + '/js/')) {
         callback();
         return;
       }
-      fs.readdir(controller + '/src/', function (err, scripts){
+      fs.readdir(controller + '/js/', function (err, scripts){
         if (err) throw err;
         scripts
-          .map(function (script) { return path.join(controller + '/src/', script); })
+          .map(function (script) { return path.join(controller + '/js/', script); })
           .filter(function (script) { return fs.statSync(script).isFile(); })
+          .filter(function (script) { return path.extname(script) === '.js'; })
           .forEach(function(script) {
             var scriptName = path.basename(script);
             browserify[controllerName + '/' + scriptName] = {
@@ -112,6 +114,7 @@ module.exports = function (grunt) {
           src: '**.css',
           dest: 'public/css/' + controllerName + '/'
         };
+        clean.push('public/css/' + controllerName);
         scanControllers(controllers, callback);
       });
     };
@@ -122,9 +125,14 @@ module.exports = function (grunt) {
       var controllers = dirs
         .map(function (dir) {return path.join(controllerPath, dir); })
         .filter(function (dir) { return fs.statSync(dir).isDirectory(); });
-      scanControllers(controllers, function () {
 
-        grunt.config.set('clean', ['public/js', 'public/css']);
+      if (controllerName) {
+        controllers = controllers
+          .filter(function (dir) { return path.basename(dir) === controllerName; });
+      }
+
+      scanControllers(controllers, function () {
+        grunt.config.set('clean', clean);
         grunt.task.run('clean');
 
         grunt.config.set('browserify', browserify);

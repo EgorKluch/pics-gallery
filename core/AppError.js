@@ -15,7 +15,7 @@ var util = require('util');
  * @constructor
  */
 var AppError = function (err, errorCode, status) {
-  this.stack = null;
+  this.stack = err.stack;
 
   if (err instanceof AppError) return err;
 

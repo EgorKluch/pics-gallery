@@ -8,9 +8,12 @@
 var _ = require('underscore');
 
 var AppError        = require('./AppError');
+var MainController = require('../controller/main/mainController');
 var Mysql           = require('./Mysql');
 var PictureManager  = require('../model/PictureManager');
 var UserManager     = require('../model/UserManager');
+
+var mainController = new MainController();
 
 /**
  * @param app
@@ -71,41 +74,30 @@ Core.prototype.responseHtml = function (html, code) {
 };
 
 /**
- * @param {String} script
- * @param {String} style
+ * @param {Object} data
  * @param {String} template
  * @param {Function} next
  * @param {Number} [code]
  */
-Core.prototype.responseHtmlFromTemplate = function (script, style, template, next, code) {
-  this.getPage(script, style, template, function (err, html) {
+Core.prototype.responseHtmlFromTemplate = function (template, data, next, code) {
+  this.render(template, data, function (err, html) {
     if (err) return next(new AppError(err));
     this.responseHtml(html, code);
   }.bind(this));
 };
 
-Core.prototype.getTemplateData = function (script, style) {
-  return {
-    script: '/js/' + script + '.js',
-    style: '/css/' + style + '.css',
-    user: this.userManager.currentUser
-  };
+Core.prototype.notFound = function (next) {
+  mainController.notFound(this, next);
 };
 
-Core.prototype.getTemplate = function (template) {
+Core.prototype.render = function (template, data, next) {
   var tmp = template.split(':');
-  return 'controller/' + tmp[0] + '/tpl/' + tmp[1] + '.twig';
-};
+  template = 'controller/' + tmp[0] + '/tpl/' + tmp[1] + '.jade';
 
-/**
- * @param {String} script
- * @param {String} style
- * @param {String} template
- * @param {Function} next
- */
-Core.prototype.getPage = function (script, style, template, next) {
-  var data = this.getTemplateData(script, style);
-  template = this.getTemplate(template);
+  data.script = '/js/' + data.script + '.js';
+  data.style = '/css/' + data.style + '.css';
+
+  data.user = this.userManager.currentUser;
 
   this.app.render(template, data, function(err, html){
     if (err) return next(new AppError(err));

@@ -1,0 +1,37 @@
+extends ../../main/tpl/block/base
+
+block title
+  | Добавить картину
+
+block content
+  p Обязательные поля отмечены звездочкой.
+  form(ng-controller='AddPictureCtrl', name='addPictureForm', novalidate)
+    table
+      tr
+        td.label Название
+          span.required *
+          | :
+
+        td
+          div.error(ng-target='title', ng-error='required')
+            | Введите название картины
+          input(type='text', name='title', ng-model='picture.title', required,
+            ng-class='{validate: doValidate}')
+      tr
+        td.label Источник
+          span.required *
+          | :
+        td
+          div.error(ng-target='file', ng-error='required')
+            | Выберите файл изображения картины
+          input(type='file', name='file', oi-file='file', ng-model='picture.file', required )
+          br
+          img(ng-src='{{picture.src}}', ng-show='picture.src')
+      tr
+        td.label Описание:
+        td: textarea(name='description', ng-model='picture.description',
+          ng-class='{validate: doValidate}')
+      tr
+        td
+        td
+          div.buttons: a.button(ng-click='addPicture()') Добавить

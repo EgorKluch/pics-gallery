@@ -9,24 +9,31 @@ var AppError = require('../../core/AppError');
 
 var PictureController = function () {};
 
+PictureController.prototype.upload = function (core, next) {
+  var file = core.files.picture;
+  var pictureId = core.post.pictureId;
+  core.pictureManager.upload(file, pictureId, function (err, data) {
+    if (err) next(new AppError(err));
+    core.responseJson(data);
+  });
+};
 
 PictureController.prototype.addPage = function (core, next) {
-  core.responseHtmlFromTemplate('picture/addPicture', 'main/main', 'picture:addPicture', next);
+  var data = { script: 'picture/addPicture', style: 'main/main' };
+  core.responseHtmlFromTemplate('picture:addPicture', data, next);
 };
 
 PictureController.prototype.editPage = function (core, next) {
   var picture = core.req.picture;
 
-  var data = core.getTemplateData('picture/editPicture', 'main/main');
-  data.id = picture.id;
-  data.title = picture.title;
-  data.description = picture.description;
-
-  var template = core.getTemplate('picture:editPicture');
-  core.app.render(template, data, function (err, html) {
-    if (err) return next(new AppError(err));
-    core.responseHtml(html);
-  });
+  var data = {
+    script: 'picture/editPicture',
+    style: 'main/main',
+    id: picture.id,
+    title: picture.title,
+    description: picture.description
+  };
+  core.responseHtmlFromTemplate('picture:editPicture', data, next);
 };
 
 

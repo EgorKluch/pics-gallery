@@ -1,0 +1,25 @@
+doctype html
+html(ng-app="app")
+
+head
+  meta(http-equiv="Content-Type", content="text/html", charset="utf-8")
+  script(src="/js/lib/angular.js")
+  script(src="/js/lib/oi.file.js")
+  script(src=script)
+  link(rel="stylesheet", href=style)
+  title Аукцион картин
+
+
+body: div#wrapper
+
+  include header
+
+  div#main
+    div#leftBar
+      include ../../../user/tpl/block/leftBlock
+      block leftBar
+    div#content
+      h2: block title
+      block content
+
+  include footer

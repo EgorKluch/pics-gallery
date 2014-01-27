@@ -20,20 +20,68 @@ var PictureManager = function (core) {
 
 util.inherits(PictureManager, BaseManager);
 
+PictureManager.prototype._getTmpPath = function (filename) {
+  return __dirname + '/../tmp/img/' + filename;
+};
+
+PictureManager.prototype._getPath = function (filename) {
+  return __dirname + '/../public/img/pictures/' + filename;
+};
+
+PictureManager.prototype.upload = function (file, pictureId, next) {
+  var filename = _.last(file.path.split('/'));
+
+  fs.rename(file.path, __dirname + '/../tmp/img/' + filename, function (err) {
+    if (err) return next(new AppError(err));
+
+    var data = { filename: filename, type: 'picture' };
+    if (pictureId) {
+      data.picture_id = pictureId;
+      this.core.mysql.one('tmp', data, function (err, tmpPicture) {
+        if (err) return next(new AppError(err));
+        if (tmpPicture) {
+          var where = { picture_id: pictureId };
+          data = { filename: filename };
+          this.core.mysql.update('tmp', where, data, next);
+          data = { hash: tmpPicture.id, src: this.getTmpSrc(filename) };
+          next(null, data);
+        }
+      }.bind(this));
+    }
+
+    this.core.mysql.insert('tmp', data, function (err, id) {
+      if (err) return next(new AppError(err));
+      data = { hash: id, src: this.getTmpSrc(filename) };
+      next(null, data);
+    }.bind(this));
+
+  }.bind(this));
+};
+
+PictureManager.prototype.getTmpSrc = function (filename) {
+  return '/tmp/img/' + filename;
+};
 
 PictureManager.prototype.add = function (data, next) {
   var currentUser = this.core.userManager.currentUser;
 
-  var file = this.files['picture'];
-  var filename = _.last(file.path.split('/'));
-  fs.rename(file.path, __dirname + '/../public/img/pictures/' + filename, function (err) {
+  this.core.mysql.one('tmp', { id: data.hash }, function (err, tmpPicture) {
     if (err) return next(new AppError(err));
+    if (!tmpPicture) return next(new AppError('File picture wasn\'t loaded!', 1));
+    if (tmpPicture.picture_id) return next(new AppError('File picture is used yet', 2));
 
-    var picture = new this.Entity(data);
-    picture.filename = filename;
-    picture.addedBy = currentUser.id;
-
-    this.mysql.insert(picture.getMysqlData(), next);
+    var filename = tmpPicture.filename;
+    var tmpPath = this._getTmpPath(filename);
+    fs.rename(tmpPath, this._getPath(filename), function (err) {
+      if (err) return next(new AppError(err));
+      var picture = new this.Entity(data);
+      picture.filename = filename;
+      picture.addedBy = currentUser.id;
+      this.core.mysql.del('tmp', { id: tmpPicture.id }, function (err) {
+        if (err) return next(new AppError(err));
+        this.mysql.insert(picture.getMysqlData(), next);
+      }.bind(this));
+    }.bind(this));
   }.bind(this));
 };
 
@@ -57,8 +105,8 @@ PictureManager.prototype.getAll = function (next) {
 PictureManager.prototype.del = function (picture, next) {
   this.mysql.del({ id: picture.id }, function (err) {
     if (err) return next(new AppError(err));
-    fs.unlink(__dirname + '/../public/img/pictures/' + picture.filename, next);
-  });
+    fs.unlink(this._getPath(picture.filename), next);
+  }.bind(this));
 };
 
 
