@@ -10,30 +10,47 @@ var AppError = require('../../core/AppError');
 var PictureController = function () {};
 
 PictureController.prototype.upload = function (core, next) {
+  if (null === core.userManager.currentUser) {
+    return core.forbidden();
+  }
   var file = core.files.picture;
   var pictureId = core.post.pictureId;
-  core.pictureManager.upload(file, pictureId, function (err, data) {
-    if (err) next(new AppError(err));
-    core.responseJson(data);
+  this._checkAccessUpload(pictureId, function () {
+    core.pictureManager.upload(file, pictureId, function (err, data) {
+      if (err) next(new AppError(err));
+      core.responseJson(data);
+    });
   });
 };
 
+PictureController.prototype._checkAccessUpload = function (pictureId, next) {
+  if (!pictureId) return next();
+  this.getById(pictureId, function (picture) {
+    picture.checkAccess('upload', next);
+  })
+};
+
 PictureController.prototype.addPage = function (core, next) {
+  if (null === core.userManager.currentUser) {
+    return core.forbidden();
+  }
   var data = { script: 'picture/addPicture', style: 'main/main' };
   core.responseHtmlFromTemplate('picture:addPicture', data, next);
 };
 
 PictureController.prototype.editPage = function (core, next) {
   var picture = core.req.picture;
-
-  var data = {
-    script: 'picture/editPicture',
-    style: 'main/main',
-    id: picture.id,
-    title: picture.title,
-    description: picture.description
-  };
-  core.responseHtmlFromTemplate('picture:editPicture', data, next);
+  picture.checkAccess('edit', function (err) {
+    if (err) return next(new AppError(err));
+    var data = {
+      script: 'picture/editPicture',
+      style: 'main/main',
+      id: picture.id,
+      title: picture.title,
+      description: picture.description
+    };
+    core.responseHtmlFromTemplate('picture:editPicture', data, next);
+  });
 };
 
 

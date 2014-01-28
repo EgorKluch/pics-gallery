@@ -28,6 +28,33 @@ PictureManager.prototype._getPath = function (filename) {
   return __dirname + '/../public/img/pictures/' + filename;
 };
 
+PictureManager.prototype.checkAccess = function (action, picture, next) {
+  if (!(picture instanceof Picture)) {
+    this.getById(picture, function (picture) {
+      this.checkAccess(action, picture, next);
+    }.bind(this));
+  }
+
+  // action one of [edit, delete, add, view, upload]
+
+  if (picture && 'view' === action) return next();
+
+  var user = this.core.userManager.currentUser;
+
+  if (null !== user) {
+    if ('add' === action) return next();
+    if ('upload' === action && !picture) return next();
+
+    // For edit, delete, upload
+    if (picture && (picture.userId === user.id
+        || user.hasRole('admin')|| user.hasRole('moder'))) {
+      return next();
+    }
+  }
+
+  this.core.forbidden();
+};
+
 PictureManager.prototype.upload = function (file, pictureId, next) {
   var filename = _.last(file.path.split('/'));
 

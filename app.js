@@ -36,7 +36,7 @@ if (cluster.isMaster) {
     app.set('view engine', 'jade');
   });
 
-// Set statics dirs (not handlers)
+  // Set statics dirs (not handlers)
   app.use('/js/lib', express.static('public/lib'));
   app.use('/js', express.static('public/js'));
   app.use('/css', express.static('public/css'));
@@ -79,5 +79,7 @@ if (cluster.isMaster) {
   });
 
   var server = app.listen(config.port);
-  console.log('Express started on port ' + config.port);
+
+  console.log('Worker ' + cluster.worker.id + ' is started.');
+  console.log('Express started on port with ' + config.port + '.');
 }

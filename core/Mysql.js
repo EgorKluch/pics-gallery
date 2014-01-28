@@ -85,26 +85,21 @@ Mysql.prototype.one = function (table, columns, where, next) {
  * @param {Function} next
  */
 Mysql.prototype.insert = function (table, fields, next) {
-  try {
-    var query = 'insert into' + mysql.escapeId(table);
+  var query = 'insert into' + mysql.escapeId(table);
 
-    query += '(' + _.map(fields, function (value, field) {
-      if (!_.isString(field)) throw new AppError('Field must be a string');
-      return mysql.escapeId(field);
-    }).join(', ') + ')';
+  query += '(' + _.map(fields, function (value, field) {
+    if (!_.isString(field)) throw new AppError('Field must be a string');
+    return mysql.escapeId(field);
+  }).join(', ') + ')';
 
-    query += ' values(' + _.map(fields, function (value) {
-      return mysql.escape(value);
-    }).join(', ') + ')';
+  query += ' values(' + _.map(fields, function (value) {
+    return mysql.escape(value);
+  }).join(', ') + ')';
 
-    this.query(query, function (err, response) {
-      if (err) return next(new AppError(err));
-      next(null, response.insertId);
-    });
-
-  } catch (err) {
-    next(new AppError(err));
-  }
+  this.query(query, function (err, response) {
+    if (err) return next(new AppError(err));
+    next(null, response.insertId);
+  });
 };
 
 Mysql.prototype.resetCache = function () {
@@ -120,14 +115,10 @@ Mysql.prototype.resetCache = function () {
  * @param {Function} next
  */
 Mysql.prototype.update = function (table, where, values, next) {
-  try {
-    var query = 'update ' + mysql.escapeId(table);
-    query += ' set ' + this._getWhereString(values, ',');
-    query += ' where ' + this._getWhereString(where);
-    this.query(query, next);
-  } catch (err) {
-    next(new AppError(err));
-  }
+  var query = 'update ' + mysql.escapeId(table);
+  query += ' set ' + this._getWhereString(values, ',');
+  query += ' where ' + this._getWhereString(where);
+  this.query(query, next);
 };
 
 /**
@@ -138,49 +129,39 @@ Mysql.prototype.update = function (table, where, values, next) {
  * @param {Function} next
  */
 Mysql.prototype.del = function (table, where, next) {
-  try {
-    var query = 'delete from ' + mysql.escapeId(table);
-    query += ' where ' + this._getWhereString(where);
-    this.query(query, next);
-
-  } catch (err) {
-    next(new AppError(err));
-  }
+  var query = 'delete from ' + mysql.escapeId(table);
+  query += ' where ' + this._getWhereString(where);
+  this.query(query, next);
 };
 
 Mysql.prototype._select = function (table, columns, where, next) {
-  try {
-    table = mysql.escapeId(table);
-    if (where) {
-      where = ' where ' + this._getWhereString(where);
-    } else {
-      where = '';
-    }
+  table = mysql.escapeId(table);
+  if (where) {
+    where = ' where ' + this._getWhereString(where);
+  } else {
+    where = '';
+  }
 
 
-    if (columns === null) {
-      columns = '*';
-    } else {
-      columns = columns.forEach(function (column) {
-        return mysql.escapeId(column);
-      }).join(', ');
-    }
+  if (columns === null) {
+    columns = '*';
+  } else {
+    columns = columns.forEach(function (column) {
+      return mysql.escapeId(column);
+    }).join(', ');
+  }
 
-    var query = 'select ' + columns + ' from ' + table + where;
+  var query = 'select ' + columns + ' from ' + table + where;
 
-    if (this.cache[query]) {
-      return next(null, this.cache[query]);
-    }
-    else {
-      this.query(query, function (err, rows) {
-        if (err) return new AppError(err);
-        this.cache[query] = rows;
-        next(null, rows);
-      }.bind(this));
-    }
-
-  } catch (err) {
-    next(new AppError(err));
+  if (this.cache[query]) {
+    return next(null, this.cache[query]);
+  }
+  else {
+    this.query(query, function (err, rows) {
+      if (err) return new AppError(err);
+      this.cache[query] = rows;
+      next(null, rows);
+    }.bind(this));
   }
 };
 

@@ -90,6 +90,10 @@ Core.prototype.notFound = function (next) {
   mainController.notFound(this, next);
 };
 
+Core.prototype.forbidden = function (next) {
+  mainController.forbidden(this, next);
+};
+
 Core.prototype.render = function (template, data, next) {
   var tmp = template.split(':');
   template = 'controller/' + tmp[0] + '/tpl/' + tmp[1] + '.jade';

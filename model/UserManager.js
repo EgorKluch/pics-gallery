@@ -37,11 +37,11 @@ UserManager.prototype.initialize = function (next) {
   }.bind(this));
 };
 
-UserManager.prototype.getUserByLogin = function (login, next) {
+UserManager.prototype.getByLogin = function (login, next) {
   this.getByField('login', login, next);
 };
 
-UserManager.prototype.getUserByEmail = function (email, next) {
+UserManager.prototype.getByEmail = function (email, next) {
   this.getByField('email', email, next);
 };
 
@@ -102,11 +102,11 @@ UserManager.prototype.signOut = function (next) {
 };
 
 UserManager.prototype._checkUserOnExists = function (login, email, next) {
-  this.getUserByLogin(login, function (err, userData) {
+  this.getByLogin(login, function (err, userData) {
     if (err) return next(new AppError(err));
     if (userData) next(new AppError('User with this login already exists', 2));
 
-    this.getUserByEmail(email, function (err, userData) {
+    this.getByEmail(email, function (err, userData) {
       if (err) return next(new AppError(err));
       if (userData) return next(new AppError('User with this email already exists', 3));
       next();

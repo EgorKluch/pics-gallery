@@ -28,8 +28,21 @@ MainController.prototype.index = function (core, next) {
 };
 
 MainController.prototype.notFound = function (core, next) {
-  var data = { script: 'main/main', style: 'main/style' };
-  core.responseHtmlFromTemplate('main:notFound', data, next, 404);
+  var data = {
+    script: 'main/main',
+    style: 'main/style',
+    message: 'Данной страницы не существует.'
+  };
+  core.responseHtmlFromTemplate('main:error', data, next, 404);
+};
+
+MainController.prototype.forbidden = function (core, next) {
+  var data = {
+    script: 'main/main',
+    style: 'main/style',
+    message: 'Доступ к данной странице запрещен.'
+  };
+  core.responseHtmlFromTemplate('main:error', data, next, 403);
 };
 
 module.exports = MainController;

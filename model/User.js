@@ -26,6 +26,9 @@ var User = function (manager, data) {
 
 util.inherits(User, BaseEntity);
 
+User.prototype.hasRole = function (role) {
+  return role === this.role;
+};
 
 User.prototype.getMysqlData = function () {
   return {

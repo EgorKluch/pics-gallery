@@ -11,11 +11,17 @@ var AppError = require('../../core/AppError');
 var UserController = function () {};
 
 UserController.prototype.signUpPage = function (core, next) {
+  if (null !== core.userManager.currentUser) {
+    return core.forbidden(next);
+  }
   var data = { script: 'user/signUp', style: 'main/main' };
   core.responseHtmlFromTemplate('user:signUp', data, next);
 };
 
 UserController.prototype.signUp = function (core, next) {
+  if (null !== core.userManager.currentUser) {
+    return core.forbidden(next);
+  }
   core.userManager.signUp(core.post, function (err) {
     if (err) return next(new AppError(err));
     core.responseJson();
@@ -23,6 +29,9 @@ UserController.prototype.signUp = function (core, next) {
 };
 
 UserController.prototype.signIn = function (core, next) {
+  if (null !== core.userManager.currentUser) {
+    return core.forbidden();
+  }
   var login = core.post.login;
   var password = core.post.password;
   core.userManager.signIn(login, password, function (err) {
@@ -32,6 +41,9 @@ UserController.prototype.signIn = function (core, next) {
 };
 
 UserController.prototype.signOut = function (core, next) {
+  if (null === core.userManager.currentUser) {
+    return core.forbidden();
+  }
   core.userManager.signOut(function (err) {
     if (err) return next(new AppError(err));
     core.responseJson();
