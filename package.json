@@ -10,15 +10,16 @@
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-clean": "~0.5.0",
     "brfs": "~0.0.7",
-    "grunt-contrib-uglify": "~0.2.7",
-    "connect-multiparty": "1.0.2",
-    "express-params": "0.0.3"
+    "grunt-contrib-uglify": "~0.2.7"
   },
   "dependencies": {
     "jade": "1.1.5",
     "jquery-browserify": "~1.8.1",
     "underscore": "~1.5.2",
     "express": "~3.4.7",
-    "mysql": "~2.0.0-rc1"
+    "mysql": "~2.0.0-rc1",
+    "connect-multiparty": "1.0.2",
+    "express-params": "0.0.3",
+    "express-domain-middleware": "0.1.0"
   }
 }

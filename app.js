@@ -5,54 +5,79 @@
 
 'use strict';
 
-var express = require('express');
-var app = express();
-var params = require('express-params');
-params.extend(app);
+var cluster = require('cluster');
+var os = require('os');
 
-var AppError = require('./core/AppError');
-
-var config = require('./config/config');
-
-app.configure(function(){
-  app.set('views', __dirname);
-  app.set('view engine', 'jade');
-});
-
-// Set statics dirs (not handlers)
-app.use('/js/lib', express.static('public/lib'));
-app.use('/js', express.static('public/js'));
-app.use('/css', express.static('public/css'));
-app.use('/img', express.static('public/img'));
-app.use('/tmp/img', express.static('tmp/img'));
-
-app.use(express.cookieParser());
-app.use(express.cookieSession({
-  secret: 'Siht si terces yek!'
-}));
-
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(require('connect-multiparty')());
-
-var routesConfig = require('./config/routes');
-routesConfig(app);
-
-
-// Handle errors!
-app.use(function (err, req, res, next) {
-  if (!err) return;
-
-  if (!(err instanceof AppError)) {
-    err = new AppError(err);
+if (cluster.isMaster) {
+  var proccessCount = os.cpus().length;
+  for (var index = 0; index < proccessCount; index++){
+    cluster.fork();
   }
 
-  console.log('\n\n');
-  console.error(err.stack);
+  cluster.on('disconnect', function(worker) {
+    console.log('Worker ' + worker.id + ' dies..');
+    cluster.fork();
+  });
 
-  res.json(err.status, err.getData());
-});
+} else {
 
+  var express = require('express');
+  var app = express();
+  var params = require('express-params');
+  var expressDomain = require('express-domain-middleware');
+  params.extend(app);
 
-app.listen(config.port);
-console.log('Express started on port ' + config.port);
+  var AppError = require('./core/AppError');
+
+  var config = require('./config/config');
+
+  app.configure(function(){
+    app.set('views', __dirname);
+    app.set('view engine', 'jade');
+  });
+
+// Set statics dirs (not handlers)
+  app.use('/js/lib', express.static('public/lib'));
+  app.use('/js', express.static('public/js'));
+  app.use('/css', express.static('public/css'));
+  app.use('/img', express.static('public/img'));
+  app.use('/tmp/img', express.static('tmp/img'));
+
+  app.use(express.cookieParser());
+  app.use(express.cookieSession({
+    secret: 'Siht si terces yek!'
+  }));
+
+  app.use(express.json());
+  app.use(express.urlencoded());
+  app.use(require('connect-multiparty')());
+
+  app.use(expressDomain);
+
+  var routesConfig = require('./config/routes');
+  routesConfig(app);
+
+  app.use(function (err, req, res, next) {
+    if (!err) return;
+
+    var isUnexpectedError = !(err instanceof AppError);
+    if (isUnexpectedError) {
+      err = new AppError(err);
+    }
+
+    if (isUnexpectedError && server._handle) {
+      server.close(function () {
+        process.exit(1);
+      });
+      cluster.worker.disconnect();
+    }
+
+    console.log('\n\n');
+    console.error(err.stack);
+
+    res.json(err.status, err.getData());
+  });
+
+  var server = app.listen(config.port);
+  console.log('Express started on port ' + config.port);
+}
