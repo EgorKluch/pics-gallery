@@ -11,7 +11,7 @@ var PictureController = function () {};
 
 PictureController.prototype.upload = function (core, next) {
   var pictureId = core.post.pictureId;
-  core.pictureManager.hasAccess('upload', pictureId, function (err, hasAccess) {
+  core.pictureManager.hasAccess('upload', { picture: pictureId }, function (err, hasAccess) {
     if (err) return next(new AppError(err));
     if (!hasAccess) return core.jsonForbidden();
     
@@ -35,7 +35,7 @@ PictureController.prototype.addPage = function (core, next) {
 
 PictureController.prototype.editPage = function (core, next) {
   var picture = core.req.picture;
-  core.pictureManager.hasAccess('edit', picture, function (err, hasAccess) {
+  core.pictureManager.hasAccess('edit', { picture: picture }, function (err, hasAccess) {
     if (err) return next(new AppError(err));
     if (!hasAccess) return core.forbidden();
 
@@ -68,7 +68,7 @@ PictureController.prototype.add = function (core, next) {
 
 PictureController.prototype.edit = function (core, next) {
   var picture = core.req.picture;
-  core.pictureManager.hasAccess('edit', picture, function (err, hasAccess) {
+  core.pictureManager.hasAccess('edit', { picture: picture }, function (err, hasAccess) {
     if (err) return next(new AppError(err));
     if (!hasAccess) return core.jsonForbidden();
 
@@ -83,7 +83,7 @@ PictureController.prototype.edit = function (core, next) {
 
 PictureController.prototype.del = function (core, next) {
   var picture = core.req.picture;
-  core.pictureManager.hasAccess('delete', picture, function (err, hasAccess) {
+  core.pictureManager.hasAccess('delete', { picture: picture }, function (err, hasAccess) {
     if (err) return next(new AppError(err));
     if (!hasAccess) return core.jsonForbidden();
 
