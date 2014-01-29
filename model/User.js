@@ -6,6 +6,7 @@
 'use strict';
 
 var util = require('util');
+var _ = require('underscore');
 
 var BaseEntity = require('../core/BaseEntity');
 
@@ -28,6 +29,13 @@ util.inherits(User, BaseEntity);
 
 User.prototype.hasRole = function (role) {
   return role === this.role;
+};
+
+User.prototype.inRoles = function (roles) {
+  var self = this;
+  return !!_.find(roles, function (role) {
+    return self.hasRole(role);
+  });
 };
 
 User.prototype.getMysqlData = function () {

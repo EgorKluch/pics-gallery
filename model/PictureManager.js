@@ -16,9 +16,48 @@ var Picture = require('./Picture');
 
 var PictureManager = function (core) {
   BaseManager.call(this, core, 'picture', Picture);
+  this._initAccessHandlers();
 };
 
 util.inherits(PictureManager, BaseManager);
+
+PictureManager.prototype._initAccessHandlers = function () {
+  this.addAccessHandler('view', true);
+
+  this.addAccessHandler('upload', function (handler, picture, next) {
+    if (!(picture instanceof Picture)) {
+      return this.getById(picture, function (picture) {
+        handler(handler, picture, next);
+      });
+    }
+    var user = this.core.getCurrentUser();
+    if (null === user) return next(null, false);
+    if (null === picture) return next(null, true);
+    if (user.inRoles(['moder', 'admin'])) return next(null, true);
+    if (user.id === picture.userId) return next(null, true);
+    return next(null, false);
+  }.bind(this));
+
+  this.addAccessHandler('add', function (handler, args, next) {
+    var user = this.core.getCurrentUser();
+    if (null === user) return next(null, false);
+    if (user.inRoles(['pointer', 'moder', 'admin'])) return next(null, true);
+    return next(null, false);
+  });
+
+  this.addAccessHandlers(['edit', 'delete'], function (handler, picture, next) {
+    if (!(picture instanceof Picture)) {
+      return this.getById(picture, function (picture) {
+        handler(handler, picture, next);
+      });
+    }
+    var user = this.core.getCurrentUser();
+    if (null === user) return next(null, false);
+    if (user.inRoles(['moder', 'admin'])) return next(null, true);
+    if (user.id === picture.userId) return next(null, true);
+    return next(null, false);
+  });
+};
 
 PictureManager.prototype._getTmpPath = function (filename) {
   return __dirname + '/../tmp/img/' + filename;
@@ -26,33 +65,6 @@ PictureManager.prototype._getTmpPath = function (filename) {
 
 PictureManager.prototype._getPath = function (filename) {
   return __dirname + '/../public/img/pictures/' + filename;
-};
-
-PictureManager.prototype.checkAccess = function (action, picture, next) {
-  if (!(picture instanceof Picture)) {
-    this.getById(picture, function (picture) {
-      this.checkAccess(action, picture, next);
-    }.bind(this));
-  }
-
-  // action one of [edit, delete, add, view, upload]
-
-  if (picture && 'view' === action) return next();
-
-  var user = this.core.userManager.currentUser;
-
-  if (null !== user) {
-    if ('add' === action) return next();
-    if ('upload' === action && !picture) return next();
-
-    // For edit, delete, upload
-    if (picture && (picture.userId === user.id
-        || user.hasRole('admin')|| user.hasRole('moder'))) {
-      return next();
-    }
-  }
-
-  this.core.forbidden();
 };
 
 PictureManager.prototype.upload = function (file, pictureId, next) {
