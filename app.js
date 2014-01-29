@@ -40,6 +40,7 @@ if (cluster.isMaster) {
 
   // Set statics dirs (not handlers)
   app.use('/js/lib', express.static('public/lib'));
+  app.use('/bootstrap', express.static('public/lib/bootstrap'));
   app.use('/js', express.static('public/js'));
   app.use('/css', express.static('public/css'));
   app.use('/img', express.static('public/img'));

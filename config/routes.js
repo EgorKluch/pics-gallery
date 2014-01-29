@@ -65,5 +65,7 @@ module.exports = function (app) {
   app.post('/picture/:pictureId/edit',    getRouteHandler(pictureController, pictureController.edit));
   app.post('/picture/:pictureId/delete',  getRouteHandler(pictureController, pictureController.del));
 
+  app.get('/testBootstrap',               getRouteHandler(mainController, mainController.testBootstrap));
+
   app.use(getRouteHandler(mainController, mainController.notFound));
 };

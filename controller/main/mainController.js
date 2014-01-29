@@ -14,6 +14,11 @@ var MainController = function () {
   return MainController.instance = this;
 };
 
+MainController.prototype.testBootstrap = function (core, next) {
+  var data = { script: 'main/main', style: 'main/testBootstrap' };
+  core.responseHtmlFromTemplate('main:testBootstrap', data, next);
+};
+
 MainController.prototype.index = function (core, next) {
   core.pictureManager.getAll(function (err, pictures) {
     if (err) return next(new AppError(err));
