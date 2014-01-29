@@ -25,6 +25,8 @@ if (cluster.isMaster) {
   var app = express();
   var params = require('express-params');
   var expressDomain = require('express-domain-middleware');
+  var server;
+
   params.extend(app);
 
   var AppError = require('./core/AppError');
@@ -78,7 +80,7 @@ if (cluster.isMaster) {
     res.json(err.status, err.getData());
   });
 
-  var server = app.listen(config.port);
+  server = app.listen(config.port);
 
   console.log('Worker ' + cluster.worker.id + ' is started.');
   console.log('Express started on port with ' + config.port + '.');
