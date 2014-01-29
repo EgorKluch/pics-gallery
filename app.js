@@ -45,7 +45,7 @@ if (cluster.isMaster) {
 
   app.use(express.cookieParser());
   app.use(express.cookieSession({
-    secret: 'Siht si terces yek!'
+    secret: config.cookieKey
   }));
 
   app.use(express.json());
@@ -66,7 +66,9 @@ if (cluster.isMaster) {
     }
 
     if (isUnexpectedError && server._handle) {
+      console.log('Close server');
       server.close(function () {
+        console.log('Server was closed');
         process.exit(1);
       });
       cluster.worker.disconnect();
@@ -80,4 +82,8 @@ if (cluster.isMaster) {
 
   var server = app.listen(config.port);
   console.log('Express started on port ' + config.port);
+
+  server.on('connection', function(socket) {
+    socket.setTimeout(150000);
+  });
 }

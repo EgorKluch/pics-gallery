@@ -5,6 +5,7 @@
 
 module.exports = {
   port: 3000,
+  cookieKey: 'secret',
 
   mysql: {
     host: 'localhost',
