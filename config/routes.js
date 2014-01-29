@@ -27,11 +27,7 @@ module.exports = function (app) {
 
   var getRouteHandler = function (context, method) {
     return function (req, res, next) {
-      try {
-        method.call(context, req.core, next);
-      } catch (err) {
-        next(new AppError(err));
-      }
+      method.call(context, req.core, next);
     }
   };
 
