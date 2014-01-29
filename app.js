@@ -25,6 +25,8 @@ if (cluster.isMaster) {
   var app = express();
   var params = require('express-params');
   var expressDomain = require('express-domain-middleware');
+  var server;
+
   params.extend(app);
 
   var AppError = require('./core/AppError');
@@ -36,7 +38,7 @@ if (cluster.isMaster) {
     app.set('view engine', 'jade');
   });
 
-// Set statics dirs (not handlers)
+  // Set statics dirs (not handlers)
   app.use('/js/lib', express.static('public/lib'));
   app.use('/js', express.static('public/js'));
   app.use('/css', express.static('public/css'));
@@ -80,7 +82,7 @@ if (cluster.isMaster) {
     res.json(err.status, err.getData());
   });
 
-  var server = app.listen(config.port);
+  server = app.listen(config.port);
   console.log('Express started on port ' + config.port);
 
   server.on('connection', function(socket) {

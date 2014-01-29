@@ -16,9 +16,67 @@ var Picture = require('./Picture');
 
 var PictureManager = function (core) {
   BaseManager.call(this, core, 'picture', Picture);
+  this._initAccessHandlers();
 };
 
 util.inherits(PictureManager, BaseManager);
+
+PictureManager.prototype._initAccessHandlers = function () {
+  var self = this;
+
+  var initUserArgs = function (args) {
+    if (!args.user) return;
+    args.isOwnPicture = args.user.id === args.picture.userId;
+    args.isPointerUser = args.user.hasRole('pointer');
+  };
+
+  this.accessManager.prepareHandle(function (action, args, next) {
+    if (!args) args = {};
+
+    args.user = self.core.getCurrentUser();
+    if (args.user) {
+      args.isSuperUser = args.user.inRoles('admin', 'moder');
+    }
+
+    if (!args.picture) return next(null, args);
+
+    if (args.picture instanceof Picture) {
+      initUserArgs(args);
+      return next(null, args);
+    }
+
+    self.getById(args.picture, function (err, picture) {
+      if (err) return next(err);
+
+      args.picture = picture;
+      initUserArgs(args);
+      next(null, args);
+    });
+  });
+
+  this.accessManager.handle('view', function (action, args, next) {
+    next(null, true);
+  });
+
+  this.accessManager.handle('upload', function (handler, args, next) {
+    if (!args.user) return next(null, false);
+    if (!args.picture) return next(null, true);
+    if (args.isOwnPicture || args.isSuperUser) return next(null, true);
+    return next(null, false);
+  }.bind(this));
+
+  this.accessManager.handle('add', function (handler, args, next) {
+    if (!args.user) return next(null, false);
+    if (args.isPointerUser || args.isSuperUser) return next(null, true);
+    return next(null, false);
+  });
+
+  this.accessManager.handle(['edit', 'delete'], function (handler, args, next) {
+    if (!args.user) return next(null, false);
+    if (args.isOwnPicture || args.isSuperUser) return next(null, true);
+    return next(null, false);
+  });
+};
 
 PictureManager.prototype._getTmpPath = function (filename) {
   return __dirname + '/../tmp/img/' + filename;

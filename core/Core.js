@@ -73,6 +73,10 @@ Core.prototype.responseHtml = function (html, code) {
   this.res.send(code, html);
 };
 
+Core.prototype.getCurrentUser = function () {
+  return this.userManager.currentUser;
+};
+
 /**
  * @param {Object} data
  * @param {String} template
@@ -88,6 +92,18 @@ Core.prototype.responseHtmlFromTemplate = function (template, data, next, code) 
 
 Core.prototype.notFound = function (next) {
   mainController.notFound(this, next);
+};
+
+Core.prototype.forbidden = function (next) {
+  mainController.forbidden(this, next);
+};
+
+Core.prototype.jsonForbidden = function () {
+  this.responseJson({
+    result: 0,
+    errorCode: 0,
+    errorMessage: 'Forbidden'
+  }, 403);
 };
 
 Core.prototype.render = function (template, data, next) {

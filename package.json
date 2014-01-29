@@ -20,6 +20,7 @@
     "mysql": "~2.0.0-rc1",
     "connect-multiparty": "1.0.2",
     "express-params": "0.0.3",
-    "express-domain-middleware": "0.1.0"
+    "express-domain-middleware": "0.1.0",
+    "hm-access-manager": "0.0.1"
   }
 }
