@@ -10,11 +10,10 @@ var AppError = require('../../core/AppError');
 var PictureController = function () {};
 
 PictureController.prototype.upload = function (core, next) {
-  var self = this;
   var pictureId = core.post.pictureId;
-  this.core.pictureManager.hasAccess('upload', pictureId, function (err, hasAccess) {
+  core.pictureManager.hasAccess('upload', pictureId, function (err, hasAccess) {
     if (err) return next(new AppError(err));
-    if (!hasAccess) return self.core.jsonForbidden();
+    if (!hasAccess) return core.jsonForbidden();
     
     var file = core.files.picture;
     core.pictureManager.upload(file, pictureId, function (err, data) {
@@ -25,10 +24,9 @@ PictureController.prototype.upload = function (core, next) {
 };
 
 PictureController.prototype.addPage = function (core, next) {
-  var self = this;
-  this.core.pictureManager.hasAccess('add', null, function (err, hasAccess) {
+  core.pictureManager.hasAccess('add', null, function (err, hasAccess) {
     if (err) return next(new AppError(err));
-    if (!hasAccess) return self.core.forbidden();
+    if (!hasAccess) return core.forbidden();
     
     var data = { script: 'picture/addPicture', style: 'main/main' };
     core.responseHtmlFromTemplate('picture:addPicture', data, next);
@@ -36,11 +34,10 @@ PictureController.prototype.addPage = function (core, next) {
 };
 
 PictureController.prototype.editPage = function (core, next) {
-  var self = this;
   var picture = core.req.picture;
-  this.core.pictureManager.hasAccess('edit', picture, function (err, hasAccess) {
+  core.pictureManager.hasAccess('edit', picture, function (err, hasAccess) {
     if (err) return next(new AppError(err));
-    if (!hasAccess) return self.core.forbidden();
+    if (!hasAccess) return core.forbidden();
 
     var data = {
       script: 'picture/editPicture',
@@ -55,10 +52,9 @@ PictureController.prototype.editPage = function (core, next) {
 
 
 PictureController.prototype.add = function (core, next) {
-  var self = this;
-  this.core.pictureManager.hasAccess('add', null, function (err, hasAccess) {
+  core.pictureManager.hasAccess('add', null, function (err, hasAccess) {
     if (err) return next(new AppError(err));
-    if (!hasAccess) return self.core.jsonForbidden();
+    if (!hasAccess) return core.jsonForbidden();
 
     var data = core.post;
     data.userId = core.userManager.currentUser.id;
@@ -71,11 +67,10 @@ PictureController.prototype.add = function (core, next) {
 };
 
 PictureController.prototype.edit = function (core, next) {
-  var self = this;
   var picture = core.req.picture;
-  this.core.pictureManager.hasAccess('edit', picture, function (err, hasAccess) {
+  core.pictureManager.hasAccess('edit', picture, function (err, hasAccess) {
     if (err) return next(new AppError(err));
-    if (!hasAccess) return self.core.jsonForbidden();
+    if (!hasAccess) return core.jsonForbidden();
 
     var data = core.post;
     data.userId = core.userManager.currentUser.id;
@@ -87,11 +82,10 @@ PictureController.prototype.edit = function (core, next) {
 };
 
 PictureController.prototype.del = function (core, next) {
-  var self = this;
   var picture = core.req.picture;
-  this.core.pictureManager.hasAccess('delete', picture, function (err, hasAccess) {
+  core.pictureManager.hasAccess('delete', picture, function (err, hasAccess) {
     if (err) return next(new AppError(err));
-    if (!hasAccess) return self.core.jsonForbidden();
+    if (!hasAccess) return core.jsonForbidden();
 
     core.pictureManager.del(picture, function (err) {
       if (err) return next(new AppError(err));

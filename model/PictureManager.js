@@ -22,24 +22,34 @@ var PictureManager = function (core) {
 util.inherits(PictureManager, BaseManager);
 
 PictureManager.prototype._initAccessHandlers = function () {
-  this.accessManager.prepareHandle(function (args, next) {
-    args.user = this.core.getCurrentUser();
-    args.isSuperUser = args.user.inRoles('admin', 'moder');
+  var self = this;
+
+  var initUserArgs = function (args) {
+    if (!args.user) return;
+    args.isOwnPicture = args.user.id === args.picture.userId;
+    args.isPointerUser = args.user.hasRole('pointer');
+  };
+
+  this.accessManager.prepareHandle(function (action, args, next) {
+    if (!args) args = {};
+
+    args.user = self.core.getCurrentUser();
+    if (args.user) {
+      args.isSuperUser = args.user.inRoles('admin', 'moder');
+    }
 
     if (!args.picture) return next(null, args);
 
     if (args.picture instanceof Picture) {
-      args.isOwnPicture = args.user.id === args.picture.userId;
-      args.isPointerUser = args.user.hasRole('pointer');
+      initUserArgs(args);
       return next(null, args);
     }
 
-    this.getById(args.picture, function (err, picture) {
+    self.getById(args.picture, function (err, picture) {
       if (err) return next(err);
 
       args.picture = picture;
-      args.isOwnPicture = args.user.id === args.picture.userId;
-      args.isPointerUser = args.user.hasRole('pointer');
+      initUserArgs(args);
       next(null, args);
     });
   });
@@ -56,6 +66,7 @@ PictureManager.prototype._initAccessHandlers = function () {
   }.bind(this));
 
   this.accessManager.handle('add', function (handler, args, next) {
+    console.log(args);
     if (!args.user) return next(null, false);
     if (args.isPointerUser || args.isSuperUser) return next(null, true);
     return next(null, false);

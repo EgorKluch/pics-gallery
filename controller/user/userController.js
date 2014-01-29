@@ -11,7 +11,7 @@ var AppError = require('../../core/AppError');
 var UserController = function () {};
 
 UserController.prototype.signUpPage = function (core, next) {
-  if (null !== core.userManager.currentUser) {
+  if (core.userManager.isAuthorized()) {
     return core.forbidden(next);
   }
   var data = { script: 'user/signUp', style: 'main/main' };
@@ -19,7 +19,7 @@ UserController.prototype.signUpPage = function (core, next) {
 };
 
 UserController.prototype.signUp = function (core, next) {
-  if (null !== core.userManager.currentUser) {
+  if (core.userManager.isAuthorized()) {
     return core.forbidden(next);
   }
   core.userManager.signUp(core.post, function (err) {
@@ -29,7 +29,7 @@ UserController.prototype.signUp = function (core, next) {
 };
 
 UserController.prototype.signIn = function (core, next) {
-  if (null !== core.userManager.currentUser) {
+  if (core.userManager.isAuthorized()) {
     return core.forbidden();
   }
   var login = core.post.login;
@@ -41,7 +41,7 @@ UserController.prototype.signIn = function (core, next) {
 };
 
 UserController.prototype.signOut = function (core, next) {
-  if (null === core.userManager.currentUser) {
+  if (!core.userManager.isAuthorized()) {
     return core.forbidden();
   }
   core.userManager.signOut(function (err) {

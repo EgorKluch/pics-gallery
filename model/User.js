@@ -20,7 +20,7 @@ var User = function (manager, data) {
   this.login = data.login;
   this.password = data.password;
   this.email = data.email;
-  this.role = data.role;
+  this.roles = data.roles.split('|');
   this.name = data.name;
   this.secondName = data.second_name;
 };
@@ -28,7 +28,7 @@ var User = function (manager, data) {
 util.inherits(User, BaseEntity);
 
 User.prototype.hasRole = function (role) {
-  return role === this.role;
+  return this.roles.indexOf(role) !== -1;
 };
 
 User.prototype.inRoles = function () {
