@@ -20,7 +20,7 @@ var User = function (manager, data) {
   this.login = data.login;
   this.password = data.password;
   this.email = data.email;
-  this.roles = data.roles.split('|');
+  this.roles = data.roles ? data.roles.split('|') : 'user';
   this.name = data.name;
   this.secondName = data.second_name;
 };
@@ -50,7 +50,7 @@ User.prototype.getMysqlData = function () {
     login: this.login,
     password: this.password,
     email: this.email,
-    role: this.role,
+    roles: this.roles,
     name: this.name,
     second_name: this.secondName
   };

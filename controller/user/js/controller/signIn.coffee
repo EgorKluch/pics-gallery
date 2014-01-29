@@ -21,7 +21,7 @@ window.app.controller 'SignInCtrl', ['$scope', '$http', ($scope, $http)->
     $http.post('/signOut', $scope.user)
       .success (response)->
           return console.error response.errorMessage if response.error
-          location.reload()
+          location.href = '/'
       .error (response)->
           console.error response
 ]

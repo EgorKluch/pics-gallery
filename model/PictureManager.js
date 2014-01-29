@@ -66,7 +66,6 @@ PictureManager.prototype._initAccessHandlers = function () {
   }.bind(this));
 
   this.accessManager.handle('add', function (handler, args, next) {
-    console.log(args);
     if (!args.user) return next(null, false);
     if (args.isPointerUser || args.isSuperUser) return next(null, true);
     return next(null, false);

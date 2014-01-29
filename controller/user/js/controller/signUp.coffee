@@ -22,7 +22,7 @@ window.app.controller 'SignUpCtrl', ['$scope', '$http', (s, $http)->
     $http.post('/signUp', s.user)
     .success (response)->
         return console.error response.errorMessage if response.error
-        location.reload()
+        window.history.back();
     .error (response)->
         console.error response
 ]
