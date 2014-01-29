@@ -31,8 +31,13 @@ User.prototype.hasRole = function (role) {
   return role === this.role;
 };
 
-User.prototype.inRoles = function (roles) {
+User.prototype.inRoles = function () {
+  if (arguments[0] instanceof Array) {
+    return this.inRoles.apply(this, arguments[0]);
+  }
+
   var self = this;
+  var roles = Array.prototype.slice.call(arguments);
   return !!_.find(roles, function (role) {
     return self.hasRole(role);
   });

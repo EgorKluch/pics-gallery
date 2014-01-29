@@ -22,39 +22,48 @@ var PictureManager = function (core) {
 util.inherits(PictureManager, BaseManager);
 
 PictureManager.prototype._initAccessHandlers = function () {
-  this.addAccessHandler('view', true);
+  this.accessManager.prepareHandle(function (args, next) {
+    args.user = this.core.getCurrentUser();
+    args.isSuperUser = args.user.inRoles('admin', 'moder');
 
-  this.addAccessHandler('upload', function (handler, picture, next) {
-    if (!(picture instanceof Picture)) {
-      return this.getById(picture, function (picture) {
-        handler(handler, picture, next);
-      });
+    if (!args.picture) return next(null, args);
+
+    if (args.picture instanceof Picture) {
+      args.isOwnPicture = args.user.id === args.picture.userId;
+      args.isPointerUser = args.user.hasRole('pointer');
+      return next(null, args);
     }
-    var user = this.core.getCurrentUser();
-    if (null === user) return next(null, false);
-    if (null === picture) return next(null, true);
-    if (user.inRoles(['moder', 'admin'])) return next(null, true);
-    if (user.id === picture.userId) return next(null, true);
+
+    this.getById(args.picture, function (err, picture) {
+      if (err) return next(err);
+
+      args.picture = picture;
+      args.isOwnPicture = args.user.id === args.picture.userId;
+      args.isPointerUser = args.user.hasRole('pointer');
+      next(null, args);
+    });
+  });
+
+  this.accessManager.handle('view', function (action, args, next) {
+    next(null, true);
+  });
+
+  this.accessManager.handle('upload', function (handler, args, next) {
+    if (!args.user) return next(null, false);
+    if (!args.picture) return next(null, true);
+    if (args.isOwnPicture || args.isSuperUser) return next(null, true);
     return next(null, false);
   }.bind(this));
 
-  this.addAccessHandler('add', function (handler, args, next) {
-    var user = this.core.getCurrentUser();
-    if (null === user) return next(null, false);
-    if (user.inRoles(['pointer', 'moder', 'admin'])) return next(null, true);
+  this.accessManager.handle('add', function (handler, args, next) {
+    if (!args.user) return next(null, false);
+    if (args.isPointerUser || args.isSuperUser) return next(null, true);
     return next(null, false);
   });
 
-  this.addAccessHandlers(['edit', 'delete'], function (handler, picture, next) {
-    if (!(picture instanceof Picture)) {
-      return this.getById(picture, function (picture) {
-        handler(handler, picture, next);
-      });
-    }
-    var user = this.core.getCurrentUser();
-    if (null === user) return next(null, false);
-    if (user.inRoles(['moder', 'admin'])) return next(null, true);
-    if (user.id === picture.userId) return next(null, true);
+  this.accessManager.handle(['edit', 'delete'], function (handler, args, next) {
+    if (!args.user) return next(null, false);
+    if (args.isOwnPicture || args.isSuperUser) return next(null, true);
     return next(null, false);
   });
 };

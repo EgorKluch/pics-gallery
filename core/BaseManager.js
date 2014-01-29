@@ -7,6 +7,7 @@
 
 var util = require('util');
 var _ = require('underscore');
+var AccessManager = require('hm-access-manager');
 
 var AppError = require('../core/AppError');
 var BaseClass = require('../core/BaseClass');
@@ -16,7 +17,7 @@ var BaseManager = function (core, table, Entity) {
   BaseClass.call(this, core);
   this.mysql = this.mysql.assign(table);
   this.Entity = Entity.bind(null, this);
-  this.accessHandlers = [];
+  this.accessManager = new AccessManager();
 };
 
 util.inherits(BaseManager, BaseClass);
@@ -47,22 +48,8 @@ BaseManager.prototype.getByField = function (field, value, next) {
   this.getByFields(fields, next);
 };
 
-BaseManager.prototype.addAccessHandler = function (action, handler) {
-  this.accessHandlers[action] = handler;
-};
-
-BaseManager.prototype.addAccessHandlers = function (actions, handler) {
-  var self = this;
-  actions.forEach(function (action) {
-    self.addAccessHandler(action, handler);
-  });
-};
-
 BaseManager.prototype.hasAccess = function (action, args, next) {
-  var handler = this.accessHandlers[action];
-  if (undefined === this.accessHandlers[action]) return next(null, false);
-  if (handler instanceof Function) return handler(handler, args, next);
-  next(null, !!handler);
+  this.accessManager.hasAccess(action, args, next);
 };
 
 
