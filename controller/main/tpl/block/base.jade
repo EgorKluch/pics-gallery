@@ -1,25 +1,41 @@
 doctype html
+
 html(ng-app="app")
-
-head
   meta(http-equiv="Content-Type", content="text/html", charset="utf-8")
+
+  script(src="/lib/jquery.js")
   script(src="/js/lib/angular.js")
-  script(src="/js/lib/oi.file.js")
-  script(src=script)
-  link(rel="stylesheet", href=style)
-  title Аукцион картин
+
+  - for (var i =0; i < scripts.length; i++) {
+    script(src=scripts[i])
+  - }
+
+  - for (var i =0; i < styles.length; i++) {
+    link(rel="stylesheet", href=styles[i])
+  - }
+
+  title =title
 
 
-body: div#wrapper
+body(ng-controller='MainCtrl')
 
-  include header
+  include topBar
 
-  div#main
-    div#leftBar
-      include ../../../user/tpl/block/leftBlock
-      block leftBar
-    div#content
-      h2: block title
-      block content
+  div#mainContainer.container
+    div.row
+      if args.existsLeftBar
+        div.span3
+          block leftBar
 
-  include footer
+        div.span9
+          h2: block title
+          block content
+      else
+        div.span12
+          h2: block title
+          block content
+
+  div#dataBlock
+    - for (var key in args) {
+      div(ng-model='args.' + key) =args[key]
+    - }

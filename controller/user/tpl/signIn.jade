@@ -1,0 +1,21 @@
+extends ../../main/tpl/block/base
+
+block title
+  | Авторизация
+
+block content
+  div(ng-controller='SignInCtrl')
+    form(name='loginForm', novalidate)
+      h3 Войти:
+      input.input-block-level(
+        type='text', name='login',
+        placeholder='Логин', required,
+        ng-model='user.login',
+        ng-class='{validate: doValidate}')
+      input.input-block-level(
+        type='password', name='pasword',
+        placeholder='Пароль', required,
+        ng-model='user.password',
+        ng-class='{validate: doValidate}')
+      button.btn.btn-link(ng-click='signIn()') Войти
+      a.btn.btn-link(href='/signUp') Регистрация
