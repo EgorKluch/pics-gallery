@@ -6,3 +6,4 @@ public
 controller/*/js/**/*.js
 controller/*/css/**/*.css
 tmp
+!public/lib
