@@ -1,17 +1,13 @@
 mixin picturePreview(picture)
-  div.picture(data-id=picture.id)
-    div.title
-      a(href=picture.url) #{picture.title}
+  div.picture.span3(data-id=picture.id)
+    h3: a(href=picture.url) #{picture.title}
     a(href=picture.url): img(src=picture.src)
-    div.info
-      table
+    p
+      table.table.table-bordered.table-condensed: tbody
         tr
-          td(style="font-weight: bold") Автор:
+          td: strong Автор:
           td #{picture.user.login}
-        tr
-          td
-          td(style="text-align: right")
-            a.redButton.deletePictureButton(href="/picture/" + picture.id + "/delete")
-              | Удалить
-            a.redButton.editPictureButton(href="/picture/" + picture.id + "/edit")
-              | Редактировать
+      a.btn.btn-small(href="/picture/" + picture.id + "/edit")
+        | Редактировать
+      button.btn.btn-small.btn-danger(ng-click='deletePicture()')
+        | Удалить

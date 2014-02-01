@@ -2,8 +2,28 @@ extends ../../main/tpl/block/base
 include mixin/picturePreview
 
 block title
-  | #{title}
+  =title
+
+
 
 block content
-  each picture, index in pictures
-    +picturePreview(picture)
+  table
+    - var columns = 4
+    - var row
+    - var tableList = []
+    - for (var i = 0; i < pictures.length; i++) {
+    -  if (0 === i % columns) {
+    -    if (0 !== i) tableList.push(row)
+    -    row = []
+    -   }
+    -   row.push(pictures[i])
+    - }
+    - for (var i = 0; i < tableList.length; i++ ) {
+      tr
+        - var row = tableList[i];
+        - for (var j = 0; j < row.length; j++ ) {
+          - var picture = row[j]
+          td
+            +picturePreview(picture)
+        - }
+    - }

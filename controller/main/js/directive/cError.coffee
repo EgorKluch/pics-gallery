@@ -3,8 +3,6 @@
 
 'use strict'
 
-$ = require('jquery-browserify');
-
 window.app.directive 'error', ->
   return {
   restrict: 'C',

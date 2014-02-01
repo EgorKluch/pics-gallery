@@ -14,11 +14,6 @@ var MainController = function () {
   return MainController.instance = this;
 };
 
-MainController.prototype.testBootstrap = function (core, next) {
-  var data = { script: 'main/main', style: 'main/testBootstrap' };
-  core.responseHtmlFromTemplate('main:testBootstrap', data, next);
-};
-
 MainController.prototype.index = function (core, next) {
   core.pictureManager.getAll(function (err, pictures) {
     if (err) return next(new AppError(err));
@@ -26,7 +21,16 @@ MainController.prototype.index = function (core, next) {
     core.callAsyncMethods(pictures, Picture.prototype.getUser, function (err) {
       if (err) return next(new AppError(err));
 
-      var data = { script: 'main/main', style: 'main/main', pictures: pictures };
+      var data = {
+        scripts: ['main/main'],
+        styles: ['main/main'],
+        pictures: pictures,
+        topMenu: [
+          { href: '/sign-in', label: 'Войти' },
+          { href: '/sign-up', label: 'Присоединиться' }
+        ],
+        title: 'Главная'
+      };
       core.responseHtmlFromTemplate('picture:pictures', data, next);
     });
   });

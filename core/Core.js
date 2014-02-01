@@ -110,9 +110,15 @@ Core.prototype.render = function (template, data, next) {
   var tmp = template.split(':');
   template = 'controller/' + tmp[0] + '/tpl/' + tmp[1] + '.jade';
 
-  data.script = '/js/' + data.script + '.js';
-  data.style = '/css/' + data.style + '.css';
+  data.scripts = data.scripts.map(function (script) {
+    return '/js/' + script + '.js';
+  });
 
+  data.styles = data.styles.map(function (style) {
+    return '/css/' + style + '.css';
+  });
+
+  if (undefined === data.existsLeftBar) data.existsLeftBar = false;
   data.user = this.userManager.currentUser;
 
   this.app.render(template, data, function(err, html){

@@ -1,19 +1,20 @@
-div.navbar.navbar-inverse.navbar-fixed-top
+div#topBar.navbar.navbar-inverse.navbar-fixed-top
   div.navbar-inner
     div.container-fluid
       a.brand(href='/') Pics-gallery
-      if user
-        div.nav-collapse.collapse
-          p.navbar-text.pull-right Добро пожаловать,
-            a.navbar-link(href='/user/EgorKluch') EgorKluch
-          ul.nav
-            li.active: a(href='/') Главная
-            li: a(href='/picture/add') Добавить картину
-            li: a(href='/sign-out') Выход
-      else
-        div.nav-collapse.collapse
-          p.navbar-text.pull-right Добро пожаловать, Посетитель
-          ul.nav
-            li.active: a(href='/') Главная
-            li: a(href='/sign-in') Вход
-            li: a(href='/sign-up') Регистрация
+      div.nav-collapse.collapse
+        - if (user)
+          p.navbar-text.pull-right
+            | Добро пожаловать,
+            a(href='/user/' + user.id) #{user.login}
+        - else
+          p.navbar-text.pull-right
+            | Добро пожаловать,&nbsp;
+            a(href='/sign-up') Гость
+        ul.nav
+          - for (var i = 0; i < topMenu.length; i++) {
+            - if (topMenu[i].active)
+              li.active: a(href=topMenu[i].href) #{topMenu[i].label}
+            - else
+              li: a(href=topMenu[i].href) #{topMenu[i].label}
+          - }

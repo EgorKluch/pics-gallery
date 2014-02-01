@@ -3,18 +3,20 @@ doctype html
 html(ng-app="app")
   meta(http-equiv="Content-Type", content="text/html", charset="utf-8")
 
-  script(src="/lib/jquery.js")
+  script(src="/js/lib/jquery.js")
   script(src="/js/lib/angular.js")
+  script(src="/bootstrap/js/bootstrap.js")
+  link(rel="stylesheet", href="/bootstrap/css/bootstrap.css")
 
-  - for (var i =0; i < scripts.length; i++) {
+  - for (var i = 0; i < scripts.length; i++) {
     script(src=scripts[i])
   - }
 
-  - for (var i =0; i < styles.length; i++) {
+  - for (var i = 0; i < styles.length; i++) {
     link(rel="stylesheet", href=styles[i])
   - }
 
-  title =title
+  title #{title}
 
 
 body(ng-controller='MainCtrl')
@@ -23,7 +25,7 @@ body(ng-controller='MainCtrl')
 
   div#mainContainer.container
     div.row
-      if args.existsLeftBar
+      if existsLeftBar
         div.span3
           block leftBar
 
