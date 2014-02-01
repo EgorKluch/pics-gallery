@@ -110,6 +110,16 @@ Core.prototype.render = function (template, data, next) {
   var tmp = template.split(':');
   template = 'controller/' + tmp[0] + '/tpl/' + tmp[1] + '.jade';
 
+  if (!data.scripts) {
+    data.scripts = [data.script];
+    delete data.script;
+  }
+
+  if (!data.styles) {
+    data.styles = [data.style];
+    delete data.style;
+  }
+
   data.scripts = data.scripts.map(function (script) {
     return '/js/' + script + '.js';
   });

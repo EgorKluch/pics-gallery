@@ -25,10 +25,6 @@ MainController.prototype.index = function (core, next) {
         scripts: ['main/main'],
         styles: ['main/main'],
         pictures: pictures,
-        topMenu: [
-          { href: '/sign-in', label: 'Войти' },
-          { href: '/sign-up', label: 'Присоединиться' }
-        ],
         title: 'Главная'
       };
       core.responseHtmlFromTemplate('picture:pictures', data, next);

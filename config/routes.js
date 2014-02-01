@@ -53,10 +53,11 @@ module.exports = function (app) {
 
   app.get('/',                            getRouteHandler(mainController, mainController.index));
 
-  app.post('/signIn',                     getRouteHandler(userController, userController.signIn));
-  app.all('/signOut',                     getRouteHandler(userController, userController.signOut));
-  app.get('/signUp',                      getRouteHandler(userController, userController.signUpPage));
-  app.post('/signUp',                     getRouteHandler(userController, userController.signUp));
+  app.post('/sign-in',                    getRouteHandler(userController, userController.signIn));
+  app.get('/sign-in',                     getRouteHandler(userController, userController.signInPage));
+  app.all('/sign-out',                    getRouteHandler(userController, userController.signOut));
+  app.get('/sign-up',                     getRouteHandler(userController, userController.signUpPage));
+  app.post('/sign-up',                    getRouteHandler(userController, userController.signUp));
 
   app.get ('/picture/add',                getRouteHandler(pictureController, pictureController.addPage));
   app.post('/picture/add',                getRouteHandler(pictureController, pictureController.add));

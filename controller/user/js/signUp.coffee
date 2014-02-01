@@ -5,8 +5,9 @@
 
 window.app = window.angular.module 'app', []
 
-require('../../main/js/directive/cError')
+require('../../main/js/directive/cHelpBlock')
 require('../../main/js/directive/eInput')
 
+require('../../main/js/controller/main')
 require('./controller/signIn')
 require('./controller/signUp')

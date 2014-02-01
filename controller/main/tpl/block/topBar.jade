@@ -12,9 +12,8 @@ div#topBar.navbar.navbar-inverse.navbar-fixed-top
             | Добро пожаловать,&nbsp;
             a(href='/sign-up') Гость
         ul.nav
-          - for (var i = 0; i < topMenu.length; i++) {
-            - if (topMenu[i].active)
-              li.active: a(href=topMenu[i].href) #{topMenu[i].label}
-            - else
-              li: a(href=topMenu[i].href) #{topMenu[i].label}
-          - }
+          - if (!user)
+            li: a(href='/sign-in') Войти
+            li: a(href='/sign-up') Присоединиться
+          - else
+            li: a(href='/sign-in') Выйти
