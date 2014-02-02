@@ -9,11 +9,4 @@ window.core = {
         console.error('Element not found!')
         return null
       return element if element.is selector
-
-  getFormInputsInContainer: (eContainer)->
-    eContainer = $(eContainer)
-    result = []
-    result.push $(element) for element in $('input', eContainer)
-    result.push $(element) for element in $('textarea', eContainer)
-    return result
 }

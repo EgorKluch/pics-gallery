@@ -5,45 +5,40 @@ block title
 
 block content
   p Все поля являются обязательными для заполнения.
-  form.form-horizontal(ng-controller='SignUpCtrl', name='signUpForm', novalidate)
+  form#signUpForm.form-horizontal(novalidate)
     div.control-group
-      label.control-label(for='login') Логин
+      label.control-label Логин
       div.controls
-        span.help-block(ng-error='required')
+        span.help-block(data-error='required')
             | Введите логин, который вы будете использовать для авторизации
-        input(name='login', ng-model='user.login',
-          placeholder='Логин', required, type="text")
-    div.control-group
+        input(name='login', placeholder='Логин', required, type="text")
+    div.control-group(data-for='name')
       label.control-label(for='name') Имя
       div.controls
-        span.help-block(ng-error='required')
+        span.help-block(data-for='name', data-error='required')
             | Представьтесь, как вас зовут
-        input(name='name', ng-model='user.name',
-          placeholder='Имя', required, type="text")
-    div.control-group
+        input(name='name', placeholder='Имя', required, type="text")
+    div.control-group(data-for='password')
       label.control-label(for='password') Пароль
       div.controls
-        span.help-block(ng-error='required')
+        span.help-block(data-for='password', data-error='required')
             | Введите пароль, который вы будете использовать для авторизации
-        input(name='password', ng-model='user.password',
-          placeholder='Пароль', required, type="text")
-    div.control-group
+        input(name='password', placeholder='Пароль', required, type="text")
+    div.control-group(data-for='repeatPassword')
       label.control-label(for='repeatPassword') Повторите пароль
       div.controls
-        span.help-block(for='repeatPassword', ng-error='required')
+        span.help-block(data-for='repeatPassword', data-error='required')
             | Подтвердите пароль
-        span.help-block(ng-error='repeatPassword',
-          ng-show=false)
+        span.help-block(data-for='repeatPassword', data-error='repeatPassword')
             | Введенные пароли не совпадают. Пожалуйста, попробуйте снова
-        input(name='repeatPassword', ng-model='user.repeatPassword',
-          placeholder='Повторите пароль', required, type="text")
-    div.control-group
+        input(name='repeatPassword', placeholder='Повторите пароль',
+            required, type="text")
+    div.control-group(data-for='email')
       label.control-label(for='email') Почта
       div.controls
-        span.help-block(ng-error='required')
+        span.help-block(data-for='email', data-error='required')
             | Введите почту, к которой будет привязан ваш аккаунт
-        input(name='email', ng-model='user.email',
-          placeholder='Почта', required, type="text")
+        input(name='email', placeholder='Почта', required, type="text")
     div.control-group
       div.controls
-        button.btn(ng-click='signUp()') Присоединиться
+        button.btn(data-action='signUp') Присоединиться
