@@ -5,7 +5,6 @@
 
 window.app = window.angular.module 'app', ['oi.file']
 
-require('../../main/js/directive/cError')
 require('../../main/js/directive/eInput')
 require('../../main/js/directive/eTextarea')
 

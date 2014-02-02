@@ -9,11 +9,11 @@ window.app.controller 'SignUpCtrl', ['$scope', '$http', (s, $http)->
   s.checkRepeatePassword = ->
     return if s.signUpForm.repeatPassword.$pristine
     return if s.signUpForm.password.$error.required
-    return if s.signUpForm.repeatePassword.$error.required
+    return if s.signUpForm.repeatPassword.$error.required
 
     error = s.user.repeatPassword is s.user.password
     s.signUpForm.$error.repeatPassword = error
-    s.signUpForm.repeatePassword.$error.repeatPassword = error
+    s.signUpForm.repeatPassword.$error.repeatPassword = error
 
   s.signUp = ->
     s.doValidate = on

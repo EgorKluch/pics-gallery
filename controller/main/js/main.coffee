@@ -5,7 +5,6 @@
 
 window.app = window.angular.module 'app', []
 
-require('./directive/cError')
 require('./directive/eInput')
 
 require('./controller/main')
