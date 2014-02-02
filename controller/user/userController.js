@@ -10,6 +10,8 @@ var AppError = require('../../core/AppError');
 
 var UserController = function () {};
 
+
+
 UserController.prototype.signUpPage = function (core, next) {
   core.userManager.hasAccess('signUp', null, function (err, hasAccess) {
     if (err) return next(new AppError(err));
@@ -19,6 +21,18 @@ UserController.prototype.signUpPage = function (core, next) {
     core.responseHtmlFromTemplate('user:signUp', data, next);
   });
 };
+
+UserController.prototype.signInPage = function (core, next) {
+  core.userManager.hasAccess('signIn', null, function (err, hasAccess) {
+    if (err) return next(new AppError(err));
+    if (!hasAccess) return core.forbidden();
+
+    var data = { script: 'user/signIn', style: 'main/main' };
+    core.responseHtmlFromTemplate('user:signIn', data, next);
+  });
+};
+
+
 
 UserController.prototype.signUp = function (core, next) {
   core.userManager.hasAccess('signUp', null, function (err, hasAccess) {

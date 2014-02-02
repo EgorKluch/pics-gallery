@@ -4,18 +4,25 @@ block title
   | Авторизация
 
 block content
-  div(ng-controller='SignInCtrl')
-    form(name='loginForm', novalidate)
-      h3 Войти:
-      input.input-block-level(
-        type='text', name='login',
-        placeholder='Логин', required,
-        ng-model='user.login',
-        ng-class='{validate: doValidate}')
-      input.input-block-level(
-        type='password', name='pasword',
-        placeholder='Пароль', required,
-        ng-model='user.password',
-        ng-class='{validate: doValidate}')
-      button.btn.btn-link(ng-click='signIn()') Войти
-      a.btn.btn-link(href='/signUp') Регистрация
+  form#signInForm.form-horizontal(novalidate)
+
+    div.control-group
+      label.control-label Логин
+      div.controls
+        span.help-block(data-error='required')
+          | Введите логин, который вы вводили при регистрации
+        input.input-xlarge(name='login', placeholder='Логин', required, type="text")
+
+    div.control-group
+      label.control-label Пароль
+      div.controls
+        span.help-block(data-error='required')
+          | Введите пароль, который вы вводили при регистрации
+        input.input-xlarge(name='password', placeholder='Пароль', required,
+            type="password")
+
+    div.control-group
+      div.controls
+        button.btn(data-action='signIn') Войти
+        a.btn.btn-link(href='/sign-up')  Регистрация
+

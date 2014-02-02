@@ -4,8 +4,9 @@
 'use strict'
 
 require('../../main/js/core')
+require('../../main/js/main')
 
-BootstrapForm = require('../../main/BootstrapForm')
+BootstrapForm = require('../../main/js/BootstrapForm')
 
 $(document).ready ->
   $signUpForm = $('#signUpForm')
@@ -45,7 +46,7 @@ $(document).ready ->
         data: form.getData(),
         success: (response)->
           return console.error response.errorMessage if response.error
-          window.history.back()
+          window.location.href = '/'
         error: (response)->
           error = JSON.parse(response.responseText);
           console.error(error.errorMessage);
@@ -54,4 +55,3 @@ $(document).ready ->
     catch err
       console.error(err)
     return false
-

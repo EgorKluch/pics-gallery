@@ -5,7 +5,7 @@ div#topBar.navbar.navbar-inverse.navbar-fixed-top
       div.nav-collapse.collapse
         - if (user)
           p.navbar-text.pull-right
-            | Добро пожаловать,
+            | Добро пожаловать,&nbsp;
             a(href='/user/' + user.id) #{user.login}
         - else
           p.navbar-text.pull-right
@@ -16,4 +16,4 @@ div#topBar.navbar.navbar-inverse.navbar-fixed-top
             li: a(href='/sign-in') Войти
             li: a(href='/sign-up') Присоединиться
           - else
-            li: a(href='/sign-out') Выйти
+            li: a(data-action='signOut') Выйти
