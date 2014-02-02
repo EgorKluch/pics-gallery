@@ -3,19 +3,17 @@
 
 window.core = {
   getParentElementBySelector: (element, selector)->
-    element = $(element)
-    element = element.parent()
     while true
+      element = element.parent()
       if element.length is 0
-        return console.error('Element not found!')
+        console.error('Element not found!')
+        return null
       return element if element.is selector
 
   getFormInputsInContainer: (eContainer)->
     eContainer = $(eContainer)
     result = []
-    $('input', eContainer).each (element)->
-      result.push element
-    $('textarea', eContainer).each (element)->
-      result.push element
+    result.push $(element) for element in $('input', eContainer)
+    result.push $(element) for element in $('textarea', eContainer)
     return result
-};
+}
