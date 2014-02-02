@@ -26,14 +26,17 @@ window.app.directive 'controlGroup', ->
     compile: ->
       return {
         pre: ($scope, $element)->
-          $scope.e.input = core.getFormInputsInContainer($element)[0]
-          $scope.l.input = $scope.e.input.attr('name')
-          $scope.s.input = $scope.s.form[$scope.l.input]
-          $scope.l.errors = $scope.s.input.$error
+          eInput = core.getFormInputsInContainer($element)[0]
+          $scope.e.input = eInput
       }
 
     link: ($scope, $element)->
+      return if !$scope.e.input
       return if !core.getParentElementBySelector $element, '.form-horizontal'
+
+      $scope.s.input = $scope.s.form[$scope.l.input]
+      $scope.l.errors = $scope.s.input.$error
+      $scope.l.input = $scope.e.input.attr('name')
 
       checkValid = =>
         if $scope.s.form.$enabledValid and $scope.s.input.$invalid
@@ -53,10 +56,12 @@ window.app.directive 'helpBlock', ->
     compile: ->
       return {
         pre: ($scope, $element, attrs)->
+          return if !$scope.e.input
           $scope.a = {error: attrs.ngError}
       }
 
-    link: ($scope, $element, attrs)->
+    link: ($scope, $element)->
+      return if !$scope.e.input
       return if !core.getParentElementBySelector $element, '.control-group'
       checkError = =>
         enabledValid = $scope.s.form.$enabledValid
