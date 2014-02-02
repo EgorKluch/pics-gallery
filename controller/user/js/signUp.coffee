@@ -5,74 +5,53 @@
 
 require('../../main/js/core')
 
+BootstrapForm = require('../../main/BootstrapForm')
+
 $(document).ready ->
   $signUpForm = $('#signUpForm')
-  $inputs = $('input', $signUpForm)
 
-  getHelper = (name, error)->
-    return model[name].helpers.filter('[data-error="' + error + '"]')
-
-  markInput = (name, isValid)->
-    container = model[name].container
-    if isValid
-      container.removeClass 'error'
-    else
-      container.addClass 'error'
-    return isValid
-
-  model = {}
-  addInput = (name)->
-    obj = { element: $inputs.filter('[name="' + name + '"]') }
-    obj.container = core.getParentElementBySelector(obj.element, '.control-group')
-    obj.helpers = $('.help-block', obj.container)
-    model[name] = obj
-
-  addInput 'login'
-  addInput 'name'
-  addInput 'password'
-  addInput 'repeatPassword'
-  addInput 'email'
-
-  enabledValidate = false
-  getHelper('repeatPassword', 'repeatPassword').hide()
-
-  validateRequiredError = (name)->
-    $element = model[name].element
-    return markInput name, !$element.attr('required') or $element.val()
+  form = new BootstrapForm $signUpForm
+  form.repeatPassword.switchHelper 'repeatPassword', false
 
   validateReapeatPasswordError = ->
-    $repeatPassword = model.repeatPassword.element
-    $password = model.password.element
-    return true if !$repeatPassword.val()
-    if $password.val() isnt $repeatPassword.val()
-      markInput 'repeatPassword', false
-      getHelper('repeatPassword', 'repeatPassword').show()
-      return false
-    markInput 'repeatPassword', true
-    getHelper('repeatPassword', 'repeatPassword').hide()
-    return true
+    repeatPassword = form.repeatPassword
+    password = form.password
+    return true if !repeatPassword.val()
+    if password.val() isnt repeatPassword.val()
+      repeatPassword.markInput false
+      return !repeatPassword.switchHelper 'repeatPassword', true
+    repeatPassword.markInput true
+    return !repeatPassword.switchHelper 'repeatPassword', false
 
+  enabledValidate = false
   $('input', $signUpForm).keyup ->
     return if !enabledValidate
     name = $(this).attr('name')
-    console.log(name)
-    isValid = validateRequiredError name
+    isValid = form[name].validateRequiredError()
     if isValid and name in ['repeatPassword', 'password']
       isValid = validateReapeatPasswordError()
-    markInput name, isValid
+    form[name].markInput isValid
 
   $('.btn[data-action="signUp"]', $signUpForm).click ->
     try
       enabledValidate = true
-      isValid = true
-      for name of model
-        isValid = validateRequiredError(name) && isValid
+      isValid = form.validateRequiredError()
       isValid = validateReapeatPasswordError() && isValid
-      if !isValid
-        console.log('FAILED')
-        return false
-      console.log('SUCCESS')
+      return false if !isValid
+      $.ajax({
+        dataType: 'json'
+        url: '/sign-up'
+        type: 'POST'
+        data: form.getData(),
+        success: (response)->
+          return console.error response.errorMessage if response.error
+          window.history.back()
+        error: (response)->
+          error = JSON.parse(response.responseText);
+          console.error(error.errorMessage);
+      })
       return false
     catch err
       console.error(err)
     return false
+

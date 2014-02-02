@@ -3,7 +3,3 @@
 
 'use strict'
 
-window.app.controller 'MainCtrl', ['$scope', ($scope)->
-
-]
-

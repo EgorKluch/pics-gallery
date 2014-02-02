@@ -3,9 +3,5 @@
 
 'use strict';
 
-window.app = window.angular.module 'app', []
-
-require('./directive/eInput')
 
 require('./controller/main')
-require('../../user/js/controller/signIn')

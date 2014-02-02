@@ -4,41 +4,41 @@ block title
   | Регистрация
 
 block content
-  p Все поля являются обязательными для заполнения.
+  p: strong Все поля являются обязательными для заполнения.
   form#signUpForm.form-horizontal(novalidate)
     div.control-group
       label.control-label Логин
       div.controls
         span.help-block(data-error='required')
             | Введите логин, который вы будете использовать для авторизации
-        input(name='login', placeholder='Логин', required, type="text")
-    div.control-group(data-for='name')
+        input.input-xlarge(name='login', placeholder='Логин', required, type="text")
+    div.control-group
       label.control-label(for='name') Имя
       div.controls
         span.help-block(data-for='name', data-error='required')
             | Представьтесь, как вас зовут
-        input(name='name', placeholder='Имя', required, type="text")
-    div.control-group(data-for='password')
-      label.control-label(for='password') Пароль
+        input.input-xlarge(name='name', placeholder='Имя', required, type="text")
+    div.control-group
+      label.control-label Пароль
       div.controls
-        span.help-block(data-for='password', data-error='required')
+        span.help-block(data-error='required')
             | Введите пароль, который вы будете использовать для авторизации
-        input(name='password', placeholder='Пароль', required, type="text")
-    div.control-group(data-for='repeatPassword')
-      label.control-label(for='repeatPassword') Повторите пароль
+        input.input-xlarge(name='password', placeholder='Пароль', required, type="text")
+    div.control-group
+      label.control-label Повторите пароль
       div.controls
-        span.help-block(data-for='repeatPassword', data-error='required')
+        span.help-block(data-error='required')
             | Подтвердите пароль
-        span.help-block(data-for='repeatPassword', data-error='repeatPassword')
+        span.help-block( data-error='repeatPassword')
             | Введенные пароли не совпадают. Пожалуйста, попробуйте снова
-        input(name='repeatPassword', placeholder='Повторите пароль',
+        input.input-xlarge(name='repeatPassword', placeholder='Повторите пароль',
             required, type="text")
-    div.control-group(data-for='email')
-      label.control-label(for='email') Почта
+    div.control-group
+      label.control-label Почта
       div.controls
-        span.help-block(data-for='email', data-error='required')
+        span.help-block(data-error='required')
             | Введите почту, к которой будет привязан ваш аккаунт
-        input(name='email', placeholder='Почта', required, type="text")
+        input.input-xlarge(name='email', placeholder='Почта', required, type="text")
     div.control-group
       div.controls
         button.btn(data-action='signUp') Присоединиться
