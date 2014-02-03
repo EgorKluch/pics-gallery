@@ -9,5 +9,3 @@ mixin picturePreview(picture)
           td #{picture.user.login}
       a.btn.btn-small(href="/picture/" + picture.id + "/edit")
         | Редактировать
-      button.btn.btn-small.btn-danger(ng-click='deletePicture()')
-        | Удалить

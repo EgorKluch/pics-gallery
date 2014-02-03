@@ -1,30 +1,28 @@
 extends ../../main/tpl/block/base
 
 block title
-  | Редактировать картину
+  | Изменить
 
 block content
-  p Обязательные поля отмечены звездочкой.
-  form(ng-controller='EditPictureCtrl', name='editPictureForm', novalidate)
-    input(type='hidden', value=id, ng-model='picture.id')
-    table
-      tr
-        td.label Название
-          span.required *
-          | :
+  p: strong Обязательные поля отмечены звездочкой.
+  form#editPictureForm.form-horizontal(novalidate)
+    div.control-group
+      div.controls: img(src=src, width='200px', height='300px')
+    div.control-group
+      label.control-label Название*:
+      div.controls
+        span.help-block(data-error='required')
+          | Введите название картины
+        input.input-xlarge(name='title', type='text',
+            placeholder='Название', required, value=title)
+    div.control-group
+      label.control-label Описание:
+      div.controls
+        textarea.input-xlarge(name='description', placeholder='Описание')
+          | #{description}
+    div.control-group
+      div.controls
+        button.btn.btn-success(data-action='editPicture') Изменить
+        button.btn.btn-danger(data-action='deletePicture') Удалить
 
-        td
-          div.error(ng-target='title', ng-error='required')
-            | Введите название картины
-          input(type='text', name='title', ng-model='picture.title', required,
-            ng-class='{validate: doValidate}', value=title)
-      tr
-        td.label Описание:
-        td: textarea(name='description', ng-model='picture.description',
-          ng-class='{validate: doValidate}', value=description)
-      tr
-        td
-        td: div.buttons
-          a.button(ng-click='editPicture()') Сохранить
-          br
-          a.button(ng-click='deletePicture()') Удалить
+  div.attribute(data-id='pictureId', data-value=id)

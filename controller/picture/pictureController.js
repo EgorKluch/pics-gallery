@@ -14,8 +14,8 @@ PictureController.prototype.upload = function (core, next) {
   core.pictureManager.hasAccess('upload', { picture: pictureId }, function (err, hasAccess) {
     if (err) return next(new AppError(err));
     if (!hasAccess) return core.jsonForbidden();
-    
-    var file = core.files.picture;
+
+    var file = core.files.file;
     core.pictureManager.upload(file, pictureId, function (err, data) {
       if (err) next(new AppError(err));
       core.responseJson(data);
@@ -44,7 +44,8 @@ PictureController.prototype.editPage = function (core, next) {
       style: 'main/main',
       id: picture.id,
       title: picture.title,
-      description: picture.description
+      description: picture.description,
+      src: picture.src
     };
     core.responseHtmlFromTemplate('picture:editPicture', data, next);
   });

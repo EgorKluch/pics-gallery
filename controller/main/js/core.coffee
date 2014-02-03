@@ -6,7 +6,6 @@ window.core = {
     while true
       element = element.parent()
       if element.length is 0
-        console.error('Element not found!')
         return null
       return element if element.is selector
 }

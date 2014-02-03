@@ -4,25 +4,31 @@ include mixin/picturePreview
 block title
   =title
 
-
-
 block content
   table
-    - var columns = 4
-    - var row
-    - var tableList = []
-    - for (var i = 0; i < pictures.length; i++) {
-    -  if (0 === i % columns) {
-    -    if (0 !== i) tableList.push(row)
-    -    row = []
+    - var columns = 4;
+    - var row = [];
+    - var tableList = [];
+    - var i = 0;
+
+    - while (true) {
+    -   var picture = pictures[i++];
+    -   if (!picture) {
+    -     if (0 !== row.length) tableList.push(row);
+    -     break;
     -   }
-    -   row.push(pictures[i])
+    -   row.push(picture);
+    -   if (0 === i % columns) {
+    -     tableList.push(row);
+    -     row = [];
+    -   }
     - }
-    - for (var i = 0; i < tableList.length; i++ ) {
+
+    - for (var i = 0; i < tableList.length; i++) {
       tr
         - var row = tableList[i];
-        - for (var j = 0; j < row.length; j++ ) {
-          - var picture = row[j]
+        - for (var j = 0; j < row.length; j++) {
+          - var picture = row[j];
           td
             +picturePreview(picture)
         - }
