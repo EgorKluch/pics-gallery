@@ -7,10 +7,12 @@ require('../../main/js/core')
 require('../../main/js/main')
 
 BootstrapForm = require('../../main/js/BootstrapForm')
+AlertManager = require('../../main/js/AlertManager')
 
 $(document).ready ->
   $signInForm = $('#signInForm')
 
+  alertManager = new AlertManager '#alerts'
   form = new BootstrapForm $signInForm
 
   enabledValidate = false
@@ -21,22 +23,18 @@ $(document).ready ->
     form[name].markInput isValid
 
   $('.btn[data-action="signIn"]', $signInForm).click ->
-    try
-      enabledValidate = true
-      return false if !form.validateRequiredError()
-      $.ajax({
-        dataType: 'json'
-        url: '/sign-in'
-        type: 'POST'
-        data: form.getData(),
-        success: (response)->
-          return console.error response.errorMessage if response.error
-          window.location.href = '/'
-        error: (response)->
-          error = JSON.parse(response.responseText);
-          console.error(error.errorMessage);
-      })
-      return false
-    catch err
-      console.error(err)
+    enabledValidate = true
+    return false if !form.validateRequiredError()
+    $.ajax({
+      dataType: 'json'
+      url: '/sign-in'
+      type: 'POST'
+      data: form.getData(),
+      success: (response)->
+        return alertManager.addError response.errorMessage if response.error
+        window.location.href = '/'
+      error: (response)->
+        error = JSON.parse response.responseText
+        alertManager.addError error.errorMessage
+    })
     return false

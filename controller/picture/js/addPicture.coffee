@@ -14,6 +14,7 @@ $(document).ready ->
   $fileImage = $('img', $addPictureForm)
   fileHash = null
 
+  alertManager = new AlertManager '#alerts'
   form = new BootstrapForm $addPictureForm
 
   $fileInput.change ->
@@ -62,9 +63,9 @@ $(document).ready ->
       url: '/picture/add'
       type: 'POST'
       success: (response)->
-        return console.error response.errorMessage if response.error
+        return alertManager.addError response.errorMessage if response.error
         window.location.href = '/'
       error: (response)->
-        error = JSON.parse(response.responseText);
-        console.error(error.errorMessage);
+        error = JSON.parse response.responseText
+        alertManager.addError error.errorMessage
     }

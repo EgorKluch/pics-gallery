@@ -7,10 +7,12 @@ require('../../main/js/core')
 require('../../main/js/main')
 
 BootstrapForm = require('../../main/js/BootstrapForm')
+AlertManager = require('../../main/js/AlertManager')
 
 $(document).ready ->
   $signUpForm = $('#signUpForm')
 
+  alertManager = new AlertManager '#alerts'
   form = new BootstrapForm $signUpForm
   form.repeatPassword.switchHelper 'repeatPassword', false
 
@@ -45,11 +47,11 @@ $(document).ready ->
         type: 'POST'
         data: form.getData(),
         success: (response)->
-          return console.error response.errorMessage if response.error
+          return alertManager.addError response.errorMessage if response.error
           window.location.href = '/'
         error: (response)->
-          error = JSON.parse(response.responseText);
-          console.error(error.errorMessage);
+          error = JSON.parse response.responseText
+          alertManager.addError error.errorMessage
       })
       return false
     catch err

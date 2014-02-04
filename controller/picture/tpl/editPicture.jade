@@ -6,8 +6,11 @@ block title
 block content
   p: strong Обязательные поля отмечены звездочкой.
   form#editPictureForm.form-horizontal(novalidate)
+    div#alerts
+
     div.control-group
       div.controls: img(src=src, width='200px', height='300px')
+
     div.control-group
       label.control-label Название*:
       div.controls
@@ -15,11 +18,13 @@ block content
           | Введите название картины
         input.input-xlarge(name='title', type='text',
             placeholder='Название', required, value=title)
+
     div.control-group
       label.control-label Описание:
       div.controls
         textarea.input-xlarge(name='description', placeholder='Описание')
           | #{description}
+
     div.control-group
       div.controls
         button.btn.btn-success(data-action='editPicture') Изменить
