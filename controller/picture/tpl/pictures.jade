@@ -5,31 +5,17 @@ block title
   =title
 
 block content
-  table
-    - var columns = 4;
-    - var row = [];
-    - var tableList = [];
-    - var i = 0;
-
-    - while (true) {
-    -   var picture = pictures[i++];
-    -   if (!picture) {
-    -     if (0 !== row.length) tableList.push(row);
-    -     break;
-    -   }
-    -   row.push(picture);
-    -   if (0 === i % columns) {
-    -     tableList.push(row);
-    -     row = [];
-    -   }
-    - }
-
-    - for (var i = 0; i < tableList.length; i++) {
-      tr
-        - var row = tableList[i];
-        - for (var j = 0; j < row.length; j++) {
-          - var picture = row[j];
-          td
-            +picturePreview(picture)
-        - }
+  ul.thumbnails
+    - for (var index in pictures) {
+    - var picture = pictures[index];
+      li.class3: div.thumbnail
+        h3: a(href=picture.url) #{picture.title}
+        img(src=picture.src, width=250, height=300)
+        p
+          table.table.table-bordered.table-condensed: tbody
+            tr
+              td: strong Автор:
+              td #{picture.user.login}
+          a.btn.btn-small(href="/picture/#{picture.id}/edit")
+            | Редактировать
     - }
