@@ -31,7 +31,7 @@ AlertManager.prototype.addAlert = (title, html, isBlock, className)->
 
   $alert.addClass className if className?
 
-  $alert.append html
+  $alert.append ' ' + html
 
   @container.html ''
   @container.append $alert

@@ -48,9 +48,9 @@ $(document).ready ->
       url: '/picture/' + pictureId + '/delete'
       type: 'POST'
       success: (response)->
-        return alertManager.addError response.errorMessage if response.error
+        return alertManager.addError 'Ошибка', response.errorMessage if response.error
         window.location.href = '/'
       error: (response)->
         error = JSON.parse response.responseText
-        alertManager.addError error.errorMessage
+        alertManager.addError 'Ошибка', error.errorMessage
     }

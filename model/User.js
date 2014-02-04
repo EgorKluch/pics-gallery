@@ -31,6 +31,10 @@ User.prototype.hasRole = function (role) {
   return this.roles.indexOf(role) !== -1;
 };
 
+User.prototype.isSuper = function () {
+  return this.inRoles('admin', 'moder');
+};
+
 User.prototype.inRoles = function () {
   if (arguments[0] instanceof Array) {
     return this.inRoles.apply(this, arguments[0]);

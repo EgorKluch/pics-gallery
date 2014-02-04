@@ -27,7 +27,6 @@ PictureManager.prototype._initAccessHandlers = function () {
   var initUserArgs = function (args) {
     if (!args.user) return;
     args.isOwnPicture = args.user.id === args.picture.userId;
-    args.isPointerUser = args.user.hasRole('pointer');
   };
 
   this.accessManager.prepareHandle(function (action, args, next) {
@@ -36,6 +35,10 @@ PictureManager.prototype._initAccessHandlers = function () {
     args.user = self.core.getCurrentUser();
     if (args.user) {
       args.isSuperUser = args.user.inRoles('admin', 'moder');
+    }
+
+    if (args.user) {
+      args.isPointerUser = args.user.hasRole('pointer');
     }
 
     if (!args.picture) return next(null, args);

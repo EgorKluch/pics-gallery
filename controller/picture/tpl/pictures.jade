@@ -1,5 +1,4 @@
 extends ../../main/tpl/block/base
-include mixin/picturePreview
 
 block title
   =title
@@ -16,6 +15,7 @@ block content
             tr
               td: strong Автор:
               td #{picture.user.login}
-          a.btn.btn-small(href="/picture/#{picture.id}/edit")
-            | Редактировать
+          - if (user && (picture.user.id === user.id || user.isSuper()))
+            a.btn.btn-small.btn-success(href="/picture/#{picture.id}/edit")
+              | Редактировать
     - }

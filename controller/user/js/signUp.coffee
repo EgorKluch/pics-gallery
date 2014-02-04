@@ -47,11 +47,11 @@ $(document).ready ->
         type: 'POST'
         data: form.getData(),
         success: (response)->
-          return alertManager.addError response.errorMessage if response.error
+          return alertManager.addError 'Ошибка', response.errorMessage if response.error
           window.location.href = '/'
         error: (response)->
           error = JSON.parse response.responseText
-          alertManager.addError error.errorMessage
+          alertManager.addError 'Ошибка', error.errorMessage
       })
       return false
     catch err
