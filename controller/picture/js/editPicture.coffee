@@ -8,6 +8,7 @@ require('../../main/js/core')
 require('../../main/js/main')
 
 BootstrapForm = require('../../main/js/BootstrapForm')
+AlertManager = require('../../main/js/AlertManager')
 
 $(document).ready ->
   $editPictureForm = $('#editPictureForm')
