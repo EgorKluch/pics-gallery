@@ -7,15 +7,7 @@ block content
   ul.thumbnails
     - for (var index in pictures) {
     - var picture = pictures[index];
-      li.class3: div.thumbnail
-        h3: a(href=picture.url) #{picture.title}
-        img(src=picture.src, width=250, height=300)
-        p
-          table.table.table-bordered.table-condensed: tbody
-            tr
-              td: strong Автор:
-              td #{picture.user.login}
-          - if (user && (picture.user.id === user.id || user.isSuper()))
-            a.btn.btn-small.btn-success(href="/picture/#{picture.id}/edit")
-              | Редактировать
+      li.span3
+        a.thumbnail(href=picture.url) #{picture.title}
+          img(src=picture.src)
     - }
