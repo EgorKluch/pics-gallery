@@ -7,7 +7,10 @@ block content
   ul.thumbnails
     - for (var index in pictures) {
     - var picture = pictures[index];
-      li.span3
+      li.span2
         a.thumbnail(href=picture.url) #{picture.title}
           img(src=picture.src)
+        p
+          | Автор:&nbsp;
+          strong: a(href='/user/' + picture.user.id) #{picture.user.login}
     - }
