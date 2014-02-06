@@ -69,6 +69,11 @@ if (cluster.isMaster) {
     }
 
     if (isUnexpectedError && server._handle) {
+      var killtimer = setTimeout(function() {
+        process.exit(1);
+      }, 60 * 60 * 1000);
+      killtimer.unref();
+
       console.log('Close server');
       server.close(function () {
         console.log('Server was closed');
@@ -87,6 +92,6 @@ if (cluster.isMaster) {
   console.log('Express started on port ' + config.port);
 
   server.on('connection', function(socket) {
-    socket.setTimeout(150000);
+    socket.setTimeout(30 * 60 * 1000);
   });
 }
