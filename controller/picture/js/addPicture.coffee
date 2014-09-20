@@ -34,8 +34,9 @@ $(document).ready ->
 
     $iFrame.load ->
       response = $iFrame[0].contentWindow.document.body.innerHTML
-      response = $(response).html();
-      response = JSON.parse(response);
+      # $(response).html() not working, if JSONView plugin enabled
+      response = $(response).text()
+      response = JSON.parse(response)
       if !response.result
         $fileInput.val ''
         return console.error(response.errorMessage)
