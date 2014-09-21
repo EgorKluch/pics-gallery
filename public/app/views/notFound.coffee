@@ -4,5 +4,6 @@
 define ['text!tpl/notFound.ejs'], (tpl)->
   App.ContentView.extend
     tpl: _.template tpl
+    title: 'Страница не найдена'
 
     initialize: ->@render()

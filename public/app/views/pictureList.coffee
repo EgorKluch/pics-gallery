@@ -14,6 +14,6 @@ define ['text!tpl/pictureList.ejs', 'collections/picture'], (tpl, PictureCollect
       @pictures.fetch()
 
     render: ->
-      console.log @pictures.toJSON()
       this.$el.html @tpl
         pictures: @pictures.toJSON()
+      @updateTitle()

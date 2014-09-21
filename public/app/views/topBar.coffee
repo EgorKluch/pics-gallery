@@ -16,4 +16,4 @@ define ['text!tpl/topBar.ejs'], (tpl)->
     render: ->
       this.$el.html @tpl
         userName: app.user.get 'name'
-        profileUrl: '/user/' + app.user.get('id')
+        profileUrl: '/user/' + app.user.get 'id'

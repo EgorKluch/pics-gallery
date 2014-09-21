@@ -31,7 +31,11 @@ _.extend App.ContentView.prototype,
 
   render: ->
     this.$el.html @tpl()
+    @updateTitle()
+
+  updateTitle: ->
     $('title').html @title
+    $('h1.title').html @title
 
   destroy: ->
 
