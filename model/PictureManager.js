@@ -153,12 +153,16 @@ PictureManager.prototype.edit = function (picture, data, next) {
   picture.save(next);
 };
 
-PictureManager.prototype.getAll = function (next) {
-  this.mysql.selectAll(function (err, pictures) {
+PictureManager.prototype.get = function (options, next) {
+  var limit = (options.pageNumber - 1) * options.pageSize + ',' + options.pageSize;
+  var query = "SELECT CONCAT('/pictures/', p.id) AS src, u.id AS userId, u.login AS userLogin, p.id, title, filename AS url FROM picture p JOIN user u ON(p.user_id=u.id) LIMIT " + limit;
+  this.mysql.query(query, function (err, pictures) {
     if (err) return next(new AppError(err));
-    pictures = pictures.map(function (picture) {
-      return new this.Entity(picture, true);
-    }.bind(this));
+    if (options.parse) {
+      pictures = pictures.map(function (picture) {
+        return new this.Entity(picture, true);
+      }.bind(this));
+    }
     next(null, pictures);
   }.bind(this));
 };

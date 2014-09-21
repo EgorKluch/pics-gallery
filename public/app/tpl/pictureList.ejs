@@ -1,0 +1,10 @@
+<ul class="thumbnails">
+  <% pictures.forEach(function (picture) { %>
+  <li class="span2">
+    <a class="thumbnail" href="<%= picture.src %>"><%= picture.title %>
+      <img src="<%= picture.url %>" alt="<%= picture.title %>">
+    </a>
+    <p>Автор:&nbsp;<strong><a href="/user/<%= picture.userId %>"><%= picture.userLogin %></a></strong></p>
+  </li>
+  <% }); %>
+</ul>

@@ -5,12 +5,23 @@
 
 'use strict';
 
-var express = require('express');
+var path = require('path');
 var AppError = require('../core/AppError');
+var PictureController = require('../controller/picture/pictureController');
 
 module.exports = function (app) {
+
+  var getRouteHandler = function (Controller, method) {
+    var controller = new Controller();
+    return function (req, res, next) {
+      controller[method].call(controller, req.core, next);
+    }
+  };
+
   app.use(function (req, res, next) {
     if (0 === req.path.indexOf('/api/')) return next();
-    res.sendfile('public/index.html');
+    res.sendFile(path.join(__dirname, '../public/index.html'));
   });
+
+  app.use('/api/pictures', getRouteHandler(PictureController, 'get'));
 };

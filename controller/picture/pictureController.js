@@ -5,9 +5,22 @@
 
 'use strict';
 
+var _ = require('underscore');
 var AppError = require('../../core/AppError');
 
 var PictureController = function () {};
+
+_.extend(PictureController.prototype, {
+  get: function (core, next) {
+    core.pictureManager.get({
+      pageNumber: core.query.pageNumber,
+      pageSize: core.query.pageSize
+    }, function (err, data) {
+      if (err) next(new AppError(err));
+      core.responseJson(data);
+    });
+  }
+});
 
 PictureController.prototype.upload = function (core, next) {
   var pictureId = core.post.pictureId;

@@ -1,6 +1,8 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 20.09.2014
 
+Backbone.emulateJSON = true;
+
 class window.App
   constructor: ->
     require ['views/topBar', 'Router', 'text'], (TopBarView, Router)=>
@@ -11,6 +13,9 @@ class window.App
         @router = new Router()
         Backbone.history.start { pushState: true }
 
+  navigate: (url)->
+    @router.navigate url, { trigger: true }
+
   _initUser: (callback)->
     require ['models/user'], (User)=>
       @user = new User
@@ -19,12 +24,16 @@ class window.App
         roles: ['admin', 'user']
       callback?();
 
-
 App.ContentView = Backbone.View.extend {}
 _.extend App.ContentView.prototype,
   el: '#content',
-  render: ->this.$el.html @tpl()
+  title: 'pics-gallery.ru'
 
+  render: ->
+    this.$el.html @tpl()
+    $('title').html @title
+
+  destroy: ->
 
 $(document).ready ->
   require.config { baseUrl: 'app' }

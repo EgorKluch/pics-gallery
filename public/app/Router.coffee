@@ -4,10 +4,12 @@
 define ->
   Backbone.Router.extend
     routes:
-      '': ->@_initContentView 'index'
+      '': ->@_initContentView 'frontpage'
       'sign-in': ->app.user.trigger 'signIn'
       'sign-out': ->app.user.trigger 'signOut'
       'sign-up': ->@_initContentView 'signUp'
+      'pictures(/page/:page)(/size/:size)': (page, size)->
+        @_initContentView 'pictureList', { page, size }
       'picture/:id/add': (id)->@_initContentView 'addPicture', { id }
       'picture/:id/edit': (id)->@_initContentView 'editPicture', { id }
       '*notFound': ->@_initContentView 'notFound'
@@ -23,5 +25,4 @@ define ->
         app.content.destroy() if app.content
         options.el = '#content'
         app.content = new View options
-        app.content.render()
         callback?()

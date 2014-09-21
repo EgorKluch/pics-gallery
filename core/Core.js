@@ -61,7 +61,7 @@ Core.prototype.responseJson = function (data, code) {
   code = code ? code : 200;
   data = data ? data : {};
   data.result = 1;
-  this.res.json(code, data);
+  this.res.status(code).json(data);
 };
 
 /**
