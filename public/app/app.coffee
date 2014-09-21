@@ -20,7 +20,7 @@ class window.App
     require ['models/user'], (User)=>
       @user = new User
         id: 2,
-        name: 'Егор',
+        login: 'EgorKluch',
         roles: ['admin', 'user']
       callback?();
 
