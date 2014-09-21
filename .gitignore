@@ -2,8 +2,12 @@
 node_modules
 etc
 config/config.js
-public
+public/js
+public/app/**/*.js
+public/css
+public/img/
 controller/*/js/**/*.js
 controller/*/css/**/*.css
 tmp
 !public/lib
+*.map

@@ -39,9 +39,10 @@ if (cluster.isMaster) {
   });
 
   // Set statics dirs (not handlers)
-  app.use('/js/lib', express.static('public/lib'));
+  app.use('/lib', express.static('public/lib'));
   app.use('/bootstrap', express.static('public/lib/bootstrap'));
   app.use('/js', express.static('public/js'));
+  app.use('/app', express.static('public/app'));
   app.use('/css', express.static('public/css'));
   app.use('/img', express.static('public/img'));
   app.use('/tmp/img', express.static('tmp/img'));
@@ -56,6 +57,12 @@ if (cluster.isMaster) {
   app.use(require('connect-multiparty')());
 
   app.use(expressDomain);
+
+  var Core = require('./core/Core');
+  app.use(function(req, res, next){
+    req.core = new Core(app, req, res);
+    req.core.initialize(next);
+  });
 
   var routesConfig = require('./config/routes');
   routesConfig(app);
