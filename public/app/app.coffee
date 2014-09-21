@@ -5,7 +5,7 @@ Backbone.emulateJSON = true;
 
 class window.App
   constructor: ->
-    require ['views/topBar', 'Router', 'text'], (TopBarView, Router)=>
+    require ['views/main/topBar', 'Router', 'text'], (TopBarView, Router)=>
       @_initUser =>
         @topBar = new TopBarView()
         @content = null # Еще не инициализировали
@@ -24,14 +24,15 @@ class window.App
         roles: ['admin', 'user']
       callback?();
 
-App.ContentView = Backbone.View.extend {}
-_.extend App.ContentView.prototype,
+App.ContentView = Backbone.View.extend
   el: '#content',
   title: 'pics-gallery.ru'
 
   render: ->
-    this.$el.html @tpl()
+    this.$el.html @tpl @getTplData()
     @updateTitle()
+
+  getTplData: ->{}
 
   updateTitle: ->
     $('title').html @title

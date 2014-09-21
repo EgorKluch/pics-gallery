@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 21.09.2014
 
-define ['text!tpl/pictureList.ejs', 'collections/picture'], (tpl, PictureCollection)->
+define ['text!tpl/picture/list.ejs', 'collections/picture'], (tpl, PictureCollection)->
   return App.ContentView.extend
     tpl: _.template tpl
     title: 'Картины'
@@ -13,7 +13,4 @@ define ['text!tpl/pictureList.ejs', 'collections/picture'], (tpl, PictureCollect
       @pictures.on 'change', =>@render()
       @pictures.fetch()
 
-    render: ->
-      this.$el.html @tpl
-        pictures: @pictures.toJSON()
-      @updateTitle()
+    getTplData: ->{ pictures: @pictures.toJSON() }

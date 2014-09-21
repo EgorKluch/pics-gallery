@@ -4,15 +4,15 @@
 define ->
   Backbone.Router.extend
     routes:
-      '': ->@_initContentView 'frontpage'
+      '': ->@_initContentView 'main/frontpage'
       'sign-in': ->app.user.trigger 'signIn'
       'sign-out': ->app.user.trigger 'signOut'
-      'sign-up': ->@_initContentView 'signUp'
+      'sign-up': ->@_initContentView 'user/signUp'
       'pictures(/page/:page)(/size/:size)': (page, size)->
-        @_initContentView 'pictureList', { page, size }
-      'picture/:id/add': (id)->@_initContentView 'addPicture', { id }
-      'picture/:id/edit': (id)->@_initContentView 'editPicture', { id }
-      '*notFound': ->@_initContentView 'notFound'
+        @_initContentView 'picture/pictureList', { page, size }
+      'picture/:id/add': (id)->@_initContentView 'picture/addPicture', { id }
+      'picture/:id/edit': (id)->@_initContentView 'picture/editPicture', { id }
+      '*notFound': ->@_initContentView 'main/notFound'
 
     _initContentView: (view, options, callback)->
       # Init arguments
