@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 20.09.2014
 
-class App
+class window.App
   constructor: ->
     require ['views/topBar', 'Router', 'text'], (TopBarView, Router)=>
       @_initUser =>
@@ -18,6 +18,12 @@ class App
         name: 'Егор',
         roles: ['admin', 'user']
       callback?();
+
+
+App.ContentView = Backbone.View.extend {}
+_.extend App.ContentView.prototype,
+  el: '#content',
+  render: ->this.$el.html @tpl()
 
 
 $(document).ready ->
