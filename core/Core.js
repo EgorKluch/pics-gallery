@@ -62,6 +62,7 @@ Core.prototype.responseJson = function (data, code) {
   data = data ? data : {};
   data.result = 1;
   this.res.status(code).json(data);
+  this.mysql.destroy();
 };
 
 /**
@@ -71,6 +72,7 @@ Core.prototype.responseJson = function (data, code) {
 Core.prototype.responseHtml = function (html, code) {
   code = code ? code : 200;
   this.res.send(code, html);
+  this.mysql.destroy();
 };
 
 Core.prototype.getCurrentUser = function () {

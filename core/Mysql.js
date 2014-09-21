@@ -237,5 +237,10 @@ Mysql.prototype.assign = function (table) {
   return new AssignMysql(this, table);
 };
 
+Mysql.prototype.destroy = function () {
+  console.log('Mysql destroy');
+  this.connection.end();
+};
+
 
 module.exports = Mysql;

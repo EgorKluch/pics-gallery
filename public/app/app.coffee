@@ -41,7 +41,7 @@ App.ContentView = Backbone.View.extend
   destroy: ->
 
 $(document).ready ->
-  require.config { baseUrl: 'app' }
+  require.config { baseUrl: '/app' }
   requirejs.onError = (err)->console.error err
   requirejs.config
     paths:
