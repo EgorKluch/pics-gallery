@@ -16,13 +16,30 @@ class window.App
   navigate: (url)->
     @router.navigate url, { trigger: true }
 
+  callApi: (method, args, callback)->
+    if _.isFunction args
+      callback = args
+      args = {}
+    jQuery.ajax
+      url: '/api/' + method
+      data: args
+      type: 'POST'
+      success: (response)->callback null, response
+      error: (xhr)->
+        response = xhr.responseText
+        try
+          response = JSON.parse response
+          response = response.error
+        callback response
+
   _initUser: (callback)->
     require ['models/user'], (User)=>
-      @user = new User
-        id: 2,
-        login: 'EgorKluch',
-        roles: ['admin', 'user']
-      callback?();
+      app.callApi 'user/current', (err, response)=>
+        if (err)
+          console.error err
+          @user = new User()
+        @user = new User response.user
+        callback?()
 
 App.ContentView = Backbone.View.extend
   el: '#content',

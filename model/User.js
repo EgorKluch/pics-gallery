@@ -60,8 +60,17 @@ _.extend(User.prototype, {
       name: this.name,
       second_name: this.secondName
     };
-  }
+  },
 
+  toAJAX: function () {
+    return {
+      id: this.id,
+      login: this.login,
+      roles: this.roles,
+      name: this.name,
+      surname: this.secondName
+    };
+  }
 });
 
 module.exports = User;

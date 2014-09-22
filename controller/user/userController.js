@@ -14,7 +14,8 @@ _.extend(UserController.prototype, {
 
   current: function (core, next) {
     var user = core.getCurrentUser();
-
+    if (user) user = user.toJSON();
+    core.responseJson({ user: user });
   },
 
   signUp: function (core, next) {

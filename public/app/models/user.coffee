@@ -4,8 +4,10 @@
 define ->
   Backbone.Model.extend
     defaults:
-      id: 0,
-      name: 'Гость',
+      id: 0
+      login: 'Гость'
+      name: 'Гость'
+      surname: null
       roles: []
 
     isAnonym: ->!@get 'id'
