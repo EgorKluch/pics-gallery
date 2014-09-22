@@ -2,7 +2,7 @@
 # @date: 21.09.2014
 
 deps = ['text!tpl/picture/list.ejs', 'collections/picture', 'mansory', 'imagesloaded']
-define deps, (tpl, PictureCollection, Mansory, imagesloaded)->
+define deps, (tpl, PictureCollection, Masonry, imagesloaded)->
   return App.ContentView.extend
     tpl: _.template tpl
     title: 'Картины'
@@ -17,12 +17,11 @@ define deps, (tpl, PictureCollection, Mansory, imagesloaded)->
     getTplData: ->{ pictures: @pictures.toJSON() }
 
     render: ->
-      delete @msnry
+      delete @masonry
       App.ContentView.prototype.render.call this, arguments
-      $container = $('.block__pictureList')
-      $container.imagesLoaded =>
-        console.log 'TEST'
-        @masonry = $container.masonry { itemSelector: 'li' }
+      container = $('.block__pictureList')[0]
+      imagesloaded container, =>
+        @masonry = new Masonry container, { itemSelector: 'li' }
 
     destroy: ->
       App.ContentView.prototype.destroy.call this, arguments
