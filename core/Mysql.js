@@ -238,7 +238,6 @@ Mysql.prototype.assign = function (table) {
 };
 
 Mysql.prototype.destroy = function () {
-  console.log('Mysql destroy');
   this.connection.end();
 };
 

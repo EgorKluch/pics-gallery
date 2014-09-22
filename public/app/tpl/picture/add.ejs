@@ -1,0 +1,42 @@
+<div class="block__addPicture">
+  <p>Обязательные поля отмечены звездочкой.</p>
+  <!-- File upload hack: form submited for upload file -->
+  <form id="addPictureForm" class="form-horizontal" novalidate
+        action="/api/picture/upload/" method="POST"
+        enctype="multipart/form-data" target="fileUploadResult"
+      >
+    <div class="alerts"></div>
+
+    <div class="control-group">
+      <label class="control-label">Название*:</label>
+      <div class="controls">
+        <span class="help-block" data-error="required">Введите название картины</span>
+        <input class="input-xlarge" name='title' placeholder='Заголовок' required>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Источник*:</label>
+      <div class="controls">
+        <span class="help-block" data-error="required">Выберите файл изображения картины</span>
+        <input class="input-xlarge" name='file' type="file" required>
+        <iframe name="fileUploadResult" id="fileUploadResult" style="display: none">
+        <img>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Описание:</label>
+      <div class="controls">
+        <textarea class="input-xlarge" name='description'></textarea>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="controls">
+        <button class="btn" data-action='addPicture'>Добавить</button>
+      </div>
+    </div>
+
+  </form>
+</div>

@@ -10,7 +10,7 @@ define ->
       'sign-up': ->@_initContentView 'user/signUp'
       'pictures(/page/:page)(/size/:size)': (page, size)->
         @_initContentView 'picture/pictureList', { page, size }
-      'picture/:id/add': (id)->@_initContentView 'picture/addPicture', { id }
+      'picture/add': (id)->@_initContentView 'picture/addPicture', { id }
       'picture/:id/edit': (id)->@_initContentView 'picture/editPicture', { id }
       '*notFound': ->@_initContentView 'main/notFound'
 

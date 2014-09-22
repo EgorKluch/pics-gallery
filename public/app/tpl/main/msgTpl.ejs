@@ -1,0 +1,8 @@
+<div>
+  <button type="button" class="close <%
+    if (className) print(className + ' ');
+    print(isBlock ? 'alert-block' : 'alert'); %>"
+    data-dismiss="alert">&times;</button>
+  <% if (isBLock) { %><h4><%= title %></h4><% } else { %><h4><%= title %></h4><% } %>
+  <%= html %>
+</div>

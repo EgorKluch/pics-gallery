@@ -24,4 +24,5 @@ module.exports = function (app) {
   });
 
   app.use('/api/pictures', getRouteHandler(PictureController, 'get'));
+  app.use('/api/picture/upload', getRouteHandler(PictureController, 'upload'));
 };
