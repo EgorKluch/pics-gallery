@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 22.09.2014
 
-define ['text!tpl/user/signIn.ejs'], (tpl, msgTpl)->
+define ['text!tpl/user/signIn.ejs'], (tpl)->
   App.ContentFormView.extend
     tpl: _.template tpl
     title: 'Авторизация'

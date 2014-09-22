@@ -1,11 +1,12 @@
 <div class="block__addPicture">
-  <p>Обязательные поля отмечены звездочкой.</p>
+  <p><strong>Обязательные поля отмечены звездочкой.</strong></p>
+  <div class="alerts"></div>
+
   <!-- File upload hack: form submited for upload file -->
   <form id="addPictureForm" class="form-horizontal" novalidate
         action="/api/picture/upload/" method="POST"
         enctype="multipart/form-data" target="fileUploadResult"
       >
-    <div class="alerts"></div>
 
     <div class="control-group">
       <label class="control-label">Название*:</label>
@@ -19,8 +20,8 @@
       <label class="control-label">Источник*:</label>
       <div class="controls">
         <span class="help-block" data-error="required">Выберите файл изображения картины</span>
-        <input class="input-xlarge" name='file' type="file" required>
-        <iframe name="fileUploadResult" id="fileUploadResult" style="display: none">
+        <input class="input-xlarge file" name='file' type="file" required>
+        <iframe name="fileUploadResult" id="fileUploadResult" style="display: none"></iframe>
         <img>
       </div>
     </div>
@@ -34,7 +35,7 @@
 
     <div class="control-group">
       <div class="controls">
-        <button class="btn" data-action='addPicture'>Добавить</button>
+        <button class="btn submit" data-action='addPicture'>Добавить</button>
       </div>
     </div>
 

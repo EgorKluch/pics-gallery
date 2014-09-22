@@ -1,36 +1,60 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 21.09.2014
 
-define ['text!tpl/picture/add.ejs', 'text!tpl/main/msgTpl.ejs'], (tpl, msgTpl)->
-  App.ContentView.extend
+define ['text!tpl/picture/add.ejs'], (tpl)->
+  App.ContentFormView.extend
     title: 'Добавить картину'
     tpl: _.template tpl
-    msgTpl: _.template msgTpl
+    enabledValidate: false
 
-    initialize: ->
-      @render()
+    events:
+      'keyup input': '_onKeyUp'
+      'keyup textarea': '_onKeyUp'
 
-    render: ->
-      this.$el.html @tpl()
-      @updateTitle()
-      @_initFileUpload()
-
-    _initFileUpload: =>
-      fileHash = null
-      $file = $('[type="file"]', this.$el)
-      $file.change ->
-        return if !$file.val()
+      'change .file': ->
+        return if !this.$file.val()
         $('#addPictureForm').submit()
 
-        $fileUploadResult = $('#fileUploadResult')
-        $fileUploadResult.load ->
-          response = $fileUploadResult[0].contentWindow.document.body.innerHTML
-          # $(response).html() not working, if JSONView plugin enabled
-          response = $(response).text()
-          response = JSON.parse(response)
-          if !response.result
-            $file.val ''
-            return console.error response.errorMessage or 'File upload error'
 
-          fileHash = response.hash
-          $('img', this.$el).attr 'src', response.src
+      'click .submit': (e)->
+        e.preventDefault()
+        @enabledValidate = true
+        return if !@_validateRequiredForm()
+        data = this.$form.serializeObject()
+        data.hash = @fileHash
+        app.callApi 'picture/add', data, (err)=>
+          return @_addError 'Ошибка', err if err
+          this.$form.trigger 'reset'
+          this.$img.removeAttr 'src'
+
+    initialize: ->@render()
+
+    render: ->
+      App.ContentFormView.prototype.render.call this, arguments
+      this.$form = $('form', @el)
+      this.$img = $('img', @el)
+      this.$file = $('.file', @el)
+      this.$fileUploadResult = $('#fileUploadResult', @el)
+      @_initFileUpload()
+
+    _initFileUpload: ->
+      this.$fileUploadResult.load =>
+        return if !this.$file.val()
+
+        response = this.$fileUploadResult[0].contentWindow.document.body.innerHTML
+        # $(response).html() not working, if JSONView plugin enabled
+        response = $(response).text()
+        response = JSON.parse(response)
+
+        if !response.result
+          this.$file.val ''
+          return console.error response.errorMessage or 'File upload error'
+
+        @fileHash = response.hash
+        this.$img.attr 'src', response.src
+
+    _onKeyUp: (e)->
+      input = e.currentTarget
+      return if !@enabledValidate or input.type is 'file'
+      @_validateRequiredInput $(input)
+

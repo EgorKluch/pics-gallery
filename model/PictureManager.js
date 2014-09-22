@@ -136,7 +136,7 @@ PictureManager.prototype.add = function (data, next) {
     fs.rename(tmpPath, this._getPath(filename), function (err) {
       if (err) return next(new AppError(err));
       var picture = new this.Entity(data);
-      picture.filename = filename;
+      picture.filename = '/img/pictures/' + filename;
       picture.addedBy = currentUser.id;
       this.core.mysql.del('tmp', { id: tmpPicture.id }, function (err) {
         if (err) return next(new AppError(err));

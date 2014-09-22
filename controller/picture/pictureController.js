@@ -36,35 +36,6 @@ PictureController.prototype.upload = function (core, next) {
   });
 };
 
-PictureController.prototype.addPage = function (core, next) {
-  core.pictureManager.hasAccess('add', null, function (err, hasAccess) {
-    if (err) return next(new AppError(err));
-    if (!hasAccess) return core.forbidden();
-    
-    var data = { script: 'picture/addPicture', style: 'main/main' };
-    core.responseHtmlFromTemplate('picture:addPicture', data, next);
-  });
-};
-
-PictureController.prototype.editPage = function (core, next) {
-  var picture = core.req.picture;
-  core.pictureManager.hasAccess('edit', { picture: picture }, function (err, hasAccess) {
-    if (err) return next(new AppError(err));
-    if (!hasAccess) return core.forbidden();
-
-    var data = {
-      script: 'picture/editPicture',
-      style: 'main/main',
-      id: picture.id,
-      title: picture.title,
-      description: picture.description,
-      src: picture.src
-    };
-    core.responseHtmlFromTemplate('picture:editPicture', data, next);
-  });
-};
-
-
 PictureController.prototype.add = function (core, next) {
   core.pictureManager.hasAccess('add', null, function (err, hasAccess) {
     if (err) return next(new AppError(err));
