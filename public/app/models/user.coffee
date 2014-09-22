@@ -2,10 +2,10 @@
 # @date: 20.09.2014
 
 define ->
-  Backbone.Model.extend
+  App.User = Backbone.Model.extend
     defaults:
       id: 0
-      login: 'Гость'
+      login: 'гость'
       name: 'Гость'
       surname: null
       roles: []
@@ -16,3 +16,5 @@ define ->
     hasRole: (roles)->
       roles = [roles] if !_.isArray roles
       return !!_.intersection(roles, @get 'roles').length
+
+    getProfileUrl: ->'/user/' + @get 'id'

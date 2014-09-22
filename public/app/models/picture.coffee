@@ -2,4 +2,4 @@
 # @date: 21.09.2014
 
 define ->
-  Backbone.Model.extend {}
+  App.Picture = Backbone.Model.extend {}

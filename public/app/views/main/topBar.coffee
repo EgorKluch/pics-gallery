@@ -14,9 +14,16 @@ define ['text!tpl/main/topBar.ejs', 'views/main/topMenu'], (tpl, TopMenuView)->
       @menu = new TopMenuView()
       @render()
 
+      app.on 'update:user', =>@updateProfileLink()
+
+    updateProfileLink: ->
+      $profileLink = $('.profileLink', @el)
+      $profileLink.attr 'href', app.user.getProfileUrl()
+      $profileLink.html app.user.get 'login'
+
     render: ->
       this.$el.html @tpl
         userLogin: app.user.get 'login'
-        profileUrl: '/user/' + app.user.get 'id'
+        profileUrl: app.user.getProfileUrl()
       @menu.setElement '#topMenu'
       @menu.render()

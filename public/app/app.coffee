@@ -13,6 +13,21 @@ class window.App
         @router = new Router()
         Backbone.history.start { pushState: true }
 
+        $('body').on 'click', 'a', (e)->
+          return if location.host isnt @host
+          e.preventDefault()
+          app.navigate @pathname
+
+        @on 'signOut', =>
+          @callApi 'user/signOut', =>
+            @user = new App.User()
+            @trigger 'update:user'
+            @navigate '/'
+
+        @on 'signIn', ({ user })=>
+          @user = new App.User user
+          @trigger 'update:user'
+
   navigate: (url)->
     @router.navigate url, { trigger: true }
 
@@ -24,38 +39,27 @@ class window.App
       url: '/api/' + method
       data: args
       type: 'POST'
+      dataType: 'json'
       success: (response)->callback null, response
       error: (xhr)->
         response = xhr.responseText
         try
           response = JSON.parse response
-          response = response.error
+          response = response.errorMessage
         callback response
 
   _initUser: (callback)->
-    require ['models/user'], (User)=>
+    require ['models/user'], =>
       app.callApi 'user/current', (err, response)=>
         if (err)
           console.error err
-          @user = new User()
-        @user = new User response.user
+          @user = new App.User()
+        else
+          @user = new App.User response.user
+        @trigger 'update:user'
         callback?()
 
-App.ContentView = Backbone.View.extend
-  el: '#content',
-  title: 'pics-gallery.ru'
-
-  render: ->
-    this.$el.html @tpl @getTplData()
-    @updateTitle()
-
-  getTplData: ->{}
-
-  updateTitle: ->
-    $('title').html @title
-    $('h1.title').html @title
-
-  destroy: ->
+_.extend(App.prototype, Backbone.Events);
 
 $(document).ready ->
   require.config { baseUrl: '/app' }
@@ -64,4 +68,7 @@ $(document).ready ->
     paths:
       text: '../lib/require.text'
 
-  window.app = new App()
+  require ['views/main/content', 'views/main/contentForm'], (ContentView, ContentFormView)->
+    App.ContentView = ContentView
+    App.ContentFormView = ContentFormView
+    window.app = new App()

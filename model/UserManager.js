@@ -96,7 +96,11 @@ UserManager.prototype.signIn = function (login, password, next) {
     self._createToken(function (err, token) {
       if (err) return next(new AppError(err));
       self.session.token = token;
-      self.mysql.update({ id: id }, { token: token }, next);
+      self.mysql.update({ id: id }, { token: token }, function (err, data) {
+        if (err) return next(new AppError(err));
+        var user = new self.Entity(userData);
+        next(null, user);
+      });
     });
   });
 };

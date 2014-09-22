@@ -1,8 +1,6 @@
-<div>
-  <button type="button" class="close <%
-    if (className) print(className + ' ');
-    print(isBlock ? 'alert-block' : 'alert'); %>"
+<div class="alert <% if (className) print(className + ' '); print(isBlock ? 'alert-block' : 'alert'); %>">
+  <button type="button" class="close"
     data-dismiss="alert">&times;</button>
-  <% if (isBLock) { %><h4><%= title %></h4><% } else { %><h4><%= title %></h4><% } %>
+  <% if (isBlock) { %><h4><%= title %></h4><% } else { %><h4><%= title %></h4><% } %>
   <%= html %>
 </div>

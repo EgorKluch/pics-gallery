@@ -37,9 +37,9 @@ _.extend(UserController.prototype, {
 
       var login = core.post.login;
       var password = core.post.password;
-      core.userManager.signIn(login, password, function (err) {
+      core.userManager.signIn(login, password, function (err, user) {
         if (err) return next(new AppError(err));
-        core.responseJson();
+        core.responseJson({ user: user });
       });
     });
   },

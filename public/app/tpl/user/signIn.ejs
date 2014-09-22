@@ -1,0 +1,26 @@
+<div class="alerts"></div>
+<form id="signInForm" class="form-horizontal" novalidate>
+  <div class="control-group">
+    <label class="control-label">Логин</label>
+    <div class="controls">
+      <input type="text" class="input-xlarge" name='login' placeholder='Логин' required>
+      <span class="help-block" data-error="required">Введите ваш логин</span>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label">Пароль</label>
+    <div class="controls">
+      <input type="password" class="input-xlarge" name='password' placeholder='Пароль' required>
+      <span class="help-block" data-error="required">Введите ваш пароль</span>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="controls">
+      <button class="btn" data-action='signIn'>Войти</button>
+      <a class="btn btn-link" href="/sign-up">Регистрация</a>
+    </div>
+  </div>
+
+</form>

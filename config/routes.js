@@ -24,6 +24,8 @@ module.exports = function (app) {
     res.sendFile(path.join(__dirname, '../public/index.html'));
   });
 
+  app.use('/api/user/signIn', getRouteHandler(UserController, 'signIn'));
+  app.use('/api/user/signOut', getRouteHandler(UserController, 'signOut'));
   app.use('/api/user/current', getRouteHandler(UserController, 'current'));
 
   app.use('/api/pictures', getRouteHandler(PictureController, 'get'));

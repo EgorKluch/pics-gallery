@@ -6,6 +6,9 @@ define ['text!tpl/main/topMenu.ejs'], (tpl)->
     el: '#topMenu'
     tpl: _.template tpl
 
+    initialize: ->
+      app.on 'update:user', @render.bind this
+
     render: ->
       menuItems = []
       if app.user.isAnonym()
@@ -14,7 +17,10 @@ define ['text!tpl/main/topMenu.ejs'], (tpl)->
       else
         if app.user.hasRole ['admin', 'pointer']
           menuItems.push { label: 'Добавить картину', href: '/picture/add' }
-        menuItems.push { label: 'Выход', href: '/signOut' }
+        menuItems.push { label: 'Выход', href: '#', action: 'signOut' }
 
       html = @tpl { menuItems }
       this.$el.html html
+      $('a[data-action="signOut"]', @el).click (e)->
+        e.preventDefault()
+        app.trigger 'signOut'

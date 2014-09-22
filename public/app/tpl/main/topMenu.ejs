@@ -1,5 +1,8 @@
 <ul class="nav">
   <% menuItems.forEach(function (item) { %>
-    <li><a href="<%= item.href %>"><%= item.label %></a></li>
+    <li><a href="<%= item.href %>"
+           <% if (item.action) { %>data-action="<%= item.action %>"<% }
+      %>>
+        <%= item.label %></a></li>
   <% }) %>
 </ul>

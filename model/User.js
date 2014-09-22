@@ -62,7 +62,7 @@ _.extend(User.prototype, {
     };
   },
 
-  toAJAX: function () {
+  toJSON: function () {
     return {
       id: this.id,
       login: this.login,
