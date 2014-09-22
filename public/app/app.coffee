@@ -66,7 +66,10 @@ $(document).ready ->
   requirejs.onError = (err)->console.error err
   requirejs.config
     paths:
-      text: '../lib/require.text'
+      text:         '../lib/require.text'
+      mansory:      '../lib/masonry.pkgd.min'
+      imagesloaded: '../lib/imagesloaded.pkgd.min'
+
 
   require ['views/main/content', 'views/main/contentForm'], (ContentView, ContentFormView)->
     App.ContentView = ContentView

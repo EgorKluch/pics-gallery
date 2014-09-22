@@ -1,11 +1,8 @@
 <div class="block__pictureList">
   <ul class="thumbnails">
     <% pictures.forEach(function (picture) { %>
-    <li class="span3">
-      <a class="thumbnail picture" href="<%= picture.src %>"><%= picture.title %>
-        <img src="<%= picture.url %>" alt="<%= picture.title %>">
-      </a>
-      <p>Автор:&nbsp;<a href="/user/<%= picture.userId %>"><%= picture.userLogin %></a></p>
+    <li class="thumbnail">
+      <img src="<%= picture.url %>" alt="<%= picture.title %>">
     </li>
     <% }); %>
   </ul>
