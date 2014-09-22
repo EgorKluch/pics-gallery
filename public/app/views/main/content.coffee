@@ -15,3 +15,5 @@ define ->
     updateTitle: ->
       $('title').html @title
       $('h1.title').html @title
+
+    destroy: ->this.$el.off()

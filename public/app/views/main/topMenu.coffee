@@ -6,6 +6,11 @@ define ['text!tpl/main/topMenu.ejs'], (tpl)->
     el: '#topMenu'
     tpl: _.template tpl
 
+    events:
+      'click a[data-action="signOut"]': (e)->
+        e.preventDefault()
+        app.trigger 'signOut'
+
     initialize: ->
       app.on 'update:user', @render.bind this
 
@@ -21,6 +26,3 @@ define ['text!tpl/main/topMenu.ejs'], (tpl)->
 
       html = @tpl { menuItems }
       this.$el.html html
-      $('a[data-action="signOut"]', @el).click (e)->
-        e.preventDefault()
-        app.trigger 'signOut'

@@ -1,0 +1,52 @@
+<p><strong>Все поля являются обязательными для заполнения.</strong></p>
+<div class="alerts"></div>
+<form id="signUpForm" class="form-horizontal" novalidate>
+
+  <div class="control-group">
+    <label class="control-label">Логин</label>
+    <div class="controls">
+      <input type="text" class="input-xlarge" name='login' placeholder='Логин' required>
+      <span class="help-block" data-error="required">Введите ваш логин</span>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label">Имя</label>
+    <div class="controls">
+      <input type="text" class="input-xlarge" name='name' placeholder='Имя' required>
+      <span class="help-block" data-error="required">Представьтесь, как вас зовут</span>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label">Пароль</label>
+    <div class="controls">
+      <input type="password" class="input-xlarge" name='password' placeholder='Пароль' required>
+      <span class="help-block" data-error="required">Введите ваш пароль</span>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label">Подтверждение пароля</label>
+    <div class="controls">
+      <input type="password" class="input-xlarge" name='repeatPassword' placeholder='Повторите пароль' required>
+      <span class="help-block" data-error="required">Повторите пароль</span>
+      <span class="help-block" data-error="repeatPassword">Введенные пароли не совпадают. Пожалуйста, попробуйте снова</span>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label">Почта</label>
+    <div class="controls">
+      <input type="text" class="input-xlarge" name='email' placeholder='Почта' required>
+      <span class="help-block" data-error="required">Введите почту (используется для восстановления пароля)</span>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="controls">
+      <button class="btn submit">Регистрация</button>
+    </div>
+  </div>
+
+</form>
