@@ -27,37 +27,41 @@ var User = function (manager, data) {
 
 util.inherits(User, BaseEntity);
 
-User.prototype.hasRole = function (role) {
-  return this.roles.indexOf(role) !== -1;
-};
+_.extend(User.prototype, {
 
-User.prototype.isSuper = function () {
-  return this.inRoles('admin', 'moder');
-};
+  hasRole: function (role) {
+    return this.roles.indexOf(role) !== -1;
+  },
 
-User.prototype.inRoles = function () {
-  if (arguments[0] instanceof Array) {
-    return this.inRoles.apply(this, arguments[0]);
+  isSuper: function () {
+    return this.inRoles('admin', 'moder');
+  },
+
+  inRoles: function () {
+    if (_.isArray(arguments[0])) {
+      return this.inRoles.apply(this, arguments[0]);
+    }
+
+    var self = this;
+    var roles = Array.prototype.slice.call(arguments);
+    return !!_.find(roles, function (role) {
+      return self.hasRole(role);
+    });
+  },
+
+  getMysqlData: function () {
+    return {
+      id: this.id,
+      token: this.token,
+      login: this.login,
+      password: this.password,
+      email: this.email,
+      roles: this.roles,
+      name: this.name,
+      second_name: this.secondName
+    };
   }
 
-  var self = this;
-  var roles = Array.prototype.slice.call(arguments);
-  return !!_.find(roles, function (role) {
-    return self.hasRole(role);
-  });
-};
-
-User.prototype.getMysqlData = function () {
-  return {
-    id: this.id,
-    token: this.token,
-    login: this.login,
-    password: this.password,
-    email: this.email,
-    roles: this.roles,
-    name: this.name,
-    second_name: this.secondName
-  };
-};
+});
 
 module.exports = User;

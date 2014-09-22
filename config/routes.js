@@ -8,6 +8,7 @@
 var path = require('path');
 var AppError = require('../core/AppError');
 var PictureController = require('../controller/picture/pictureController');
+var UserController = require('../controller/user/userController');
 
 module.exports = function (app) {
 
@@ -22,6 +23,8 @@ module.exports = function (app) {
     if (0 === req.path.indexOf('/api/')) return next();
     res.sendFile(path.join(__dirname, '../public/index.html'));
   });
+
+  app.use('/api/user/current', getRouteHandler(UserController, 'current'));
 
   app.use('/api/pictures', getRouteHandler(PictureController, 'get'));
   app.use('/api/picture/upload', getRouteHandler(PictureController, 'upload'));
