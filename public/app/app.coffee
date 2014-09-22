@@ -5,9 +5,10 @@ Backbone.emulateJSON = true;
 
 class window.App
   constructor: ->
-    require ['views/main/topBar', 'Router', 'text'], (TopBarView, Router)=>
+    require ['views/main/topBar', 'views/main/dialog', 'Router', 'text'], (TopBarView, DialogView, Router)=>
       @_initUser =>
         @topBar = new TopBarView()
+        @dialog = new DialogView()
         @content = null # Еще не инициализировали
 
         @router = new Router()
@@ -67,8 +68,8 @@ $(document).ready ->
   requirejs.config
     paths:
       text:         '../lib/require.text'
-      mansory:      '../lib/masonry.pkgd.min'
       imagesloaded: '../lib/imagesloaded.pkgd.min'
+      Mansory:      '../lib/masonry.pkgd.min'
 
 
   require ['views/main/content', 'views/main/contentForm'], (ContentView, ContentFormView)->
