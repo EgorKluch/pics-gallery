@@ -4,7 +4,7 @@ etc
 config/config.js
 public/js
 public/app/**/*.js
-public/css
+public/css/**/*.css
 public/img/
 controller/*/js/**/*.js
 controller/*/css/**/*.css
