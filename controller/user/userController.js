@@ -23,7 +23,8 @@ _.extend(UserController.prototype, {
       if (err) return next(new AppError(err));
       if (!hasAccess) return core.jsonForbidden();
 
-      core.userManager.signUp(core.post, function (err, user) {
+      var data = JSON.parse(core.post.model);
+      core.userManager.signUp(data, function (err, user) {
         if (err) return next(new AppError(err));
         core.responseJson({ user: user });
       });

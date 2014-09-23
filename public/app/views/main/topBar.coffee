@@ -14,7 +14,8 @@ define ['text!tpl/main/topBar.ejs', 'views/main/topMenu'], (tpl, TopMenuView)->
       @menu = new TopMenuView()
       @render()
 
-      app.on 'update:user', =>@updateProfileLink()
+      app.on 'signIn', @updateProfileLink.bind(this)
+      app.on 'signOut', @updateProfileLink.bind(this)
 
     updateProfileLink: ->
       $profileLink = $('.profileLink', @el)

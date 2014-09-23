@@ -19,16 +19,6 @@ class window.App
           e.preventDefault()
           app.navigate @pathname
 
-        @on 'signOut', =>
-          @callApi 'user/signOut', =>
-            @user = new App.User()
-            @trigger 'update:user'
-            @navigate '/'
-
-        @on 'signIn', ({ user })=>
-          @user = new App.User user
-          @trigger 'update:user'
-
   navigate: (url)->
     @router.navigate url, { trigger: true }
 
@@ -42,15 +32,18 @@ class window.App
       type: 'POST'
       dataType: 'json'
       success: (response)->callback null, response
-      error: (xhr)->
-        response = xhr.responseText
-        try
-          response = JSON.parse response
-          response = response.errorMessage
-        callback response
+      error: (err)=>
+        callback @parseError err
+
+  parseError: (err)->
+    err = err.responseText
+    try
+      err = JSON.parse err
+      err = err.errorMessage
+    return err
 
   _initUser: (callback)->
-    require ['models/user'], =>
+    require ['User'], =>
       app.callApi 'user/current', (err, response)=>
         if (err)
           console.error err
@@ -70,6 +63,8 @@ $(document).ready ->
       text:         '../lib/require.text'
       imagesloaded: '../lib/imagesloaded.pkgd.min'
       Mansory:      '../lib/masonry.pkgd.min'
+      User:         './models/user'
+      Picture:      './models/picture'
 
 
   require ['views/main/content', 'views/main/contentForm'], (ContentView, ContentFormView)->

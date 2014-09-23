@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 21.09.2014
 
-define ['text!tpl/main/topMenu.ejs'], (tpl)->
+define ['text!tpl/main/topMenu.ejs', 'User'], (tpl)->
   Backbone.View.extend
     el: '#topMenu'
     tpl: _.template tpl
@@ -9,10 +9,12 @@ define ['text!tpl/main/topMenu.ejs'], (tpl)->
     events:
       'click a[data-action="signOut"]': (e)->
         e.preventDefault()
-        app.trigger 'signOut'
+        App.User.signOut()
 
     initialize: ->
-      app.on 'update:user', @render.bind this
+      app.on 'signIn', @render.bind(this)
+      app.on 'signOut', @render.bind(this)
+
 
     render: ->
       menuItems = []

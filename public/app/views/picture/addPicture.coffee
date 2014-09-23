@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 21.09.2014
 
-define ['text!tpl/picture/add.ejs'], (tpl)->
+define ['text!tpl/picture/add.ejs', 'Picture'], (tpl)->
   App.ContentFormView.extend
     title: 'Добавить картину'
     tpl: _.template tpl
@@ -22,7 +22,7 @@ define ['text!tpl/picture/add.ejs'], (tpl)->
         return if !@_validateRequiredForm()
         data = this.$form.serializeObject()
         data.hash = @fileHash
-        app.callApi 'picture/add', data, (err)=>
+        App.Picture.add data, (err)=>
           return @_addError 'Ошибка', err if err
           this.$form.trigger 'reset'
           this.$img.removeAttr 'src'

@@ -20,7 +20,7 @@ var User = function (manager, data) {
   this.login = data.login;
   this.password = data.password;
   this.email = data.email;
-  this.roles = data.roles ? data.roles.split('|') : 'user';
+  this.roles = _.isString(data.roles) ? data.roles.split('|') : 'user';
   this.name = data.name;
   this.secondName = data.second_name;
 };

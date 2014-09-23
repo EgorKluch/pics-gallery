@@ -155,7 +155,7 @@ PictureManager.prototype.edit = function (picture, data, next) {
 
 PictureManager.prototype.get = function (options, next) {
   var limit = (options.pageNumber - 1) * options.pageSize + ',' + options.pageSize;
-  var query = "SELECT CONCAT('/pictures/', p.id) AS src, u.id AS userId, u.login AS userLogin, p.id, title, filename AS url FROM picture p JOIN user u ON(p.user_id=u.id) LIMIT " + limit;
+  var query = "SELECT u.id AS userId, p.id, title, filename AS url FROM picture p JOIN user u ON(p.user_id=u.id) LIMIT " + limit;
   this.mysql.query(query, function (err, pictures) {
     if (err) return next(new AppError(err));
     if (options.parse) {

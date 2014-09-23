@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 22.09.2014
 
-define ['text!tpl/user/signIn.ejs'], (tpl)->
+define ['text!tpl/user/signIn.ejs', 'User'], (tpl)->
   App.ContentFormView.extend
     tpl: _.template tpl
     title: 'Авторизация'
@@ -17,12 +17,13 @@ define ['text!tpl/user/signIn.ejs'], (tpl)->
         @enabledValidate = true
         return if !@_validateRequiredForm()
         data = this.$form.serializeObject()
-        app.callApi 'user/signIn', data, (err, response)=>
-          return @_addError 'Ошибка', err if err
-          app.trigger 'signIn', { user: response.user }
-          app.navigate '/'
+        App.User.signIn data, (err)=>
+          @_addError 'Ошибка', err if err
 
-    initialize: ->@render()
+
+    initialize: ->
+      @render()
+      app.on 'signIn', ->app.navigate '/'
 
     render: ->
       App.ContentView.prototype.render.call this, arguments

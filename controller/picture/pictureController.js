@@ -41,7 +41,7 @@ PictureController.prototype.add = function (core, next) {
     if (err) return next(new AppError(err));
     if (!hasAccess) return core.jsonForbidden();
 
-    var data = core.post;
+    var data = JSON.parse(core.post.model);
     data.userId = core.userManager.currentUser.id;
 
     core.pictureManager.add(data, function (err) {

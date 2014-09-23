@@ -23,11 +23,18 @@ define ['text!tpl/user/signUp.ejs'], (tpl)->
         return if !isValid
 
         data = this.$form.serializeObject()
-        app.callApi 'user/signUp', data, (err, response)=>
-          return @_addError 'Ошибка', err if err
-          app.trigger 'signIn', { user: response.user }
-          app.navigate '/'
+        App.User.signUp data, (err)=>
+          @_addError 'Ошибка', err if err
 
+    initialize: ->
+      app.on 'signIn', ->app.navigate '/'
+      @render()
+
+    render: ->
+      App.ContentView.prototype.render.call this, arguments
+      this.$password = $('input[name="password"]', @el)
+      this.$repeatePassword = $('input[name="repeatPassword"]', @el)
+      this.$form = $('form', @el)
 
     _validateReapeatPasswordError: ->
       $container = @_getInputContainer this.$repeatePassword
@@ -38,11 +45,3 @@ define ['text!tpl/user/signUp.ejs'], (tpl)->
       @_markInput $container, !isInvalid
       @_toggleHelper $container, 'repeatPassword', isInvalid
       return not isInvalid
-
-    initialize: ->@render()
-
-    render: ->
-      App.ContentView.prototype.render.call this, arguments
-      this.$password = $('input[name="password"]', @el)
-      this.$repeatePassword = $('input[name="repeatPassword"]', @el)
-      this.$form = $('form', @el)
