@@ -6,6 +6,7 @@
 'use strict';
 
 var util = require('util');
+var _ = require('underscore');
 
 var AppError = require('../core/AppError');
 var BaseEntity = require('../core/BaseEntity');
@@ -28,27 +29,29 @@ var Picture = function (manager, data, mysqlData) {
 
 util.inherits(Picture, BaseEntity);
 
-Picture.prototype.getUser = function (next) {
-  if (this.user) {
-    next(null, this.user);
+_.extend(Picture.prototype, {
+  getUser: function (next) {
+    if (this.user) {
+      next(null, this.user);
+    }
+
+    this.core.userManager.getById(this.userId, function (err, user) {
+      if (err) return next(new AppError(err));
+      this.user = user;
+      next(null, user);
+    }.bind(this));
+  },
+
+  getMysqlData: function () {
+    return {
+      id: this.id,
+      user_id: this.userId,
+      added_by: this.addedBy,
+      filename: this.filename,
+      title: this.title,
+      description: this.description
+    };
   }
-
-  this.core.userManager.getById(this.userId, function (err, user) {
-    if (err) return next(new AppError(err));
-    this.user = user;
-    next(null, user);
-  }.bind(this));
-};
-
-Picture.prototype.getMysqlData = function () {
-  return {
-    id: this.id,
-    user_id: this.userId,
-    added_by: this.addedBy,
-    filename: this.filename,
-    title: this.title,
-    description: this.description
-  };
-};
+});
 
 module.exports = Picture;
