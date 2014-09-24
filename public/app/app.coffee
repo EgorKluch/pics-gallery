@@ -54,7 +54,7 @@ class window.App
 
 _.extend(App.prototype, Backbone.Events);
 
-initRequire: ->
+initRequire = ->
   require.config { baseUrl: '/app' }
   requirejs.onError = (err)->console.error err
   requirejs.config
@@ -74,18 +74,18 @@ initRequire: ->
       TopMenuView: './views/main/topMenu'
       DialogView: './views/main/dialog'
       # TEMPLATES
-      msgTpl: 'text!tpl/main/msgTpl.ejs'
-      dialogTpl: 'text!tpl/main/dialog.ejs'
-      notFoundTpl: 'text!tpl/main/notFound.ejs'
-      topBarTpl: 'text!tpl/main/topBar.ejs'
-      topMenuTpl: 'text!tpl/main/topMenu.ejs'
-      pictureAddTpl: 'text!tpl/picture/add.ejs'
-      pictureListTpl: 'text!tpl/picture/list.ejs'
-      userSignInTpl: 'text!tpl/user/signIn.ejs'
-      userSignUpTpl: 'text!tpl/user/signUp.ejs'
-
+      msgTpl: 'tpl/main/msgTpl.ejs'
+      dialogTpl: 'tpl/main/dialog.ejs'
+      notFoundTpl: 'tpl/main/notFound.ejs'
+      topBarTpl: 'tpl/main/topBar.ejs'
+      topMenuTpl: 'tpl/main/topMenu.ejs'
+      pictureAddTpl: 'tpl/picture/add.ejs'
+      pictureListTpl: 'tpl/picture/list.ejs'
+      userSignInTpl: 'tpl/user/signIn.ejs'
+      userSignUpTpl: 'tpl/user/signUp.ejs'
 
 $(document).ready ->
+  initRequire()
   require ['ContentView', 'ContentFormView'], (ContentView, ContentFormView)->
     App.ContentView = ContentView
     App.ContentFormView = ContentFormView

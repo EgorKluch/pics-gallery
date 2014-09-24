@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 21.09.2014
 
-deps = ['pictureListTpl', 'PictureCollection', 'Mansory', 'imagesloaded']
+deps = ['text!pictureListTpl', 'PictureCollection', 'Mansory', 'imagesloaded']
 define deps, (tpl, PictureCollection, Masonry, imagesloaded)->
   return App.ContentView.extend
     tpl: _.template tpl

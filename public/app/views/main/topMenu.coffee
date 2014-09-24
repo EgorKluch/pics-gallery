@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 21.09.2014
 
-define ['topMenuTpl', 'User'], (tpl)->
+define ['text!topMenuTpl', 'User'], (tpl)->
   Backbone.View.extend
     el: '#topMenu'
     tpl: _.template tpl

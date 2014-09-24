@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 22.09.2014
 
-define ['ContentView', 'msgTpl'], (ContentView, msgTpl)->
+define ['ContentView', 'text!msgTpl'], (ContentView, msgTpl)->
   ContentView.extend
     msgTpl: _.template msgTpl
 

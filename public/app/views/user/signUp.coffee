@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 22.09.2014
 
-define ['userSignUpTpl'], (tpl)->
+define ['text!userSignUpTpl'], (tpl)->
   App.ContentFormView.extend
     title: 'Регистрация'
     tpl: _.template tpl

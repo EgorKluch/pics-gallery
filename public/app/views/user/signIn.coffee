@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 22.09.2014
 
-define ['userSignInTpl', 'User'], (tpl)->
+define ['text!userSignInTpl', 'User'], (tpl)->
   App.ContentFormView.extend
     tpl: _.template tpl
     title: 'Авторизация'

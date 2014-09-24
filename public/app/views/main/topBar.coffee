@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 20.09.2014
 
-define ['topBarTpl', 'TopMenuView'], (tpl, TopMenuView)->
+define ['text!topBarTpl', 'TopMenuView'], (tpl, TopMenuView)->
   Backbone.View.extend
     el: '#topBar'
     tpl: _.template tpl
