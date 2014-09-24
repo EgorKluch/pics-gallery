@@ -8,7 +8,7 @@ define ['Picture'], ->
     syncProcess: false
     changed: false
 
-    initialize: ({ @pageNumber, @pageSize })->
+    initialize: (models, { @pageNumber, @pageSize })->
       @.on 'request', =>@syncProcess = true
       @.on 'sync', =>
         @.trigger 'change'  if @changed

@@ -8,7 +8,7 @@ define deps, (tpl, PictureCollection, Masonry, imagesloaded)->
     title: 'Картины'
 
     initialize: ({ page, size })->
-      @pictures = new PictureCollection
+      @pictures = new PictureCollection [],
         pageNumber: page or 1
         pageSize:   size or 100
       @pictures.on 'change', =>@render()
