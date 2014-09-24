@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 22.09.2014
 
-define ['views/main/content', 'text!tpl/main/msgTpl.ejs'], (ContentView, msgTpl)->
+define ['ContentView', 'msgTpl'], (ContentView, msgTpl)->
   ContentView.extend
     msgTpl: _.template msgTpl
 
