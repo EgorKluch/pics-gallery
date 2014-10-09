@@ -5,7 +5,7 @@ Backbone.emulateJSON = true;
 
 class window.App
   constructor: ->
-    require ['views/main/topBar', 'views/main/dialog', 'Router', 'text'], (TopBarView, DialogView, Router)=>
+    require ['TopBarView', 'DialogView', 'Router', 'text'], (TopBarView, DialogView, Router)=>
       @_initUser =>
         @topBar = new TopBarView()
         @dialog = new DialogView()
@@ -32,8 +32,7 @@ class window.App
       type: 'POST'
       dataType: 'json'
       success: (response)->callback null, response
-      error: (err)=>
-        callback @parseError err
+      error: (err)=>callback @parseError err
 
   parseError: (err)->
     err = err.responseText
@@ -55,19 +54,39 @@ class window.App
 
 _.extend(App.prototype, Backbone.Events);
 
-$(document).ready ->
+initRequire = ->
   require.config { baseUrl: '/app' }
   requirejs.onError = (err)->console.error err
   requirejs.config
     paths:
-      text:         '../lib/require.text'
+      text: '../lib/require.text'
       imagesloaded: '../lib/imagesloaded.pkgd.min'
-      Mansory:      '../lib/masonry.pkgd.min'
-      User:         './models/user'
-      Picture:      './models/picture'
+      Mansory: '../lib/masonry.pkgd.min'
+      # MODELS
+      User: './models/user'
+      Picture: './models/picture'
+      # COLLECTIONS
+      PictureCollection: './collections/picture'
+      # VIEWS
+      ContentView: './views/main/content'
+      ContentFormView: './views/main/contentForm'
+      TopBarView: './views/main/topBar'
+      TopMenuView: './views/main/topMenu'
+      DialogView: './views/main/dialog'
+      # TEMPLATES
+      msgTpl: 'tpl/main/msgTpl.ejs'
+      dialogTpl: 'tpl/main/dialog.ejs'
+      notFoundTpl: 'tpl/main/notFound.ejs'
+      topBarTpl: 'tpl/main/topBar.ejs'
+      topMenuTpl: 'tpl/main/topMenu.ejs'
+      pictureAddTpl: 'tpl/picture/add.ejs'
+      pictureListTpl: 'tpl/picture/list.ejs'
+      userSignInTpl: 'tpl/user/signIn.ejs'
+      userSignUpTpl: 'tpl/user/signUp.ejs'
 
-
-  require ['views/main/content', 'views/main/contentForm'], (ContentView, ContentFormView)->
+$(document).ready ->
+  initRequire()
+  require ['ContentView', 'ContentFormView'], (ContentView, ContentFormView)->
     App.ContentView = ContentView
     App.ContentFormView = ContentFormView
     window.app = new App()

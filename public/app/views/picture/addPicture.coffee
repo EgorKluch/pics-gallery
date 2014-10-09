@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 21.09.2014
 
-define ['text!tpl/picture/add.ejs', 'Picture'], (tpl)->
+define ['text!pictureAddTpl', 'Picture'], (tpl)->
   App.ContentFormView.extend
     title: 'Добавить картину'
     tpl: _.template tpl

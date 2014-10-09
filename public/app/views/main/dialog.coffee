@@ -1,7 +1,7 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 23.09.2014
 
-define ['text!tpl/main/dialog.ejs'], (tpl)->
+define ['text!dialogTpl'], (tpl)->
   Backbone.View.extend
     el: '#dialog'
 

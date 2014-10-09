@@ -1,14 +1,14 @@
 # @author EgorKluch (EgorKluch@gmail.com)
 # @date: 21.09.2014
 
-define ['models/picture'], (Picture)->
+define ['Picture'], ->
   Backbone.Collection.extend
-    model: Picture
+    model: App.Picture
     url: '/api/pictures'
     syncProcess: false
     changed: false
 
-    initialize: ({ @pageNumber, @pageSize })->
+    initialize: (models, { @pageNumber, @pageSize })->
       @.on 'request', =>@syncProcess = true
       @.on 'sync', =>
         @.trigger 'change'  if @changed
